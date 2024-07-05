@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Review Edit</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<script th:src="@{js/review.js}"></script>
+</head>
+<body>
+<div class="review-edit-container">
+	<h1>리뷰 수정</h1>
+	<hr>
+	
+	<label>작성자 : </label>
+	<p th:text="${review.member.id}"></p>
+	<label>리뷰 제목 : </label>
+	<input type="text" id="title" name="title" th:value="${review.title}" placeholder="제목을 입력하세요.">
+	<label>리뷰 내용 : </label>
+	<textarea id="content" name="content" placeholder="리뷰 내용을 입력해 주세요.">${review.content}</textarea>
+	<label>작성 날짜 : </label>
+	<p th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></p>
+	<hr>
+	
+	<div class="review-btn">
+		<button type="button" onclick="window.location.href='/reviews'">목록으로</button>
+        <button type="button" onclick="saveEdit()">저장하기</button>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>join</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script th:src="@{js/login.js}"></script>
+</head>
+<body>
+<div class="join-container">
+	<h1>회원가입</h1>
+	<div class="social-login">
+	나중에 소셜 가입
+	</div>
+	<span>또는 사이트 계정 가입</span>
+	<form id="join-form" method="post">
+		<input type="text" name="id" id="id" placeholder="ID">
+		<button type="button" id="id-check-button">중복체크</button>
+		<input type="email" name="email" id="email" placeholder="Email">
+		<input type="password" name="pwd" id="pwd" placeholder="Password">
+		<input type="text" name="name" id="name" placeholder="Name">
+		<button type="button" id="join-button">회원가입</button>
+	</form>
+</div>
+</body>
+</html>

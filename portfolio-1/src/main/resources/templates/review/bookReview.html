@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Review Main</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<script th:src="@{js/review.js}"></script>
+</head>
+<body>
+<div class="review-container">
+	<h1>리뷰</h1>
+	<button type="button" onclick="ReviewWriteForm()">글쓰기</button>
+	<p>다른 사용자의 리뷰를 보거나, 나의 리뷰를 작성해 보세요.</p>
+	<table class="review-table">
+		<tr>
+			<th>No.</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>조회수</th>
+			<th>추천수</th>
+			<th>작성 시간</th>
+		</tr>
+		<tr th:each="review : ${reviewList}">
+			<td th:text="${review.review_seq}"></td>
+			<td><a th:href="@{/reviewDetail(review_seq=${review.review_seq})}" th:text="${review.title}"></a></td>
+			<td th:text="${review.member.id}"></td>
+			<td th:text="${review.viewCount}"></td>
+			<td th:text="${review.recommendCount}"></td>
+			<td th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></td>
+		</tr>
+	</table>
+	<div>
+        <a th:if="${hasPrevious}" th:href="@{/review(page=${currentPage - 1}, size=${size})}">이전</a>
+        <span>Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
+        <a th:if="${hasNext}" th:href="@{/review(page=${currentPage + 1}, size=${size})}">다음</a>
+    </div>
+</div>
+</body>
+</html>
