@@ -25,6 +25,9 @@ public interface MemberService {
 	// 닉네임 중복체크
 	public int confirmNickname(String nickname);
 	
+	// 이메일 중복체크
+	public int confirmEmail(String email);
+	
 	// 개인정보 수정
 	public void changeInfo(Member vo);
 	

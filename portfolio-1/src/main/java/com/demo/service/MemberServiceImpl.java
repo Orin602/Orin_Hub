@@ -78,6 +78,18 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return result;
 	}
+	
+	@Override
+	public int confirmEmail(String email) {
+		int result = 0;
+		Member member = memberRepo.findByEmail(email);
+		if(member != null) {
+			result = 1;
+		} else {
+			result = -1;
+		}
+		return result;
+	}
 
 	@Override
 	public void changeInfo(Member vo) {

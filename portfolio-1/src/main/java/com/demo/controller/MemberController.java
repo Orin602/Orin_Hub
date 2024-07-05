@@ -93,6 +93,15 @@ public class MemberController {
  	    return response;
  	}
     
+ 	// 이메일 중복확인 처리
+ 	@GetMapping("/email-check-form")
+ 	@ResponseBody
+ 	public Map<String, Object> emailCheckAction(@RequestParam("email") String email) {
+ 		int result = memberService.confirmEmail(email);
+ 		Map<String, Object> response = new HashMap<>();
+ 		response.put("result", result);
+ 		return response;
+ 	}
     // 아이디 찾기 화면
     @GetMapping("/find-id")
     public String findIdView() {

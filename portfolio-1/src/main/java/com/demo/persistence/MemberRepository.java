@@ -33,12 +33,16 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 	@Query(value="SELECT * FROM member WHERE id = :id AND name = :name AND email = :email", nativeQuery = true)
 	Member findByIdAndNameAndEmail(String id, String name, String email);
 	
-	@Query(value = "SELECT * FROM member WHERE id =:id", nativeQuery=true)
+	@Query(value="SELECT * FROM member WHERE id =:id", nativeQuery=true)
 	Member findByLoginId(String id);
 	
 	// 닉네임 중복체크
 	@Query(value="SELECT * FROM member WHERE nickname =:nickname", nativeQuery=true)
 	Member findByNickname(String nickname);
+	
+	// 이메일 중복체크
+	@Query(value="SELECT * FROM member WHERE email =:email", nativeQuery=true)
+	Member findByEmail(String email);
 	
 	
 	

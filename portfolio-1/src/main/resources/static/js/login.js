@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var isIdChecked = false;
+	var isEmailChecked = false;
     // 로그인 버튼 클릭 시
     $("#login-button").click(function() {
         login();
@@ -7,6 +8,10 @@ $(document).ready(function() {
 
 	// 회원가입 버튼 클릭 시
 	$("#join-button").click(function() {
+		
+		var idRegex = /^[a-zA-Z0-9]{3,15}$/;
+		var pwdRegex = /^(?=.*[!@#$%^&*()-_=+`~{}[\]|;:'",<.>/?])(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
+		
 		if ($("#id").val() == "") {
 			swal.fire({
 				title: 'ID를 입력해 주세요',
@@ -41,6 +46,37 @@ $(document).ready(function() {
 				icon: 'error',
 				confirmButtonText: '확인'
 			});
+			return false;
+		} else if (!isEmailChecked) {
+			swal.fire({
+				title: 'Email 중복 체크를 해주세요.',
+				icon: 'error',
+				confirmButtonText: '확인'
+			});
+			return false;
+		} else if ($("#pwd").val() != $("#pwdcheck").val()) {
+			swal.fire({
+				title: '비밀번호가 일치하지 않습니다.',
+				text: '비밀번호를 다시 입력해 주세요.',
+				icon: 'error'
+			});
+			$("#pwd").focus();
+			return false;
+		} else if(!idRegex.test($("#id").val())) {
+			swal.fire({
+				title: '제약조건에 맞지 않습니다.',
+				text: 'ID는 영문자와 숫자로만 구성되어야 하고, 3자 이상 15자 이하여야 합니다.',
+				icon: 'warning'
+			});
+			$("#id").focus();
+			return false;
+		} else if(!pwdRegex.test($("#pwd").val())) {
+			swal.fire({
+				title: '제약조건에 맞지 않습니다.',
+				text: '비밀번호는 최소 8자 이상이며, 대문자, 소문자, 숫자, 특수문자를 모두 포함해야 합니다.',
+				icon: 'warning'
+			});
+			$("#pwd").focus();
 			return false;
 		}
 
@@ -79,13 +115,24 @@ $(document).ready(function() {
     $("#find-pwd-button").click(function() {
         findPwd();
     });
+    
+    // ID 중복 체크
     $("#id-check-button").click(function() {
+		var idRegex = /^[a-zA-Z0-9]{3,15}$/;
 		var id = $("#id").val();
 		if(id == "") {
 			swal.fire({
 				title: 'ID를 입력하세요.',
 				icon: 'error',
 				confirmButtonText: '확인'
+			});
+			$("#id").focus();
+			return false;
+		} else if(!idRegex.test(id)) {
+			swal.fire({
+				title: '제약조건에 맞지 않습니다.',
+				text: 'ID는 영문자와 숫자로만 구성되어야 하고, 3자 이상 15자 이하여야 합니다.',
+				icon: 'warning'
 			});
 			$("#id").focus();
 			return false;
@@ -98,7 +145,7 @@ $(document).ready(function() {
 			success: function(response) {
 				if(response.result === 1) {
 					swal.fire({
-						title: '중복된 ID입니다.',
+						title: '이미 사용중인 ID입니다.',
 						icon: 'error',
 						confirmButtonText: '확인'
 					});
@@ -121,6 +168,52 @@ $(document).ready(function() {
 				});
 				isIdChecked = false;
 			}
+		});
+	});
+	
+	// email 중복 체크
+	$("#email-check-button").click(function() {
+		var email = $("#email").val();
+		if(email == "") {
+			swal.fire({
+				title: 'Email을 입력하세요.',
+				icon: 'error',
+				confirmButtonText: '확인'
+			});
+			return false;
+		}
+
+		$.ajax({
+			type: 'GET',
+			url: "/email-check-form",
+			data: { email : email },
+			success: function(response) {
+				if(response.result == 1) {
+					swal.fire({
+						title: '이미 사용중인 Email입니다.',
+						icon: 'warning',
+						confirmButtonText: '확인'
+					});
+					isEmailChecked = false;
+				}else {
+					swal.fire({
+						title: '사용 가능한 Email입니다.',
+						icon: 'success',
+						confirmButtonText: '확인'
+					});
+					isEmailChecked = true;
+				}
+			},
+			error: function() {
+				swal.fire({
+					title: '오류 발생',
+					text: 'Email 중복 확인 중 오류가 발생했습니다.',
+					icon: 'error',
+					confirmButtonText: '확인'
+				});
+				isEmailChecked = false;
+			}
+
 		});
 	});
 });
