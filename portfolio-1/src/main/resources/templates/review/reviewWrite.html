@@ -13,9 +13,10 @@
 <body>
 <div class="review-write-container">
 	<h1>리뷰 작성</h1>
-	<form id="review-write-form" method="post">
+	<form id="review-write-form" method="post" enctype="multipart/form-data">
 		<input type="text" name="title" id="title" placeholder="제목을 입력하세요." />
 		<textarea name="content" id="content" placeholder="리뷰 내용을 입력해 주세요."></textarea>
+		<input type="file" name="imageFile" id="imageFile" />
 	</form>
 	<button type="button" onclick="review_write()">리뷰작성</button>
 </div>

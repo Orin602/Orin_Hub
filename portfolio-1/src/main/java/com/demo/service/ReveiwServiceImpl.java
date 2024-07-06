@@ -31,6 +31,7 @@ public class ReveiwServiceImpl implements ReviewService {
 		Review update_review = reviewRepo.getReview(vo.getReview_seq());
 		vo.setWrite_date(update_review.getWrite_date());	// 작성 시간 유지
 		vo.setReview_seq(update_review.getReview_seq());	// 게시글 고유 번호 유지
+		vo.setMember(update_review.getMember());	// 작성자 유지
 		reviewRepo.save(vo);
 		
 	}

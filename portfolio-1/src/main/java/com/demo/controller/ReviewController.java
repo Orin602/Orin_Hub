@@ -1,20 +1,29 @@
 package com.demo.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.domain.Member;
 import com.demo.domain.Review;
@@ -28,6 +37,8 @@ public class ReviewController {
 	@Autowired
 	private ReviewService reviewService;
 	
+	@Value("${com.demo.upload.path}")
+	private String uploadPath; 
 	// 리뷰 페이지
 	@GetMapping("/review")
 	public String reviewMain(@RequestParam(value="page", defaultValue="1") int page,
@@ -72,8 +83,8 @@ public class ReviewController {
 	
 	// 리뷰 작성 처리
 	@PostMapping("/review-write")
-	public String reviewWriteAction(HttpSession session, @RequestParam("title") String title,
-									@RequestParam("content") String content, Model model) {
+	public String reviewWriteAction(HttpSession session, @RequestParam("title") String title, Model model,
+									@RequestParam("content") String content, @RequestParam("imageFile") MultipartFile imageFile) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		
 		if(loginUser == null) {
@@ -81,14 +92,39 @@ public class ReviewController {
 			model.addAttribute("messageType", "info");
 			return "redirect:/login";
 		}
-		Review review = new Review();
-		review.setTitle(title);
-		review.setContent(content);
-		review.setMember(loginUser);
+		try {
+			// 파일 업로드 처리
+			String fileName = saveUploadedFile(imageFile);
+			
+			// 리뷰 저장 처리
+			Review review = new Review();
+			review.setTitle(title);
+			review.setContent(content);
+			review.setImagePath(fileName);
+			review.setMember(loginUser);
+			
+			reviewService.insertReview(review);
+			
+			return "redirect:/review";
+		} catch(Exception e) {
+			model.addAttribute("message", "리뷰 작성 중 오류가 발생했습니다.");
+			model.addAttribute("messageType", "error");
+			return "redirect:/reviewWriteForm";
+		}
+	}
+	private String saveUploadedFile(MultipartFile file) throws IOException {
+		String uploadDir = "uploads/";
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		Path uploadPath = Paths.get(uploadDir);
 		
-		reviewService.insertReview(review);
-		
-		return "redirect:/review"; // 작성한 리뷰 목록 페이지로 리다이렉트
+		if(!Files.exists(uploadPath)) {
+			Files.createDirectories(uploadPath);
+		}
+		try(InputStream inputStream = file.getInputStream()) {
+			Path filePath = uploadPath.resolve(fileName);
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+		}
+		return fileName;
 	}
 	
 	// 리뷰 상세 화면
@@ -102,16 +138,19 @@ public class ReviewController {
         
         // 모델에 리뷰와 로그인 사용자 정보 추가
         model.addAttribute("review", review);
-        model.addAttribute("loginUser", loginUser);
+        if(loginUser != null) {
+        	model.addAttribute("loginUser", loginUser);
+        }
+        
 
         return "review/reviewDetail";
 	}
 	
 	// 리뷰 수정 화면
 	@GetMapping("/edit")
-    public String reviewEditView(@RequestParam("reviewSeq") int reviewSeq,
+    public String reviewEditView(@RequestParam("review_seq") int review_seq,
 									Model model, HttpSession session) {
-        Review review = reviewService.getReview(reviewSeq);
+        Review review = reviewService.getReview(review_seq);
         model.addAttribute("review", review);
         return "review/reviewEdit";
     }

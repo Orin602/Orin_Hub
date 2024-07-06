@@ -9,6 +9,57 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/review.css}">
 <script th:src="@{js/review.js}"></script>
+<script th:inline="javascript">
+function saveEdit() {
+    var title = $("#title").val();
+    var content = $("#content").val();
+    var review_seq = /*[[${review.review_seq}]]*/ 0;
+    if (title.trim() === "") {
+        Swal.fire({
+            title: '제목을 입력하세요.',
+            icon: 'warning',
+            confirmButtonText: '확인'
+        });
+        return false;
+    }
+    
+    if (content.trim() === "") {
+        Swal.fire({
+            title: '리뷰 내용을 입력하세요.',
+            icon: 'warning',
+            confirmButtonText: '확인'
+        });
+        return false;
+    }
+    
+    $.ajax({
+        url: '/edit',
+        type: 'POST',
+        data: {
+            review_seq: review_seq,
+            title: title,
+            content: content
+        },
+        success: function(response) {
+            Swal.fire({
+                title: '수정 완료',
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then(() => {
+                window.location.href = '/review'
+            });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                title: '수정 실패',
+                text: '오류가 발생했습니다. 다시 시도해 주세요.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        }
+    });
+}
+</script>
 </head>
 <body>
 <div class="review-edit-container">
@@ -20,13 +71,13 @@
 	<label>리뷰 제목 : </label>
 	<input type="text" id="title" name="title" th:value="${review.title}" placeholder="제목을 입력하세요.">
 	<label>리뷰 내용 : </label>
-	<textarea id="content" name="content" placeholder="리뷰 내용을 입력해 주세요.">${review.content}</textarea>
+	<textarea id="content" name="content" placeholder="리뷰 내용을 입력해 주세요.">[[${review.content}]]</textarea>
 	<label>작성 날짜 : </label>
 	<p th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></p>
 	<hr>
 	
 	<div class="review-btn">
-		<button type="button" onclick="window.location.href='/reviews'">목록으로</button>
+		<button type="button" onclick="window.location.href='/review'">목록으로</button>
         <button type="button" onclick="saveEdit()">저장하기</button>
 	</div>
 </div>

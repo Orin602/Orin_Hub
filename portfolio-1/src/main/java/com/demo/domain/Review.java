@@ -5,6 +5,7 @@ import java.util.Date;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,6 +48,7 @@ public class Review {
     private int favoriteCount;  // 즐겨찾기 수
     private int recommendCount;  // 추천 수
     private int viewCount;  // 조회 수
+    private String imagePath;	// 이미지 파일 경로
 
     @Temporal(value=TemporalType.TIMESTAMP)
     @ColumnDefault("sysdate")
