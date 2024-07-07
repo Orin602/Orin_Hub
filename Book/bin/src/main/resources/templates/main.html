@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Main</title>
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a77e619adb52e6d650de29bcd7ef2670"></script>
+<script>
+    window.onload = function() {
+        // 위치 정보 가져오기
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                // 카카오맵 API를 로드하는 스크립트
+                kakao.maps.load(function () {
+                    // 지도를 표시할 div 요소 선택
+                    var container = document.getElementById('map');
+
+                    // 지도를 생성하는데 필요한 옵션
+                    var options = {
+                        center: new kakao.maps.LatLng(lat, lng), // 현재 위치로 설정
+                        level: 5 // 지도 확대 레벨
+                    };
+
+                    // 지도를 생성
+                    var map = new kakao.maps.Map(container, options);
+                });
+            });
+        } else {
+            alert("Geolocation이 지원되지 않습니다.");
+        }
+    };
+</script>
+</head>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<body>
+<div class="container">
+    <!-- 지도 test -->
+    <div id="map" style="width:500px; height:450px;"></div>
+    <!-- 고캠핑 test -->
+    <div id="go-camping">
+        <label>아이콘 + 주변 캠핑장 목록</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span>
+            <select name="distance" id="distance">
+                <option value="10km">5km</option>
+                <option value="20km">10km</option>
+                <option value="30km">20km</option>
+                <option value="40km">30km</option>
+            </select>
+        </span>
+    </div>
+</div>
+</body>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</html>
