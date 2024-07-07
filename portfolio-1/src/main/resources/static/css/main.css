@@ -1,0 +1,87 @@
+/* 밝은 테마 스타일 */
+.body-light-theme {
+    --primary-color: #87CEEB; /* 파스텔 연두색 계열 */
+    --text-color: #000; /* 기본 텍스트 색상 */
+}
+
+.body-light-theme .header-top a,
+.body-light-theme .header-mid a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* 어두운 테마 스타일 */
+.body-dark-theme {
+    --primary-color: #000; /* 검정색 */
+    --text-color: #C0C0C0; /* 실버색 */
+}
+
+.body-dark-theme .header-top a,
+.body-dark-theme .header-mid a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* 공통 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+}
+.header-top {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.header-mid {
+    text-align: center;
+    color: var(--text-color);
+    margin-top: 20px;
+}
+.header-bottom {
+    text-align: center;
+    margin-top: 20px;
+}
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.fixed-header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.fixed-header ul li {
+    margin-right: 20px;
+}
+
+.fixed-header ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* 아이콘 스타일 */
+.fa-sun, .fa-moon {
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+/* 호버 효과 */
+.fa-sun:hover, .fa-moon:hover {
+    transform: scale(1.2);
+}
