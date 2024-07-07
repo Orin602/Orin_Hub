@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Review Detail</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<script th:src="@{js/review.js}"></script>
+<script th:inline="javascript">
+    var writer = /*[[${review.member.id}]]*/ '';
+    var viewer = /*[[${loginUser.id}]]*/ '';
+    var review_seq = /*[[${review.review_seq}]]*/ 0;
+	console.log("writer: ", writer);
+	console.log("viewer: ", viewer);
+	console.log("reviewSeq: ", reviewSeq);
+	
+	function checkAndEdit() {
+	    if(writer == viewer) {
+	        window.location.href = '/edit?review_seq=' + review_seq;
+	    } else {
+	        swal.fire({
+	            title: '게시글 수정 불가',
+	            icon: 'error',
+	            text: '게시글 수정은 작성자만 가능합니다.',
+	            confirmButtonText: '확인'
+	        });
+	    }
+	}
+</script>
+</head>
+<body>
+<div class="review-detail-container">
+	<h1>리뷰 상세</h1>
+	<hr>
+	
+	<div class="review-btn">
+		조회수 카운트 <br>
+		추천수 카운트 + 버튼 <br>
+		즐겨찾기 카운트 버튼 <br>
+	</div>
+	
+	<hr>
+	<label>작성자 : </label>
+	<p th:text="${review.member.id}"></p>
+	<label>리뷰 제목 : </label>
+	<p th:text="${review.title}"></p>
+	<label>리뷰 내용 : </label>
+	<p th:text="${review.content}"></p>
+	<label>작성 날짜 : </label>
+	<p th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></p>
+	<hr>
+	
+	<div class="review-reply">
+		댓글 자리
+	</div>
+	
+	<div class="review-btn">
+		<button type="button" onclick="window.location.href='/review'">목록으로</button>
+		<th:block th:if="${loginUser != null}">
+        <button type="button" onclick="checkAndEdit()">수정하기</button>
+        </th:block>
+	</div>
+</div>
+</body>
+</html>

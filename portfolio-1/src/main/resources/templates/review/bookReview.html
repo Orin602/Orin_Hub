@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Review Main</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<script th:src="@{js/review.js}"></script>
+</head>
+<body>
+<div class="review-container">
+	<h1>리뷰</h1>
+	<button type="button" onclick="ReviewWriteForm()">글쓰기</button>
+	<p>다른 사용자의 리뷰를 보거나, 나의 리뷰를 작성해 보세요.</p>
+	
+	<div th:each="review : ${reviewList}" class="review-item">
+	    <a th:href="@{/reviewDetail(review_seq=${review.review_seq})}">
+	        <th:block th:if="${review.imagePath != null}">
+	            <!-- 이미지 파일이 있는 경우 -->
+	             <img th:src="${review.imagePath}" alt="리뷰 이미지">
+	        </th:block>
+	        <th:block th:unless="${review.imagePath != null}">
+	            <!-- 이미지 파일이 없는 경우 -->
+	            <img th:src="@{/images/no_img.jpg}" alt="이미지 없음">
+	        </th:block>
+	    </a>
+	    <h3 th:text="${review.review_seq + '. ' + review.title}"></h3>
+	    <h3>작성자: <span th:text="${review.member.id}"></span></h3>
+	    <h3>조회수: <span th:text="${review.viewCount}"></span></h3>
+	    <h3>추천수: <span th:text="${review.recommendCount}"></span></h3>
+	    <h3 th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></h3>
+	</div>
+
+	<div>
+        <a th:if="${hasPrevious}" th:href="@{/review(page=${currentPage - 1}, size=${size})}">이전</a>
+        <span>Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
+        <a th:if="${hasNext}" th:href="@{/review(page=${currentPage + 1}, size=${size})}">다음</a>
+    </div>
+</div>
+</body>
+</html>
