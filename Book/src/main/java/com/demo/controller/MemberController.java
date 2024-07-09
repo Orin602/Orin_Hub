@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.demo.domain.Member;
 import com.demo.service.MemberService;
@@ -44,10 +45,6 @@ public class MemberController {
 		if(result == 1) {
 			Member user = memberService.getMember(vo.getId());
 			session.setAttribute("loginUser", user); // 세션에 로그인 사용자 정보 저장
-			model.addAttribute("message", "로그인 성공");
-			model.addAttribute("text", "안녕하세요~!");
-			model.addAttribute("messageType", "success");
-			
 			return "redirect:/main";
 		} else if(result == -1) {
 			model.addAttribute("message", "ID가 존재하지 않습니다.");

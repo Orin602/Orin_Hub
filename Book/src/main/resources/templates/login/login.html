@@ -31,18 +31,17 @@
 	/*<![CDATA[*/
 	var message = [[${message}]];
 	var messageType = [[${messageType}]];
+	var text = [[${text}]];
 	/*]]>*/
-</script>
-
-<script>
-$(document).ready(function() {
-    if (message && messageType) {
-        Swal.fire({
-            title: message,
-            icon: messageType
-        });
-    }
-}); 
+	$(document).ready(function() {
+	    if (message && messageType) {
+	        Swal.fire({
+	            title: message,
+	            text: text,
+	            icon: messageType
+	        });
+	    }
+	}); 
 </script>
 </body>
 </html>
