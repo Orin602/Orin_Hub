@@ -17,23 +17,35 @@
 	<a th:href="@{/review-write}">리뷰 작성</a>
 	<div class="review-list">
 		<h2>리뷰 목록</h2>
-		<div th:if="${#lists.isEmpty(reviewList)}">
+		<div class="search-container">
+	        <form id="search_review" method="get">
+	            <select name="searchType">
+	                <option value="search_id">ID</option>
+	                <option value="search_title">제목</option>
+	            </select>
+	            <input type="search" id="search" name="keyword" placeholder="검색어를 입력하세요." />
+	            <button type="button" onclick="search_review()">검색</button>
+	        </form>
+	    </div>
+		<div th:if="${reviews.isEmpty()}">
 		    <p>작성된 리뷰가 없습니다.</p>
 		</div>
-		<div th:unless="${#lists.isEmpty(reviewList)}">
-		    <div class="review-box" th:each="review : ${reviewList}">
-		        <th:block th:if="${review.imagePath == null}">
+		<div th:unless="${reviews.isEmpty()}">
+		    <div class="review-box" th:each="review : ${reviews}">
+		    	
+		        <th:block th:if="${review.uploadFilePath == null}">
 		            <img th:src="@{/images/no_img.jpg}" alt="이미지 없음">
 		        </th:block>
-		        <th:block th:unless="${review.imagePath == null}">
-		            <img th:src="${review.imagePath}" alt="${review.title}">
+		        <th:block th:unless="${review.uploadFilePath == null}">
+		            <img th:src="${review.uploadFilePath}" alt="${review.title}">
 		        </th:block>
 		        <h4>제목 : <span th:text="${review.title}"></span></h4>
 		        <h4>작성자 : <span th:text="${review.member.id}"></span></h4>
 		        <h4>조회수 : <span th:text="${review.viewCount}"></span> / 
-		        추천수 : <span th:text="${review.recommendCount}"></span></h4>
+		        추천수 : <span th:text="${review.recoCount}"></span></h4>
 		    </div>
 		</div>
+		
 	</div>
 </div>
 </body>
