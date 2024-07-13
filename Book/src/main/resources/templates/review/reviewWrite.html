@@ -14,12 +14,13 @@
 <div class="review-write-container">
 	<h1>리뷰 작성</h1>
 	<div class="review-write-content">
-		<form class="writeform" id="review-write-form" method="post" enctype="multipart/form-data">
+		<form class="review-write-form" id="review-write-form" method="post" enctype="multipart/form-data">
 			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요." />
 			<textarea rows="10" cols="20" name="content" id="content" placeholder="내용을 입력해주세요."></textarea>
-			<input type="file" name="uploadFile" id="uploadFile">
+			<input type="file" name="uploadFile" id="uploadFile" multiple>
 		</form>
 	</div>
+	<button type="button" onclick="window.location.href='/review'">목록으로</button>
 	<button type="button" onclick="review_write()">리뷰 작성</button>
 </div>
 </body>

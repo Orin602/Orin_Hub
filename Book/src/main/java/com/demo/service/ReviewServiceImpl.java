@@ -1,12 +1,13 @@
 package com.demo.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Review;
 import com.demo.persistence.ReviewRepository;
 
@@ -105,4 +106,30 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewRepo.findFavoriteReviewsByMemberId(id);
 	}
 
+	// 이미지 삭제
+	@Override
+	@Transactional
+	public void deleteImage(int review_seq, int imageIndex) {
+	    Review review = reviewRepo.getReviewBySeq(review_seq);
+	    List<String> uploadImages = review.getUploadedImages();
+	    
+	    if (imageIndex >= 0 && imageIndex < uploadImages.size()) {
+	        // 이미지 리스트에서 해당 인덱스의 이미지 삭제
+	        String imageUrlToRemove = uploadImages.remove(imageIndex);
+	        
+	        try {
+	            // 파일 시스템에서 이미지 삭제
+	            FileUploadUtil.deleteFile(imageUrlToRemove);
+	        } catch (IOException e) {
+	            // IOException을 RuntimeException으로 전환하여 처리
+	            throw new RuntimeException("Failed to delete image file: " + imageUrlToRemove, e);
+	        }
+	        
+	        // 변경된 이미지 리스트를 Review 객체에 설정
+	        review.setUploadedImages(uploadImages);
+	        reviewRepo.save(review);
+	    } else {
+	        throw new IllegalArgumentException("Invalid image index: " + imageIndex);
+	    }
+	}
 }

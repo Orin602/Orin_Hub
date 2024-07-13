@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Review Detail</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/review.js}"></script>
+<script th:inline="javascript">
+	var writer = /*[[${review.member.id}]]*/ '';
+	var viewer = /*[[${loginUser.id}]]*/ '';
+	var review_seq = /*[[${review.review_seq}]]*/ 0;
+	
+	function checkAndEdit() {
+		if(writer == viewer) {
+			window.location.href = '/edit?review_seq=' + review_seq;
+		} else {
+			swal.fire({
+				title: '리뷰 수정 실패',
+				text: '작성자만 수정 가능합니다.',
+				icon: 'warning',
+				confirmButtonText: '확인'
+			});
+		}
+	}
+</script>
+</head>
+<body>
+<div class="review-detail-container">
+	<h1>리뷰 상세 보기</h1>
+	<div class="review-btn">
+		조회수 카운트 <br>
+		추천수 카운트 + 버튼 <br>
+		즐겨찾기 카운트 버튼 <br>
+	</div>
+	<div class="review-detail-content">
+		<th:block th:if="${#lists.isEmpty(uploadImages)}">
+            <img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:200px; height:200px;">
+        </th:block>
+        <th:block th:unless="${#lists.isEmpty(uploadImages)}">
+            <div th:each="image : ${uploadImages}">
+                <img th:src="@{${image}}" th:alt="${review.title}" style="width:200px; height:200px;">
+            </div>
+        </th:block>
+		<h4>작성자 : <span th:text="${review.member.id}"></span></h4>
+		<h4>제목 : <span th:text="${review.title}"></span></h4>
+		<h4>리뷰 내용 : <span th:text="${review.content}"></span></h4>
+		<h4>작성 날짜 : <span th:text="${#dates.format(review.review_date, 'yyyy-MM-dd HH:mm')}"></span></h4>
+	</div>
+	<div class="review-reply">
+		댓글자리
+	</div>
+	<div class="review_btn">
+		<button type="button" onclick="window.location.href='/review'">목록으로</button>
+		<th:block th:if="${loginUser != null}">
+        <button type="button" onclick="checkAndEdit()">수정하기</button>
+        </th:block>
+	</div>
+</div>
+</body>
+</html>
