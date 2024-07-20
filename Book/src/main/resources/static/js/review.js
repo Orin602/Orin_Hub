@@ -109,3 +109,67 @@ function update_review() {
 	}
 	
 }
+
+
+// 댓글 좋아요
+function reply_like(reply_seq) {
+	swal.fire({
+		title: '좋아요',
+		icon: 'success',
+		confirmButtonText: '확인'
+	}).then((result) => {
+		if (result.isConfirmed) {
+            $.ajax({
+                url: '/increment-likes',
+                type: 'POST',
+                data: { replySeq: replySeq },
+                success: function(response) {
+                    console.log('좋아요 증가 성공:', response);
+                    // 페이지를 새로고침
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('좋아요 증가 실패:', error);
+                }
+            });
+        }
+    });
+}
+
+// 댓글 작성
+function reply_write() {
+	if($("#content").val() == "") {
+		swal.fire({
+			title: '댓글 작성 실패',
+			text: '댓글을 입력해 주세요.',
+			icon: 'error',
+			confirmButtonText: '확인'
+		});
+		$("#content").focus();
+		return false;
+	}
+	// 댓글 작성 요청
+    $.ajax({
+        url: '/write-reply',  // 댓글 작성 서버 엔드포인트
+        type: 'POST',
+        data: $("#reply-write-form").serialize(),
+        success: function(response) {
+            swal.fire({
+                title: '댓글 작성 성공',
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then(() => {
+                location.reload(); // 댓글 작성 후 페이지 새로고침
+            });
+        },
+        error: function(xhr, status, error) {
+            swal.fire({
+                title: '댓글 작성 실패',
+                text: '서버에서 오류가 발생했습니다. 다시 시도해 주세요.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        }
+    });
+	
+}

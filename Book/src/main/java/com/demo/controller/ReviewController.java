@@ -7,18 +7,22 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Member;
+import com.demo.domain.Reply;
 import com.demo.domain.Review;
+import com.demo.service.ReplyService;
 import com.demo.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +32,8 @@ public class ReviewController {
 
 	@Autowired
 	private ReviewService reviewService;
+	@Autowired
+	private ReplyService replyService;
 	
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
@@ -138,6 +144,11 @@ public class ReviewController {
 		// 어보드한 이미지 파일 URL 리스트 추가
 		List<String> uploadImages = review.getUploadedImages();
 		model.addAttribute("uploadImages", uploadImages);
+		
+		// 댓글
+		List<Reply> reply = replyService.getReplyByReview(review_seq);
+		model.addAttribute("reply", reply);
+		
 		model.addAttribute("review", review);
 		
 		return "review/reviewDetail";
@@ -240,6 +251,34 @@ public class ReviewController {
         
         reviewService.updateReview(vo);
         return "redirect:/review";
+	}
+	
+	// 댓글 좋아요
+	@PostMapping("/increment-like")
+	@ResponseBody
+	public ResponseEntity<String> incrementLike(@RequestParam("replySeq") int replySeq) {
+		try {
+			replyService.incrementLike(replySeq);
+	        return ResponseEntity.ok("좋아요 증가 성공");
+		} catch(Exception e) {
+			return ResponseEntity.status(500).body("좋아요 증가 실패: " + e.getMessage());
+		}
+	}
+	
+	// 댓글 작성
+	@PostMapping("/write-reply")
+	@ResponseBody
+	public ResponseEntity<String> writeReply(@RequestBody Reply reply) {
+	    try {
+	        // 댓글 저장 서비스 호출
+	        replyService.saveReply(reply);
+	        
+	        // 성공 응답 반환
+	        return ResponseEntity.ok("댓글이 성공적으로 작성되었습니다.");
+	    } catch (Exception e) {
+	        // 예외 발생 시 실패 응답 반환
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 작성 실패: " + e.getMessage());
+	    }
 	}
 }
 
