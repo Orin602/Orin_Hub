@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Main</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
@@ -32,5 +33,21 @@
 
 <h1>테스트</h1>
 <a th:href="@{/review}">리뷰</a>
+
+<h1>Book Recommendations</h1>
+<div th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
+<div th:if="${recommendations}">
+    <ul>
+        <li th:each="recommendation : ${recommendations}">
+            <h2 th:text="${recommendation.recomtitle}"></h2>
+            <img th:src="${recommendation.recomfilepath}" alt="Book Image">
+            <p th:text="${#strings.replace(recommendation.recomauthor, ';', '/')}" />
+            <p th:utext="${recommendation.recomcontens}"></p>
+            <p th:text="'Date: ' + ${recommendation.regdate}"></p>
+        </li>
+    </ul>
+</div>
 </body>
 </html>

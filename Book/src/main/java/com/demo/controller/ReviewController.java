@@ -1,8 +1,12 @@
 package com.demo.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +27,7 @@ import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Member;
 import com.demo.domain.Reply;
 import com.demo.domain.Review;
+import com.demo.service.MemberService;
 import com.demo.service.ReplyService;
 import com.demo.service.ReviewService;
 
@@ -34,6 +40,8 @@ public class ReviewController {
 	private ReviewService reviewService;
 	@Autowired
 	private ReplyService replyService;
+	@Autowired
+	private MemberService memberService;
 	
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
@@ -254,32 +262,52 @@ public class ReviewController {
 	}
 	
 	// 댓글 좋아요
-	@PostMapping("/increment-like")
-	@ResponseBody
-	public ResponseEntity<String> incrementLike(@RequestParam("replySeq") int replySeq) {
-		try {
-			replyService.incrementLike(replySeq);
-	        return ResponseEntity.ok("좋아요 증가 성공");
-		} catch(Exception e) {
-			return ResponseEntity.status(500).body("좋아요 증가 실패: " + e.getMessage());
+	@PostMapping("/{replySeq}/like")
+	public ResponseEntity<Map<String, Object>> likeReply(HttpSession session, @PathVariable int replySeq) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "로그인 후 사용해 주세요.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 		}
+			replyService.incrementLike(replySeq);
+			return null;
 	}
+
 	
 	// 댓글 작성
 	@PostMapping("/write-reply")
 	@ResponseBody
-	public ResponseEntity<String> writeReply(@RequestBody Reply reply) {
+	public ResponseEntity<String> writeReply(@RequestBody Map<String, Object> requestBody) {
 	    try {
+	        // requestBody에서 review_seq와 member_id 추출
+	        int reviewSeq = Integer.parseInt((String) requestBody.get("review_seq"));
+	        String memberId = (String) requestBody.get("member_id");
+	        String content = (String) requestBody.get("content");
+
+	        // Review 객체와 Member 객체를 데이터베이스에서 조회
+	        Review review = reviewService.getReviewBySeq(reviewSeq);
+	        Member member = memberService.getMember(memberId);
+
+	        // Reply 객체 생성
+	        Reply reply = Reply.builder()
+	                            .content(content)
+	                            .review(review)
+	                            .member(member)
+	                            .reply_date(new Date()) // 현재 날짜 및 시간 설정
+	                            .build();
+
 	        // 댓글 저장 서비스 호출
 	        replyService.saveReply(reply);
 	        
-	        // 성공 응답 반환
 	        return ResponseEntity.ok("댓글이 성공적으로 작성되었습니다.");
 	    } catch (Exception e) {
-	        // 예외 발생 시 실패 응답 반환
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 작성 실패: " + e.getMessage());
 	    }
 	}
+
 }
 
 

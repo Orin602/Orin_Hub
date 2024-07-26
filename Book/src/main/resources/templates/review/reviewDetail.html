@@ -57,13 +57,14 @@
 				<h5><span th:text="${reply.member.name}"></span>
 				<span th:text="${reply.content}"></span>
 				<span th:text="${#dates.format(reply.reply_date, 'yyyy-MM-dd HH:mm')}"></span></h5>
-				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>
 				<button type="button" onclick="reply_like(${reply.replySeq})">좋아요</button>
+				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>
 			</div>
 		</div>
 		<div class="reply-content" th:if="${loginUser != null}">
 			<form class="reply-write-form" id="reply-write-form" method="post">
 				<input type="hidden" name="review_seq" th:value="${review.review_seq}">
+				<input type="hidden" name="member_id" th:value="${loginUser.id}">
 				<input type="text" id="content" name="content" placeholder="댓글을 작성하세요">
 			</form>
 			<button type="button" onclick="reply_write()">댓글 작성</button>

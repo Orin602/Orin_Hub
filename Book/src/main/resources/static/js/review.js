@@ -112,50 +112,86 @@ function update_review() {
 
 
 // 댓글 좋아요
-function reply_like(reply_seq) {
-	swal.fire({
-		title: '좋아요',
-		icon: 'success',
-		confirmButtonText: '확인'
-	}).then((result) => {
-		if (result.isConfirmed) {
+function reply_like(replySeq) {
+    Swal.fire({
+        title: '좋아요를 누르시겠습니까?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText: '취소'
+    }).then((result) => {
+        if (result.isConfirmed) {
             $.ajax({
-                url: '/increment-likes',
+                url: `/reply/${replySeq}/like`,  // 댓글의 ID를 포함한 URL
                 type: 'POST',
-                data: { replySeq: replySeq },
+                contentType: 'application/json',
                 success: function(response) {
-                    console.log('좋아요 증가 성공:', response);
-                    // 페이지를 새로고침
-                    location.reload();
+                    if (response.success) {
+                        // 좋아요 수 업데이트
+                        document.getElementById(`likes-${replySeq}`).innerText = response.newLikes;
+                        Swal.fire({
+                            title: '성공!',
+                            text: '좋아요가 증가했습니다.',
+                            icon: 'success',
+                            confirmButtonText: '확인'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: '이미 좋아요!',
+                            text: '이미 좋아요를 눌렀습니다.',
+                            icon: 'info',
+                            confirmButtonText: '확인'
+                        });
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error('좋아요 증가 실패:', error);
+                    Swal.fire({
+                        title: '오류!',
+                        text: '좋아요 증가에 실패했습니다. 나중에 다시 시도해주세요.',
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
                 }
             });
         }
     });
 }
 
+
 // 댓글 작성
 function reply_write() {
-	if($("#content").val() == "") {
-		swal.fire({
-			title: '댓글 작성 실패',
-			text: '댓글을 입력해 주세요.',
-			icon: 'error',
-			confirmButtonText: '확인'
-		});
-		$("#content").focus();
-		return false;
-	}
-	// 댓글 작성 요청
+    var content = $("#content").val();
+    var reviewSeq = $("input[name='review_seq']").val();
+    var memberId = $("input[name='member_id']").val();
+    
+    if (content.trim() === "") {
+        swal.fire({
+            title: '댓글 작성 실패',
+            text: '댓글을 입력해 주세요.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        });
+        $("#content").focus();
+        return;
+    }
+
+    var reviewSeq = $("input[name='review_seq']").val();
+
+    // 댓글 작성 요청
     $.ajax({
-        url: '/write-reply',  // 댓글 작성 서버 엔드포인트
+        url: '/write-reply',
         type: 'POST',
-        data: $("#reply-write-form").serialize(),
+        contentType: 'application/json',
+        data: JSON.stringify({
+            review_seq: reviewSeq,
+            member_id: memberId,
+            content: content
+        }),
         success: function(response) {
             swal.fire({
                 title: '댓글 작성 성공',
+                text: response,
                 icon: 'success',
                 confirmButtonText: '확인'
             }).then(() => {
@@ -171,5 +207,5 @@ function reply_write() {
             });
         }
     });
-	
 }
+

@@ -164,7 +164,37 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
-
+		<!-- Jakarta XML Bind API -->
+	    <dependency>
+	        <groupId>jakarta.xml.bind</groupId>
+	        <artifactId>jakarta.xml.bind-api</artifactId>
+	        <version>3.0.0</version>
+	    </dependency>
+	    <!-- Jakarta XML Bind Runtime -->
+	    <dependency>
+	        <groupId>org.glassfish.jaxb</groupId>
+	        <artifactId>jaxb-runtime</artifactId>
+	        <version>3.0.0</version>
+	    </dependency>
+	    <!-- JAXB API -->
+	    <dependency>
+	        <groupId>jakarta.xml.bind</groupId>
+	        <artifactId>jakarta.xml.bind-api</artifactId>
+	        <version>3.0.1</version>
+	    </dependency>
+	
+	    <!-- JAXB Runtime -->
+	    <dependency>
+	        <groupId>org.glassfish.jaxb</groupId>
+	        <artifactId>jaxb-runtime</artifactId>
+	        <version>3.0.2</version>
+	    </dependency>
+	
+	    <dependency>
+	        <groupId>org.glassfish.jaxb</groupId>
+	        <artifactId>jaxb-core</artifactId>
+	        <version>3.0.2</version>
+	    </dependency>
     </dependencies>
 
     <build>
