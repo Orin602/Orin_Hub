@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>도서 검색 결과</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/book.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:src="@{/js/book.js}"></script>
+</head>
+<body>
+    <div class="search-book-container">
+        <h1>도서 검색 결과</h1>
+
+        <div id="search-results"></div>
+        <div id="pagination" class="pagination"></div>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var searchResultJson = /*[[${searchResultJson}]]*/ '{}';
+            var query = /*[[${query}]]*/ '';
+            var start = /*[[${start}]]*/ 1;
+
+            // JavaScript 객체로 변환
+            var parsedResult = JSON.parse(searchResultJson);
+
+            var totalResults = parsedResult.totalResults || 0;
+            var items = parsedResult.items || [];
+            var maxResults = 10; // 한 페이지에 표시할 최대 결과 수
+            var currentPage = Math.ceil(start / maxResults);
+            var totalPages = Math.ceil(totalResults / maxResults);
+
+            var htmlContent = '<p>Total Results: ' + totalResults + '</p>';
+            items.forEach(function(item) {
+                htmlContent += '<div class="book-item">'
+                    + '<h2>' + item.title + '</h2>'
+                    + '<img src="' + item.cover + '" alt="' + item.title + '">'
+                    + '<p>Author: ' + item.author + '</p>'
+                    + '<p>Description: ' + item.description + '</p>'
+                    + '</div>';
+            });
+
+            $('#search-results').html(htmlContent);
+
+            // 페이지네이션 생성
+            var paginationContent = '';
+            if (currentPage > 1) {
+                paginationContent += '<a href="#" onclick="loadPage(' + (currentPage - 1) + ')">Previous</a>';
+            }
+            for (var i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationContent += '<strong>' + i + '</strong>';
+                } else {
+                    paginationContent += '<a href="#" onclick="loadPage(' + i + ')">' + i + '</a>';
+                }
+            }
+            if (currentPage < totalPages) {
+                paginationContent += '<a href="#" onclick="loadPage(' + (currentPage + 1) + ')">Next</a>';
+            }
+
+            $('#pagination').html(paginationContent);
+
+            function loadPage(page) {
+                var start = (page - 1) * maxResults + 1;
+                window.location.href = '/search-book?query=' + encodeURIComponent(query) + '&start=' + start;
+            }
+            /*]]>*/
+        </script>
+    </div>
+</body>
+</html>

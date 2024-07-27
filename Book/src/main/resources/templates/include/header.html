@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/main.css}">
+<script th:src="@{/js/main.js}"></script>
 <title>header</title>
 <script>
     document.addEventListener("scroll", function() {
@@ -56,7 +57,12 @@
     <div class="header-mid">
         <h1>
             <a th:href="@{/main}">메인페이지</a>
+            <a th:href="@{/review}">리뷰</a>
         </h1>
+        <form id="search-form" method="get">
+	        <input type="search" name="query" id="query" placeholder="도서 검색..." aria-label="도서 검색" />
+	        <button type="button" onclick="search_book()">검색</button>
+	    </form>
     </div>
 </div>
 <!--고정 헤더-->
