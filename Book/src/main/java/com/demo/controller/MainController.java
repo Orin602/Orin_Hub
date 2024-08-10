@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.demo.domain.Member;
 import com.demo.domain.SearchHistory;
 import com.demo.dto.BookRecommendation;
+import com.demo.dto.ItemDTO;
 import com.demo.dto.SearchResultDTO;
 import com.demo.service.BookRecommendationService;
 import com.demo.service.SearchHistoryService;
@@ -84,37 +87,31 @@ public class MainController {
 	
 	// 도서 검색
 	@GetMapping("/search-book")
-	public String searchBookView(HttpSession session, Model model, @RequestParam("query") String query,
-			@RequestParam(value = "start", defaultValue = "1") int start) {
+	public String searchBooks(@RequestParam("query") String query, HttpSession session,
+            @RequestParam(value = "start", defaultValue = "1") int start, Model model) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
+		SearchHistory searchHistory = new SearchHistory();
 		
-		// 검색 기록 저장
-        SearchHistory searchHistory = new SearchHistory();
-        searchHistory.setQuery(query);
-        searchHistory.setSearch_date(new Date());
-        
-		// 로그인한 사용자가 있는 경우, 검색 기록에 사용자 정보 설정
-        if (loginUser != null) {
-            searchHistory.setMember(loginUser);
-        }
-        
-        // 검색 기록을 데이터베이스에 저장
-        searchHisService.saveSearchHistory(searchHistory);
-        
-        // 검색어를 기반으로 API 호출
-        SearchResultDTO searchResult = searchService.searchBooks(query, start);
-        // JSON 문자열로 변환하여 모델에 추가
-        try {
-            String searchResultJson = objectMapper.writeValueAsString(searchResult);
-            model.addAttribute("searchResultJson", searchResultJson);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            model.addAttribute("error", "검색 결과를 처리하는 동안 오류가 발생했습니다.");
-        }
+		if(loginUser != null) {
+			searchHistory.setMember(loginUser);
+		}
+		
+		searchHistory.setQuery(query);
+		searchHistory.setSearch_date(new Date());
+		
+		searchHisService.saveSearchHistory(searchHistory);
+		
+		// 검색 서비스 호출
+        List<ItemDTO> items = searchService.searchBooks(query, start);
+        // 검색 결과를 세션에 저장
+        session.setAttribute("searchResults", items);
+        // 모델에 검색 결과 추가
+        model.addAttribute("items", items);
 
-        model.addAttribute("query", query); // 페이지네이션에서 검색어를 유지하기 위해 추가
-        model.addAttribute("start", start); // 페이지네이션에서 시작 페이지를 유지하기 위해 추가
+        // 검색어를 모델에 추가하여 검색어를 유지하도록 함
+        model.addAttribute("query", query);
 
+        // 결과를 보여줄 HTML 템플릿 이름
         return "searchBook/searchBookMain";
-	}
+    }
 }

@@ -1,7 +1,6 @@
 package com.demo.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,9 +26,11 @@ import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Member;
 import com.demo.domain.Reply;
 import com.demo.domain.Review;
+import com.demo.dto.ItemDTO;
 import com.demo.service.MemberService;
 import com.demo.service.ReplyService;
 import com.demo.service.ReviewService;
+import com.demo.service.SearchService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -42,6 +43,8 @@ public class ReviewController {
 	private ReplyService replyService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private SearchService searchService;
 	
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
@@ -308,6 +311,26 @@ public class ReviewController {
 	    }
 	}
 
+	@GetMapping("/book-review/{title}")
+	public String writeReview(@PathVariable("title") String title, Model model, HttpSession session) {
+	    // 세션에서 검색 결과 가져오기
+	    List<ItemDTO> items = (List<ItemDTO>) session.getAttribute("searchResults");
+	 
+	    // 해당 책 정보를 찾기
+	    ItemDTO selectedItem = items.stream()
+	                                .filter(item -> item.getTitle().equals(title))
+	                                .findFirst()
+	                                .orElse(null);
+
+	    if (selectedItem != null) {
+	        model.addAttribute("item", selectedItem);
+	        model.addAttribute("review", new Review());
+	        return "review/reviewWrite";
+	    } else {
+	        model.addAttribute("message", "책 정보를 가져오는 데 실패했습니다.");
+	        return "error"; // 적절한 오류 페이지로 리다이렉션
+	    }
+	}
 }
 
 

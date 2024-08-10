@@ -1,16 +1,29 @@
 package com.demo.service;
 
-import com.demo.dto.SearchResultDTO;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.web.util.UriUtils;
+
+import com.demo.dto.ItemDTO;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class SearchService {
 
+	private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
+	
     @Value("${aladin.api.key}")
     private String ttbKey;
 
@@ -24,28 +37,43 @@ public class SearchService {
         this.objectMapper = objectMapper;
     }
 
-    public SearchResultDTO searchBooks(String query, int start) {
+    public List<ItemDTO> searchBooks(String query, int start) {
+        final int resultsPerPage = 10;
+
         // API 요청 URL 생성
-        String url = UriComponentsBuilder.fromHttpUrl(ALADIN_API_URL)
-            .queryParam("ttbkey", ttbKey)         // TTB Key
-            .queryParam("Query", query)           // 검색어
-            .queryParam("QueryType", "Keyword")   // 검색 타입 (기본값)
-            .queryParam("SearchTarget", "Book")   // 검색 대상 (기본값)
-            .queryParam("MaxResults", 10)          // 최대 결과 수
-            .queryParam("start", start)            // 시작 페이지
-            .queryParam("sort", "Accuracy")       // 정렬 순서 (기본값)
-            .queryParam("output", "js")            // 응답 형식 (JSON)
-            .toUriString();
-
+        String url = String.format("%s?ttbkey=%s&Query=%s&QueryType=Title&Version=20131101&SearchTarget=Book&MaxResults=%d&start=%d&sort=Accuracy&output=js",
+                ALADIN_API_URL,
+                ttbKey,
+                query, // 쿼리 값
+                resultsPerPage,
+                start);
         // API 호출
-        String response = restTemplate.getForObject(url, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
+        String response = responseEntity.getBody();
 
-        // JSON 응답을 DTO로 변환
+        // 로그 추가: API 요청 URL과 응답 확인
+        logger.info("API Request URL: {}", url);
+        logger.info("API Response: {}", response);
+
+        List<ItemDTO> items = new ArrayList<>();
+
         try {
-            return objectMapper.readValue(response, new TypeReference<SearchResultDTO>() {});
+            if (response == null || response.isEmpty()) {
+                logger.warn("No response received from API.");
+            } else {
+                JsonNode root = objectMapper.readTree(response);
+                JsonNode itemsNode = root.path("item");
+
+                for (JsonNode itemNode : itemsNode) {
+                    ItemDTO item = objectMapper.treeToValue(itemNode, ItemDTO.class);
+                    items.add(item);
+                }
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            return new SearchResultDTO(); // 오류 발생 시 빈 결과 반환
+            logger.error("Error parsing API response: {}", e.getMessage(), e);
         }
+
+        return items;
     }
+
 }

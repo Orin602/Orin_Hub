@@ -10,63 +10,23 @@
 <script th:src="@{/js/book.js}"></script>
 </head>
 <body>
-    <div class="search-book-container">
-        <h1>도서 검색 결과</h1>
-
-        <div id="search-results"></div>
-        <div id="pagination" class="pagination"></div>
-
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            var searchResultJson = /*[[${searchResultJson}]]*/ '{}';
-            var query = /*[[${query}]]*/ '';
-            var start = /*[[${start}]]*/ 1;
-
-            // JavaScript 객체로 변환
-            var parsedResult = JSON.parse(searchResultJson);
-
-            var totalResults = parsedResult.totalResults || 0;
-            var items = parsedResult.items || [];
-            var maxResults = 10; // 한 페이지에 표시할 최대 결과 수
-            var currentPage = Math.ceil(start / maxResults);
-            var totalPages = Math.ceil(totalResults / maxResults);
-
-            var htmlContent = '<p>Total Results: ' + totalResults + '</p>';
-            items.forEach(function(item) {
-                htmlContent += '<div class="book-item">'
-                    + '<h2>' + item.title + '</h2>'
-                    + '<img src="' + item.cover + '" alt="' + item.title + '">'
-                    + '<p>Author: ' + item.author + '</p>'
-                    + '<p>Description: ' + item.description + '</p>'
-                    + '</div>';
-            });
-
-            $('#search-results').html(htmlContent);
-
-            // 페이지네이션 생성
-            var paginationContent = '';
-            if (currentPage > 1) {
-                paginationContent += '<a href="#" onclick="loadPage(' + (currentPage - 1) + ')">Previous</a>';
-            }
-            for (var i = 1; i <= totalPages; i++) {
-                if (i === currentPage) {
-                    paginationContent += '<strong>' + i + '</strong>';
-                } else {
-                    paginationContent += '<a href="#" onclick="loadPage(' + i + ')">' + i + '</a>';
-                }
-            }
-            if (currentPage < totalPages) {
-                paginationContent += '<a href="#" onclick="loadPage(' + (currentPage + 1) + ')">Next</a>';
-            }
-
-            $('#pagination').html(paginationContent);
-
-            function loadPage(page) {
-                var start = (page - 1) * maxResults + 1;
-                window.location.href = '/search-book?query=' + encodeURIComponent(query) + '&start=' + start;
-            }
-            /*]]>*/
-        </script>
-    </div>
+	<div class="search-book-container">
+		<h1>도서 검색 결과</h1>
+		<h3>검색어 : [[${query}]]</h3>
+		<div id="results">
+            <!-- 검색 결과가 여기에 동적으로 추가됨 -->
+            <ul>
+                <li th:each="item : ${items}">
+                	<a th:href="@{book-review/{title}(title=${item.title})}">
+	                	<img th:src="${item.cover}" alt="Book Cover" style="width:100px;">
+	                </a>
+	                <h4 th:text="${item.title}"></h4>
+	                <p th:text="${item.author}"></p>
+	                <p th:text="${item.description}"></p>
+                </li>
+            </ul>
+        </div>
+	</div>
+	
 </body>
 </html>

@@ -46,6 +46,9 @@ public class Review {
 	private int recoCount; // 추천수
 	private int checkCount; // 즐겨찾기수
 
+	// 이미지 URL을 저장하기 위한 필드
+    private String coverImageUrl;
+    
 	// 추가된 필드: 이미지 업로드를 위한 필드
     // 여러 이미지를 업로드할 수 있도록 List<String> 형태로 정의
     @ElementCollection
