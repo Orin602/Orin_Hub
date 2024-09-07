@@ -46,4 +46,5 @@ public interface ReviewService {
     
     // 이미지 삭제
 	void deleteImage(int review_seq, int imageIndex);
+	
 }

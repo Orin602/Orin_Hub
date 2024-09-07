@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,4 +27,9 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
     @Query("UPDATE Reply r SET r.likes = r.likes + 1 WHERE r.replySeq = :replySeq")
     void incrementLikes(int replySeq);
     
+    // 댓글 삭제
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Reply r WHERE r.replySeq = :replySeq")
+    void deleteReplyBySeq(@Param("replySeq") int replySeq);
 }

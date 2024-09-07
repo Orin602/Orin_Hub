@@ -57,8 +57,10 @@
 				<h5><span th:text="${reply.member.name}"></span>
 				<span th:text="${reply.content}"></span>
 				<span th:text="${#dates.format(reply.reply_date, 'yyyy-MM-dd HH:mm')}"></span></h5>
-				<button type="button" onclick="reply_like(${reply.replySeq})">좋아요</button>
+				<button type="button" onclick="replyLike([[${reply.replySeq}]])">좋아요</button>
 				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>
+				<button type="button" onclick="replyDelete([[${reply.replySeq}]])">댓글삭제</button>
+
 			</div>
 		</div>
 		<div class="reply-content" th:if="${loginUser != null}">

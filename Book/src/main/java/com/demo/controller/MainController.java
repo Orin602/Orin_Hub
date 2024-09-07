@@ -88,9 +88,10 @@ public class MainController {
 	// 도서 검색
 	@GetMapping("/search-book")
 	public String searchBooks(@RequestParam("query") String query, HttpSession session,
-            @RequestParam(value = "start", defaultValue = "1") int start, Model model) {
+            @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		SearchHistory searchHistory = new SearchHistory();
+		
 		
 		if(loginUser != null) {
 			searchHistory.setMember(loginUser);
@@ -102,12 +103,13 @@ public class MainController {
 		searchHisService.saveSearchHistory(searchHistory);
 		
 		// 검색 서비스 호출
-        List<ItemDTO> items = searchService.searchBooks(query, start);
+        List<ItemDTO> items = searchService.searchBooks(query, page);
         // 검색 결과를 세션에 저장
         session.setAttribute("searchResults", items);
         // 모델에 검색 결과 추가
         model.addAttribute("items", items);
-
+        System.out.println("Items: " + items);
+        
         // 검색어를 모델에 추가하여 검색어를 유지하도록 함
         model.addAttribute("query", query);
 

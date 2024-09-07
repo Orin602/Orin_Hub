@@ -111,53 +111,6 @@ function update_review() {
 }
 
 
-// 댓글 좋아요
-function reply_like(replySeq) {
-    Swal.fire({
-        title: '좋아요를 누르시겠습니까?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: '확인',
-        cancelButtonText: '취소'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: `/reply/${replySeq}/like`,  // 댓글의 ID를 포함한 URL
-                type: 'POST',
-                contentType: 'application/json',
-                success: function(response) {
-                    if (response.success) {
-                        // 좋아요 수 업데이트
-                        document.getElementById(`likes-${replySeq}`).innerText = response.newLikes;
-                        Swal.fire({
-                            title: '성공!',
-                            text: '좋아요가 증가했습니다.',
-                            icon: 'success',
-                            confirmButtonText: '확인'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: '이미 좋아요!',
-                            text: '이미 좋아요를 눌렀습니다.',
-                            icon: 'info',
-                            confirmButtonText: '확인'
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('좋아요 증가 실패:', error);
-                    Swal.fire({
-                        title: '오류!',
-                        text: '좋아요 증가에 실패했습니다. 나중에 다시 시도해주세요.',
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    });
-                }
-            });
-        }
-    });
-}
-
 
 // 댓글 작성
 function reply_write() {
@@ -208,4 +161,73 @@ function reply_write() {
         }
     });
 }
+
+// 댓글 좋아요 처리
+function replyLike(replySeq) {
+	console.log("replySeq:", replySeq); // 확인용 로그
+    $.ajax({
+        url: `/replies/${replySeq}/like`,
+        method: 'POST',
+        success: function(response) {
+            swal.fire({
+                title: '좋아요 성공',
+                text: '좋아요가 성공적으로 추가되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then(() => {
+                location.reload(); // 페이지 새로 고침
+            });
+        },
+        error: function(xhr, status, error) {
+            swal.fire({
+                title: '에러',
+                text: '좋아요 처리 중 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        }
+    });
+}
+
+// 댓글 삭제 처리
+function replyDelete(replySeq) {
+	console.log("replySeq:", replySeq); // 확인용 로그
+    swal.fire({
+        title: '댓글 삭제 확인',
+        text: '정말로 이 댓글을 삭제하시겠습니까?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `/replies/${replySeq}`,
+                method: 'DELETE',
+                success: function(response) {
+                    swal.fire({
+                        title: '댓글 삭제 성공',
+                        text: '정상적으로 댓글을 삭제했습니다.',
+                        icon: 'success',
+                        confirmButtonText: '확인'
+                    }).then(() => {
+                        location.reload(); // 페이지 새로 고침
+                    });
+                },
+                error: function(xhr, status, error) {
+                    swal.fire({
+                        title: '댓글 삭제 실패',
+                        text: '댓글 삭제에 실패했습니다.',
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                }
+            });
+        }
+    });
+}
+
+
+
 

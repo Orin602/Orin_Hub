@@ -15,10 +15,14 @@ public interface ReplyService {
 	// 댓글 좋아요
 	void incrementLike(int replySeq);
 	
+	// 댓글 저장
 	void saveReply(Reply vo);
 	
+	// 댓글 수정
 	void updateReply(int replySeq, Reply vo);
 	
+	// 댓글 삭제
 	void deleteReply(int replySeq);
 	
+	Reply getReplyBySeq(int replySeq);
 }
