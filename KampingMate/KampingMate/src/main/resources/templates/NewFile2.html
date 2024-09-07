@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>뉴스 검색 결과</title>
+    
+</head>
+<body>
+    <div class="news-container">
+        <h1>네이버 뉴스 검색 결과</h1>
+        <div id="news-list" class="news-list"></div>
+        <div class="pagination">
+            <button id="prevBtn" onclick="prevPage()" disabled>Previous</button>
+            <button id="nextBtn" onclick="nextPage()">Next</button>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var newsItems = /*[[${responseBody}]]*/ '[]';
+        newsItems = JSON.parse(newsItems);
+        var currentPage = 0;
+
+        function renderPage(page) {
+            var newsList = document.getElementById('news-list');
+            newsList.innerHTML = '';
+
+            if (page >= 0 && page < newsItems.length) {
+                var item = newsItems[page];
+                var newsItem = `
+                    <div class='news-item'>
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <a href='${item.link}' target='_blank'>바로가기</a>
+                        <p>${item.pubDate}</p>
+                    </div>
+                `;
+                newsList.innerHTML = newsItem;
+
+                currentPage = page;
+                document.getElementById('prevBtn').disabled = currentPage === 0;
+                document.getElementById('nextBtn').disabled = currentPage === newsItems.length - 1;
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                renderPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < newsItems.length - 1) {
+                renderPage(currentPage + 1);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPage(0);
+        });
+        /*]]>*/
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info View</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <script th:src="@{/js/mypage.js}" defer></script>
+    <script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
+
+	<!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <div class="container1">
+        
+        <!-- 내 정보 내용 -->
+        <section id="mainInfo">
+            <div id="content">
+            	<div class="my">
+            		<section class="my1">
+            			<h3>가입 정보</h3>
+            			<ul>
+            				<li>이름 : <span>[[${name}]]</span></li>
+            				<th:block th:if="${id.length()} > 15">
+            				<li>아이디 : <span>네이버 계정</span></li>
+            				</th:block>
+            				<th:block th:if="${id.length()} < 15">
+            				<li>아이디 : <span>[[${id}]]</span></li>
+            				</th:block>
+            				<li>비밀번호 : <span th:text="'********'"></span></li>
+            				<li>이메일 : <span>[[${email}]]</span></li>
+            				<li>닉네임 : <span>[[${nickname}]]</span></li>
+            				
+            			</ul>
+            		</section>
+            		<section class="my2">
+            			<h3>바디데이터</h3>
+            			<ul>
+            				<li>성별 : <span>[[${gender}]]</span></li>
+            				<li>나이 : <span>[[${age}]]</span></li>
+            				<li>키 : <span>[[${height}]]</span></li>
+            				<li>몸무게 : <span>[[${weight}]]</span></li>
+            				<li>목표 체중: <span>[[${goal}]]</span></li>
+            				<li>BMI : <span>[[${bmi}]]</span></li>
+            			</ul>
+            		</section>
+            	</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

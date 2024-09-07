@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script type="text/javascript">
+function sendVerificationCode() {
+    var phone = $("input[name='telephone']").val();
+    if (phone.trim() === "") {
+        alert("휴대전화 번호를 입력해주세요.");
+        return;
+    }
+
+    $.post("/send-one", { phone: phone })
+        .done(function(data) {
+            alert("인증 코드가 전송되었습니다.");
+        })
+        .fail(function(error) {
+            alert("휴대전화 번호를 확인 후 다시 시도해주세요");
+        });
+}
+
+function verifyCode() {
+    var code = $("input[name='verificationCode']").val();
+    if (code.trim() === "") {
+        alert("인증 코드를 입력해주세요.");
+        return;
+    }
+
+    $.post("/verify-code", { code: code })
+        .done(function(data) {
+            if (data === "인증에 성공하였습니다") {
+                alert("인증 성공");
+                if ($("#phone_check").length === 0) {
+                    $("<input>").attr({
+                        type: "hidden",
+                        id: "phone_check",
+                        name: "phone_check",
+                        value: "verified"
+                    }).appendTo("form");
+                }
+            } else {
+                alert(data);
+                $("#phone_check").remove();
+            }
+        })
+        .fail(function(error) {
+            alert("인증 실패: " + error.responseText);
+            $("#phone_check").remove();
+        });
+}
+
+function sendEmailVerificationCode() {
+    var email = $("input[name='email']").val();
+    if (email.trim() === "") {
+        alert("이메일을 입력해주세요.");
+        return;
+    }
+    
+    // 이메일 중복 확인
+    $.post("/oauth/confirmEmail", { email: email })
+        .done(function(data) {
+            if (data === -1) {
+                $.post("/sendMail", { email: email })
+                    .done(function(data) {
+                        alert(data);
+                    })
+                    .fail(function(error) {
+                        alert("이메일을 확인 후 다시 시도해주세요");
+                    });
+            } else {
+                alert("이미 사용중인 이메일입니다.");
+            }
+        })
+        .fail(function(error) {
+            alert("이메일 확인 중 오류가 발생하였습니다. 다시 시도해주세요.");
+        });
+}
+
+function verifyEmailCode() {
+    var insertKey = $("input[name='emailVerificationCode']").val();
+    var email = $("input[name='email']").val();
+
+    if (insertKey.trim() === "") {
+        alert("인증 코드를 입력해주세요.");
+        return;
+    }
+
+    $.post("/checkMail", { insertKey: insertKey, email: email })
+        .done(function(data) {
+            if (data) {
+                alert("이메일 인증 성공");
+                if ($("#email_check").length === 0) {
+                    $("<input>").attr({
+                        type: "hidden",
+                        id: "email_check",
+                        name: "email_check",
+                        value: "verified"
+                    }).appendTo("form");
+                }
+            } else {
+                alert("이메일 인증 실패");
+                $("#email_check").remove();
+            }
+        })
+        .fail(function(error) {
+            alert("이메일 인증 실패: " + error.responseText);
+            $("#email_check").remove();
+        });
+}
+
+function validateForm() {
+    if ($("#phone_check").length === 0) {
+        alert("휴대전화 인증을 완료해주세요.");
+        return false;
+    }
+    if ($("#email_check").length === 0) {
+        alert("이메일 인증을 완료해주세요.");
+        return false;
+    }
+    return true;
+}
+</script>
+<script>
+// '출생 연도' 셀렉트 박스 option 목록 동적 생성
+document.addEventListener('DOMContentLoaded', function () {
+    const birthYearEl = document.querySelector('#birth-year');
+    const birthMonthEl = document.querySelector('#birth-month');
+    const birthDayEl = document.querySelector('#birth-day');
+    const selectedDateEl = document.querySelector('#print-date');
+    const ageHiddenEl = document.querySelector('input[name="age"]');
+    
+    let isYearOptionExisted = false;
+    birthYearEl.addEventListener('focus', function () {
+        if (!isYearOptionExisted) {
+            isYearOptionExisted = true;
+            for (let i = new Date().getFullYear(); i >= 1940; i--) {
+                const yearOption = document.createElement('option');
+                yearOption.setAttribute('value', i);
+                yearOption.innerText = i;
+                this.appendChild(yearOption);
+            }
+        }
+    });
+
+    // '월' 셀렉트 박스 option 목록 동적 생성
+    let isMonthOptionExisted = false;
+    birthMonthEl.addEventListener('focus', function () {
+        if (!isMonthOptionExisted) {
+            isMonthOptionExisted = true;
+            for (let i = 1; i <= 12; i++) {
+                const monthOption = document.createElement('option');
+                monthOption.setAttribute('value', i);
+                monthOption.innerText = i;
+                this.appendChild(monthOption);
+            }
+        }
+    });
+
+    // '일' 셀렉트 박스 option 목록 동적 생성
+    let isDayOptionExisted = false;
+    birthDayEl.addEventListener('focus', function () {
+        if (!isDayOptionExisted) {
+            isDayOptionExisted = true;
+            for (let i = 1; i <= 31; i++) {
+                const dayOption = document.createElement('option');
+                dayOption.setAttribute('value', i);
+                dayOption.innerText = i;
+                this.appendChild(dayOption);
+            }
+        }
+    });
+
+    // 선택된 생년월일을 표시 및 hidden 필드에 값 설정
+    function displaySelectedDate() {
+        const year = birthYearEl.value;
+        const month = birthMonthEl.value.padStart(2, '0');
+        const day = birthDayEl.value.padStart(2, '0');
+        if (year && month && day) {
+            selectedDateEl.textContent = `${year}-${month}-${day}`;
+            ageHiddenEl.value = `${year}${month}${day}`;
+        }
+    }
+
+    birthYearEl.addEventListener('change', displaySelectedDate);
+    birthMonthEl.addEventListener('change', displaySelectedDate);
+    birthDayEl.addEventListener('change', displaySelectedDate);
+});
+</script>
+</head>
+<body>
+<div class="join-container">
+	<h1 class="join-h1">회원가입</h1>
+	<form class="join-form" onsubmit="return validateForm()" method="post" action="/oauth/joinAction">
+		<input type="hidden" name="id" th:value="${id}">
+		<h3>이름</h3>
+		<input type="text" name="name" th:value="${name}" required><hr>
+		<h3>생년월일</h3>
+		<div class="info" id="info__birth">
+			<select class="box" id="birth-year">
+				<option disabled selected>출생 연도</option>
+			</select>
+			<select class="box" id="birth-month">
+				<option disabled selected>월</option>
+			</select>
+			<select class="box" id="birth-day">
+					<option disabled selected>일</option>
+			</select>
+		</div>
+		<div id="print-date" style="margin-top:5px;"></div>
+		<hr>
+		<input type="hidden" name="age">
+		<h3>이메일</h3>
+		<span>
+			<input type="email" name="email" th:value="${email != null ? email : ''}" required>
+			<input type="button" name="email_check" value="이메일 인증" onclick="sendEmailVerificationCode()">
+		</span> <hr>
+		<h3>이메일 인증 코드</h3>
+		<span>
+		    <input type="text" name="emailVerificationCode">
+		    <input type="button" value="인증번호 확인" onclick="verifyEmailCode()">
+		</span><hr>
+		<h3>휴대전화</h3>
+		<span>
+		    <input type="text" name="telephone" required>
+		    <input type="button" name="phone_check" value="휴대전화 인증" onclick="sendVerificationCode()">
+		</span><hr>
+		<h3>휴대전화 인증 코드</h3>
+		<span>
+		    <input type="text" name="verificationCode">
+		    <input type="button" value="인증번호 확인" onclick="verifyCode()">
+	    </span><hr>
+	    <span> 커뮤니티 : 나중에 히든값
+   			<input type="text" name="provider" th:value="${provider}">
+   		</span>
+   		<hr>
+    	<input type="submit" value="회원가입하기">
+	</form>
+</div>
+</body>
+</html>

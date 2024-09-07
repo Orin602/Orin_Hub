@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>관리자 페이지(Admin)</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
+	rel="stylesheet" />
+<link href="/css/admin_styles.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+	crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="main.do">관리자 메인</a>
+	</nav>
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_nav">
+			<nav class="sb-sidenav accordion sb-sidenav-dark"
+				id="sidenavAccordion">
+				<div class="sb-sidenav-menu">
+					<div class="nav">
+						<div class="sb-sidenav-menu-heading">회원정보</div>
+						<a class="nav-link" href="memberList.do">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-tachometer-alt"></i>
+							</div> 회원관리
+						</a>
+						<div class="sb-sidenav-menu-heading">게시판 관리</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							data-bs-target="#collapseLayouts" aria-expanded="false"
+							aria-controls="collapseLayouts">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div> 관리자 게시판
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="collapseLayouts"
+							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav">
+								<a class="nav-link" href="admin_food.do">음식레시피 게시판</a> <a
+									class="nav-link" href="admin_QnA.do">Q&A 게시판</a> <a
+									class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
+									<a class="nav-link" href="/admin/satisfactionResults">만족도 조사 결과</a>
+
+							</nav>
+						</div>
+						<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
+						<a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
+						<a class="sb-sidenav-menu-heading" href="/">사용자 페이지로 이동</a>
+					</div>
+				</div>
+				<div class="sb-sidenav-footer">
+					<div class="small">현재 로그인한 관리자 계정:</div>
+					[[${loginUser.id}]]
+					<!-- 이 부분에 로그인한 관리자 계정 표시되게 -->
+				</div>
+			</nav>
+		</div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">관리자 페이지</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item active">최근 게시물</li>
+					</ol>
+					<div class="row">
+						<div class="col-xl-3 col-md-6">
+							<div class="card bg-primary text-white mb-4">
+								<div class="card-body">음식레시피 게시판</div>
+								<div
+									class="card-footer d-flex align-items-center justify-content-between">
+									
+										<table id="datatablesSimple" width="100%" style="text-align: left">
+									<thead>
+										<tr>
+											<th>게시물ID</th>
+											<th>제 목</th>
+											<th>최근 수정시간</th>
+											<th>조회수</th>
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:if="${#lists.size(foodBoardList) <= 0}">
+											<tr>
+												<td colspan="4">등록된 게시글이 존재하지 않습니다.</td>
+											</tr>
+										</th:block>
+										<th:block th:if="${#lists.size(foodBoardList) > 0}">
+											<th:block th:each="food, status : ${foodBoardList}">
+												<tr>
+													<td>[[${food.recipe_boardnum}]]</td>
+													<td>[[${food.title}]]</td>
+													<td>[[${food.editdate}]]</td>
+													<td>[[${food.count}]]</td>
+												</tr>
+											</th:block>
+										</th:block>
+									</tbody>
+								</table>
+									
+									<a class="small text-white stretched-link" href="admin_food.do">View
+										Details</a>
+									<div class="small text-white">
+										<i class="fas fa-angle-right"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-md-6">
+							<div class="card bg-warning text-white mb-4">
+								<div class="card-body">Q&A 게시판</div>
+								<div
+									class="card-footer d-flex align-items-center justify-content-between">
+									
+									<table id="datatablesSimple" width="100%" style="text-align:left">
+									<thead>
+										<tr>
+											<th>게시물ID</th>
+											<th>자주묻는 질문</th>
+											<th>최근 수정시간</th>
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:if="${#lists.size(qnaBoardList) <= 0}">
+											<tr>
+												<td colspan="3">등록된 게시글이 존재하지 않습니다.</td>
+											</tr>
+										</th:block>
+										<th:block th:if="${#lists.size(qnaBoardList) > 0}">
+											<th:block th:each="qna, status : ${qnaBoardList}">
+												<tr>
+													<td>[[${qna.qna_boardnum}]]</td>
+													<td>[[${qna.question}]]</td>
+													<td>[[${qna.regdate}]]</td>
+												</tr>
+											</th:block>
+										</th:block>
+									</tbody>
+								</table>
+								
+									<a class="small text-white stretched-link" href="admin_QnA.do">View
+										Details</a>
+									<div class="small text-white">
+										<i class="fas fa-angle-right"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> 최근 문의내용
+						</div>
+						<div class="card-body">
+							<table id="datatablesSimple">
+								<thead>
+									<tr>
+										<th>문의번호</th>
+										<th>회원명</th>
+										<th>제목</th>
+									</tr>
+								</thead>
+								<tbody>
+									<th:block th:if="${#lists.size(askBoardList) <= 0}">
+										<tr>
+											<td colspan="3">등록된 게시글이 존재하지 않습니다.</td>
+										</tr>
+									</th:block>
+									<th:block th:if="${#lists.size(askBoardList) > 0}">
+										<th:block th:each="askBoard, status : ${askBoardList}">
+											<!-- 해당 페이지로 액션할떄 모든 회원 정보를 memberList에 담아서 -->
+											<!-- memberList에 들어있는 값으로 아래 인자(이름) 수정 -->
+											<div>
+												<tr>
+													<td>[[${askBoard.inquiry_id}]]</td>
+													<td>[[${askBoard.name}]]</td>
+													<td>[[${askBoard.subject}]]</td>
+												</tr>
+											</div>
+										</th:block>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div
+						class="d-flex align-items-center justify-content-between small">
+						<div class="text-muted">Copyright &copy; Your Website 2024</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+</body>
+</html>

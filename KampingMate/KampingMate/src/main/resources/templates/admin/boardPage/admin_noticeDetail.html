@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 상세 정보</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="adminNotice">
+    <div class="container">
+        <div class="starter-template">
+            <h2>공지사항 & 이벤트 상세 정보</h2>
+            <hr>
+            
+            <!-- Display notice details -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 th:text="${notice.notice_title}"></h4>
+                </div>
+                <div class="card-body">
+                    <p>작성자: <span th:text="${notice.member_data.name}"></span></p>
+                    <p>작성일: <span th:text="${#dates.format(notice.notice_date, 'yyyy-MM-dd')}"></span></p>
+                    <p>내용: <span th:text="${notice.notice_content}"></span></p>
+
+                    <!-- Display images -->
+                    <div>
+                        <h5>첨부 이미지:</h5>
+                        <div th:if="${notice.notice_images != null && !notice.notice_images.isEmpty()}" class="row">
+                            <div th:each="imageUrl : ${notice.notice_images}" class="col-md-4">
+                                <img th:src="${imageUrl}" alt="첨부 이미지" class="img-fluid">
+                            </div>
+                        </div>
+                        <div th:if="${notice.notice_images == null || notice.notice_images.isEmpty()}">
+                            <p>첨부된 이미지가 없습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Update form -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>공지사항 & 이벤트 수정</h4>
+                </div>
+                <div class="card-body">
+                    <form action="/admin_updateNotice" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="notice_seq" th:value="${notice.notice_seq}">
+                        <input type="hidden" name="notice_cate" th:value="${notice.notice_cate}">
+                        <div class="form-group">
+                            <label for="noticeTitle">제목</label>
+                            <input type="text" class="form-control" id="noticeTitle" name="notice_title" th:value="${notice.notice_title}">
+                        </div>
+                        <div class="form-group">
+                            <label for="noticeContent">내용</label>
+                            <textarea class="form-control" id="noticeContent" name="notice_content" rows="5" th:text="${notice.notice_content}"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="file">첨부 파일</label>
+                            <input type="file" id="file" name="file" class="form-control-file">
+                        </div>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                        <a href="/admin_noticelist.do" class="btn btn-secondary ml-2">취소</a>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Back button -->
+            <div class="card">
+                <div class="card-body">
+                    <a th:href="${notice.notice_cate == 'event' ? '/admin_eventlist.do' : '/admin_noticelist.do'}" class="btn btn-primary">목록으로 돌아가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

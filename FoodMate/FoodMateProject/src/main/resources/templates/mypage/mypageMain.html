@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Page</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script th:src="@{/js/mypage.js}" defer></script>
+    <script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
+    
+	<!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <!-- 메인 -->
+    <div class="container1">
+        <main>
+            <h3>메뉴에서 선택하면 보여지는 화면은 여기에요.</h3>
+        </main>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

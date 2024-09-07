@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>만족도 조사 결과</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <!-- Bootstrap CSS 추가 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .totals-row {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+        .totals-row th, .totals-row td {
+            border-top: 2px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">만족도 조사 결과</h1>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>매우 만족</th>
+                    <th>만족</th>
+                    <th>보통</th>
+                    <th>불만족</th>
+                    <th>매우 불만족</th>
+                    <th>등록일</th>
+                </tr>
+            </thead>
+            <tbody id="surveyTableBody">
+                <tr th:each="survey : ${surveys}">
+                    <td th:text="${survey.id}"></td>
+                    <td th:text="${survey.verySatisfied}"></td>
+                    <td th:text="${survey.satisfied}"></td>
+                    <td th:text="${survey.neutral}"></td>
+                    <td th:text="${survey.dissatisfied}"></td>
+                    <td th:text="${survey.veryDissatisfied}"></td>
+                    <td th:text="${#temporals.format(survey.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr id="totalsRow" class="totals-row">
+                    <th>합계</th>
+                    <th id="totalVerySatisfied"></th>
+                    <th id="totalSatisfied"></th>
+                    <th id="totalNeutral"></th>
+                    <th id="totalDissatisfied"></th>
+                    <th id="totalVeryDissatisfied"></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Pagination 추가 -->
+        <div id="paginationContainer" class="pagination justify-content-center">
+        </div>
+    </div>
+    <!-- Bootstrap JS 및 jQuery 추가 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+ // 페이지네이션 설정
+    const rowsPerPage = 10;
+    let currentPage = 1;
+    const surveyList = Array.from(document.querySelectorAll("#surveyTableBody tr"));
+
+    function calculateTotals(rows) {
+        let totals = {
+            verySatisfied: 0,
+            satisfied: 0,
+            neutral: 0,
+            dissatisfied: 0,
+            veryDissatisfied: 0
+        };
+
+        rows.forEach(row => {
+            totals.verySatisfied += parseInt(row.children[1].innerText) || 0;
+            totals.satisfied += parseInt(row.children[2].innerText) || 0;
+            totals.neutral += parseInt(row.children[3].innerText) || 0;
+            totals.dissatisfied += parseInt(row.children[4].innerText) || 0;
+            totals.veryDissatisfied += parseInt(row.children[5].innerText) || 0;
+        });
+
+        return totals;
+    }
+
+    function displayRows(page) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const rowsToDisplay = surveyList.slice(start, end);
+
+        surveyList.forEach((row, index) => {
+            row.style.display = (index >= start && index < end) ? "" : "none";
+        });
+
+        const totals = calculateTotals(rowsToDisplay);
+
+        document.getElementById('totalVerySatisfied').innerText = totals.verySatisfied;
+        document.getElementById('totalSatisfied').innerText = totals.satisfied;
+        document.getElementById('totalNeutral').innerText = totals.neutral;
+        document.getElementById('totalDissatisfied').innerText = totals.dissatisfied;
+        document.getElementById('totalVeryDissatisfied').innerText = totals.veryDissatisfied;
+    }
+
+    function setupPagination() {
+        const totalRows = surveyList.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+        const paginationContainer = document.getElementById('paginationContainer');
+
+        paginationContainer.innerHTML = "";
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.innerText = i;
+            pageButton.classList.add('btn', 'btn-primary', 'mr-1');
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                displayRows(currentPage);
+            });
+            paginationContainer.appendChild(pageButton);
+        }
+    }
+
+ // 페이지 로드 시 페이지네이션 설정
+    window.onload = function() {
+        setupPagination();
+        displayRows(currentPage);
+    };
+    </script>
+</body>
+</html>

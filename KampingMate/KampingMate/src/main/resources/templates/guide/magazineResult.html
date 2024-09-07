@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>네이버 카페검색결과</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<h3>네이버 카페 검색결과</h3>
+<div id="campingTip">
+    <table border="1">
+        <tr>
+            <td>제목</td>
+        </tr>
+        <tr th:each="shs : ${cafes}">
+            <td><a href="#" th:data-link="${shs.link}" th:text="${shs.title}" style="font-weight:bold;" class="cafe-link"></a></td>
+        </tr> 
+    </table>
+</div>
+<div id="cafeContent"></div>
+<script>
+    $(document).ready(function() {
+        $(document).on('click', '.cafe-link', function(event) {
+            event.preventDefault();
+            var link = $(this).attr('data-link');
+            window.location.href = '/magazinedetail?url=' + encodeURIComponent(link);
+        });
+    });
+</script>
+</body>
+</html>

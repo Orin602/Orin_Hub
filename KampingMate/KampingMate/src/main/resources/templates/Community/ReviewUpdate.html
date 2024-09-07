@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>리뷰수정</title>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/ReviewW_U.js}"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<style>
+.star_rating {
+  margin: 0 auto;
+  width: 100%; 
+  box-sizing: border-box; 
+  display: flex; 
+  float: left;
+  flex-direction: row; 
+  justify-content: center;
+}
+.star_rating .star {
+  width: 25px; 
+  height: 25px; 
+  margin-right: 10px;
+  display: inline-block; 
+  background: url('images/nostar.png') no-repeat; 
+  background-size: 100%; 
+  box-sizing: border-box; 
+}
+.star_rating .star.on {
+  width: 25px; 
+  height: 25px;
+  margin-right: 10px;
+  display: inline-block; 
+  background: url('images/star.png') no-repeat;
+  background-size: 100%; 
+  box-sizing: border-box; 
+}
+</style>
+</head>
+
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+
+<div class="review-write">
+    <h2>리뷰 수정 페이지입니다</h2>
+    <div class="rw-content">
+		<input type="hidden" id="review_seq" name="review_seq" th:value="${reviewVO.review_seq}">
+		<input type="hidden" id="write_date" name="write_date" th:value="${reviewVO.write_date}">
+        제목 : <input type="text" id="title" th:value="${reviewVO.title}" /> &nbsp;&nbsp;&nbsp;
+        캠핑장 : <input type="text" id="kakao_name" onclick="review_campingsearch()" th:value="${reviewVO.kakao_name}" />
+    <input type="hidden" id="kakao_id" name="kakao_id" />
+    <button type="button" onclick="review_campingsearch()" class="btn">캠핑장찾기</button>
+    
+        <div class ="star_rating" th:data-rating="${reviewVO.reviewrate}">
+            별점 : 
+            <span class="star" data-value="1"> </span>
+            <span class="star" data-value="2"> </span>
+            <span class="star" data-value="3"> </span>
+            <span class="star" data-value="4"> </span>
+            <span class="star" data-value="5"> </span>
+        </div>
+        <hr>
+        <!-- div부분이 에디터 -->
+        <div id="content"></div>
+        <button type="button" onclick="wsubmitReview()" class="btn" style="margin-top:10px;">리뷰 제출</button>
+    </div>
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+
+<!-- script -->
+<script th:inline="javascript">
+const initialContent = /*[[${reviewVO.content}]]*/ '';
+const editor = new toastui.Editor({
+    el: document.querySelector('#content'),
+    height: '500px',
+    initialEditType: 'wysiwyg',
+    initialValue: initialContent,
+    previewStyle: 'vertical',
+    placeholder: '내용을 입력해 주세요.',
+    hooks: {
+        async addImageBlobHook(blob, callback) {
+            try {
+                const formData = new FormData();
+                formData.append('image', blob);
+                const response = await fetch('/tui-editor/image-upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (response.ok) {
+                    const imageUrl = await response.text();
+                    callback(imageUrl, 'image alt attribute');
+                } else {
+                    console.error('업로드 실패 : ', response.statusText);
+                }
+            } catch (error) {
+                console.error('업로드 실패 : ', error);
+            }
+        }
+    }
+});
+
+$(document).ready(function() { // jQuery를 사용한 별점 초기화 및 클릭 이벤트 등록
+    var reviewRate = /*[[${reviewVO.reviewrate}]]*/ 0;
+    $('.star_rating .star').each(function() {
+        if ($(this).data('value') <= reviewRate) {
+            $(this).addClass('on');
+        }
+    });
+
+    $('.star_rating .star').on('click', function() {
+        var selectedRating = $(this).data('value');
+        $('.star_rating .star').each(function() {
+            if ($(this).data('value') <= selectedRating) {
+                $(this).addClass('on');
+            } else {
+                $(this).removeClass('on');
+            }
+        });
+        $('#review_rate').val(selectedRating);
+    });
+});
+</script>
+</html>
+

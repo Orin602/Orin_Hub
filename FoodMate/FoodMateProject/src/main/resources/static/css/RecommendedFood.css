@@ -1,0 +1,108 @@
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#result-section {
+    margin-bottom: 20px;
+}
+
+#result-section h2 {
+    margin-bottom: 10px;
+}
+
+#recommendation-section {
+    margin-bottom: 20px;
+}
+
+#recommendation-section h2 {
+    margin-bottom: 10px;
+}
+
+#food-recommendations {
+    list-style-type: none;
+    padding: 0;
+}
+
+#food-recommendations li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.date-header:hover{
+	background-color: lightgray;
+	cursor: pointer;
+	
+}
+
+.date-header td{
+	width:100%;
+	color: green;
+	text-align: center;
+	padding: 10px;
+}
+
+.tbi-content {
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.tbl-header {
+    width: 100%;
+    border: solid 1px;
+    text-align: center;
+    height: 60px;
+    align-items: center;
+    display: flex;
+}
+
+.tbl-header th {
+	
+    width: 20%;
+    display: inline-block;
+    
+}
+
+#group-container {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+}
+
+#group-container span {
+	width: 19.2%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#group-container img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+#recommend-box{
+	margin-left: 20px;
+}
+
+
+.del-button-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    
+}

@@ -1,0 +1,143 @@
+.guide-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px;
+    text-align: center;
+    border: 2px solid skyblue;
+    border-radius: 5px;
+    background: url('/images/guide.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.guide-h1, .guide-h2, .guide-h3 {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+}
+.guide-step {
+    margin: 0 auto;
+    margin-bottom: 5px;
+    width: 80%;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    border: 1px solid skyblue;
+}
+.a-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #a3d5ff; /* 파스텔톤 하늘색 */
+    border: 2px solid #82c4ff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer;
+}
+
+.a-btn:hover {
+    background-color: #82c4ff;
+    border-color: #61b3ff;
+}
+
+.text {
+    font-weight: bold;
+}
+
+
+
+
+
+.shop-container {
+    margin: 0 auto;
+    text-align: center;
+    background: url("/images/shop.jpg");
+    background-size: 50%; /* 배경 이미지 크기를 줄임 */
+}
+.shop-container h2 {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    padding: 10px;
+}
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.searchKeyword {
+    width: 300px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #a3d5ff;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.searchKeyword:focus {
+    border-color: #82c4ff;
+    box-shadow: 0 0 5px rgba(130, 196, 255, 0.5);
+}
+table {
+	background-color: rgba(255, 255, 255, 0.7);
+}
+
+
+
+.enjoy-container {
+	background: url("/images/play.jpg");
+    background-size: 50%; /* 배경 이미지 크기를 줄임 */
+}
+
+
+
+
+.tip-container {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    background: url("/images/review.jpg");
+    background-size: cover; /* 배경 이미지 크기를 줄임 */
+}
+#campingTip {
+	margin: 0 auto;
+}
+
+
+.food-container,
+.fd-container {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+    background: url("/images/cook.jpg");
+    background-size: 50%; /* 배경 이미지 크기를 줄임 */
+}
+.food-content,
+.fd-content {
+	margin: 0 auto;
+	border: 1px solid #82c4ff;
+	border-radius: 5px;
+	background-color: rgba(255, 255, 255, 0.8);
+	padding: 10px;
+	margin-bottom: 10px;
+}
+.fd-content p {
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold; /* 글자를 굵게 표시 */
+}
+.food-content a {
+	text-decoration: none; /* 밑줄 제거 */
+    color: blue; /* 부모 요소의 색상을 유지 */
+}
+.food-content a:hover {
+	color: skyblue;
+}

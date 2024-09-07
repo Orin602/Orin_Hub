@@ -1,0 +1,148 @@
+@charset "EUC-KR";
+
+*, *:after, *:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #f0f8f8;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
+	font-family: Arial, sans-serif;
+	color: #333;
+}
+
+.container {
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	width: 300px;
+	text-align: center;
+}
+
+.main-nav {
+	width: 100%;
+	margin: 0 auto;
+	height: 100%;
+	cursor: pointer;
+}
+
+.main-nav ul {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.main-nav li {
+	list-style: none;
+	flex: 1;
+	margin: 0 5px;
+}
+
+.main-nav a {
+	display: block;
+	height: 50px;
+	line-height: 50px;
+	padding: 0 25px;
+	text-decoration: none;
+	border-radius: 30px;
+	color: #FFF;
+	background: #8FBC8F;
+	transition: all 0.30s ease-in-out;
+}
+
+.main-nav li.active a {
+	background: #FFF;
+	color: #8FBC8F;
+	border: 2px solid #8FBC8F;
+}
+
+.main-nav li:nth-child(1) a:hover, .main-nav li:nth-child(2) a:hover {
+	background: #6B8E23;
+}
+
+.form-content {
+	display: none;
+	animation: fadeIn 0.5s;
+}
+
+#login-container {
+	display: block;
+}
+
+@keyframes fadeIn {from { opacity:0; } to { opacity: 1; }
+
+}
+input[type="text"], input[type="password"], input[type="email"] {
+	width: 100%;
+	padding: 10px;
+	margin: 10px 0;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+input[type="submit"], input[type="button"] {
+	background-color: #8FBC8F;
+	color: white;
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+	width: 100%;
+	border-radius: 5px;
+	margin-top: 10px;
+	transition: background-color 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+	background-color: #6B8E23;
+}
+
+a {
+	color: #8FBC8F;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#findId-container, #findPW-container, #terms-container {
+	display: none;
+}
+
+#findId-container table, #findPW-container table {
+	width: 100%;
+}
+
+#findId-container td, #findPW-container td {
+	padding: 5px;
+}
+
+#findId-container h1, #findPW-container h1 {
+	font-size: 1.5em;
+	color: #333;
+	margin-bottom: 10px;
+}
+
+#terms-container {
+	text-align: left;
+}
+
+#terms-container p {
+	margin-bottom: 10px;
+}
+
+#terms-container .buttons {
+	text-align: center;
+}

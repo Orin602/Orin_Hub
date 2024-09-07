@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Detail</title>
+     <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>
+<body id="reviewDetail">
+    <!-- 헤더 -->
+    <th:block th:insert="~{include/header}"></th:block>
+
+    <!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+
+    <div class="container">
+        <h2 id="rdh2">리뷰 상세페이지</h2>
+        <div id="rdContent">
+            <h3 id="rdh3">캠핑장 : <span th:utext="${review.kakao_name}"></span></h3>
+            <h3>제목 : <span th:text="${review.title}"></span></h3>
+            <h3>내용 : <span th:utext="${review.content}"></span></h3>
+
+            <p id="rdp">작성일: <span th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <!-- 필요한 다른 정보들을 여기에 추가 -->
+        </div>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

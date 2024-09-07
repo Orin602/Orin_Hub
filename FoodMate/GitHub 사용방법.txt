@@ -1,0 +1,31 @@
+1. GitHub Desktop 설치
+2. 이클립스 Git Repository View 추가하기
+ Windows - Show Views - Others... 를 클릭
+ Git폴더 아래에서 Git Repositories를 선택
+3. Git 저장소 만들기
+ 원격 저장소에서 Clone(복제)하는 방법
+  (1) Github에서 복제할 저장소 페이지로 접속
+  (2) 초록색 <>Code 버튼을 클릭하면 저장소의 주소가 나옵니다. 옆에 복사 버튼을 클릭
+  (3) Github Desktop에서 File 메뉴 아래에서 Clone repository...를 클릭
+  (4) URL 탭을 클릭하고 복사한 원격저장소의 주소를 붙여넣기 
+  Local path에 저장소를 복제할 로컬저장소의 경로를 정해줌
+  (5) repository 목록을 클릭하면 추가된 로컬저장소를 확인 가능
+  (6) 이클립스에서 추가된 로컬저장소를 임포트 하면 Git repository에 알아서 잡아줌
+
+ 생성한 프로젝트에서 Git 저장소를 만드는 방법
+  (1) 이클립스의 Git repository에서 우클릭 후 create git repository를 선택
+  (2) Git 저장소로 만들 프로젝트의 경로를 선택
+  (3) Github Desktop에서 File 메뉴 아래에서 Add local repository를 선택
+  (4) 생성한 로컬 저장소의 경로를 선택
+
+
+
+
+
+
+
+branch는 각자의 branch를 만들어서 작업 (?)
+merge를 하려면 파일이 바뀌어야 함
+클론 파일을 수정하고
+commit -> push -> Preview Pull Request 클릭 -> Create pull request
+

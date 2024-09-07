@@ -1,0 +1,366 @@
+/* main recommend */
+.reco-container {
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 80%;
+    border: 2px solid #ADD8E6;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    text-align: center;
+    background-image: url('/images/camp11.jpg');
+    background-size: cover;
+    background-position: center;
+}
+#campSearchForm01 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn,
+.btnSearch_black01,
+.detail-btn {
+    background-color: #a3d5ff;
+    border: 1.5px solid #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn:hover,
+.btnSearch_black01:hover {
+    background-color: #007bff;
+    border-color: #0056b3;
+}
+.search_box {
+    width: 80%;
+    border: 1px solid #ADD8E6;
+    padding: 20px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    background-color: rgba(255, 255, 255, 0.5); /* 반투명 흰색 배경 */
+}
+
+.search_box_form {
+    align-items: center;
+    width: 100%;
+}
+
+.form1_2 {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ADD8E6; /* 파스텔톤의 하늘색 */
+    border-radius: 10px;
+    margin: 20px auto;
+    padding: 10px;
+}
+
+.tt {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+
+select {
+    width: calc(50% - 10px);
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #ADD8E6;
+    border-radius: 5px;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+	display: flex;
+	list-style: none;
+	padding: 0;
+	margin: 0 auto;
+	align-items: center;
+	justify-content: center;
+}
+
+.pagination li {
+	margin: 0 5px;
+}
+
+.pagination li a {
+	text-decoration: none;
+	padding: 8px 16px;
+	color: #007bff;
+	border: 1px solid #dee2e6;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.pagination li a.current {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+.pagination li a:hover {
+	background-color: #0056b3;
+	color: white;
+}
+
+.pagination span {
+	margin: 0 5px;
+}
+
+.pagination a {
+	text-decoration: none;
+	padding: 8px 16px;
+	color: #007bff;
+	border: 1px solid #dee2e6;
+	border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination a.current {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+.pagination a:hover {
+	background-color: #0056b3;
+	color: white;
+}
+
+
+/* 캠핑 사이트 아이템 스타일 */
+.item {
+	flex: 1 1 calc(25% - 20px); /* 아이템 너비 조정 및 간격 설정 */
+	max-width: 400px; /* 최대 너비 설정 */
+	margin: 10px; /* 간격 설정 */
+	padding: 10px; /* 패딩 조정 */
+	border: 1px solid #dee2e6;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	transition: transform 0.3s ease;
+}
+
+.item:hover {
+	transform: scale(1.05);
+}
+
+.item img {
+	max-width: 200px;
+	height: auto;
+	border-radius: 5px;
+}
+/* 캠프 컨테이너 스타일 */
+#camp-container {
+	width: 80%;
+	max-width: 1200px;
+	padding: 20px;
+	border: 1px solid #dee2e6;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	margin: 0 auto; /* 중앙 정렬 */
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background-image: url('/images/camp12.jpg');
+    background-size: cover;
+    background-position: center;
+}
+/* 캠핑 사이트 목록 스타일 */
+.items-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center; /* 가운데 정렬 */
+	margin-top: 20px;
+}
+
+.scrolling {
+    display: inline-block;
+    animation: scroll 1000s linear infinite;
+    height: 100%; /* .items-container에 맞게 높이 설정 */
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.controls button {
+    background-color: #4CAF50; /* 녹색 */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.controls button:hover {
+    background-color: #45a049;
+}
+
+
+
+/* reco-detial */
+.popup {
+    display: none;
+}
+.toggle-btn {
+    cursor: pointer;
+    color: blue;
+    margin-right: 5px;
+}
+.sido-container {
+    margin-bottom: 10px;
+}
+.region-section, .sido-section, .faclt-section, .lct-section, .induty-section, .site-section, .sbrs-section {
+    border: 1px solid #ADD8E6; /* 파스텔톤의 하늘색 */
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+.checkbox-label {
+    display: flex;
+    cursor: pointer;
+    margin-bottom: 3px;
+}
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ADD8E6;
+    border-radius: 5px;
+    margin-right: 10px;
+    position: relative;
+}
+.checkbox-custom::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: #ADD8E6;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+    border-radius: 2px;
+}
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+h1 {
+	text-align: center;
+}
+.detail-btn {
+	display: block;
+    margin: 0 auto;
+}
+
+/* searchView */
+.search-list {
+	width: 80%;
+	max-width: 1200px;
+	padding: 20px;
+	border: 1px solid #dee2e6;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	margin: 0 auto; /* 중앙 정렬 */
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background-image: url('/images/camp7.jpg');
+	    background-position: center;
+}
+.c_list update {
+	width: 50%
+}
+.li-list {
+	width:90%;
+	border: 1px solid #ADD8E6;
+	border-radius: 5px;
+	margin: 20px auto;
+	padding: 10px;
+	text-align: center;
+	background-color: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
+	margin-bottom: 20px;
+}
+
+li.li-list button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+li.li-list button:hover {
+    background-color: #0056b3;
+}
+
+li.li-list hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* CSS 예시 */
+li.li-list button.book-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+li.li-list button.book-button:hover {
+    background-color: #218838;
+}
+
+/* CSS 예시 */
+.recommend-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.recommend-button:hover {
+    background-color: #0056b3;
+}
+
+/* CSS 예시 */
+.recommend-link {
+    color: #007bff; /* 링크 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+    margin-right: 10px;
+}
+
+.recommend-link:hover {
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
+    color: #0056b3; /* 호버 시 색상 변경 */
+}

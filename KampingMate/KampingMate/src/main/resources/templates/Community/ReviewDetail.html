@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/ReviewDetail.js}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<style>
+
+.star_rating {
+    width: 100%; 
+    box-sizing: border-box; 
+    float: left;
+    flex-direction: row; 
+    justify-content: flex-start;
+}
+.star_rating .star {
+    width: 25px; 
+    height: 25px; 
+    margin-right: 10px;
+    display: inline-block; 
+    background: url('images/nostar.png') no-repeat; 
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+.star_rating .star.on {
+    width: 25px; 
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block; 
+    background: url('images/star.png') no-repeat;
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+.review-box img {
+	width: 200px;
+	height: 200px;
+}
+</style>
+<title>리뷰 글</title>
+</head>
+<body id="replyjs">
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div class="review-detail">
+	<h1>리뷰 상세페이지</h1>
+    
+    <form name="frm" method="post" class="form-re">
+        <input type="hidden" name="review_seq" id="review_seq" th:value="${reviewVO.review_seq}">
+        <input type="hidden" name="login" id="login" th:value="${session.loginUser != null}">
+        <div class="review-content">
+			<!-- 버튼들 / 공유, 추천, 북마크 -->
+			<a href="#" onclick="facebook_share()"> <i class="fab fa-facebook"></i> 페이스북 공유</a>
+         <a href="#" onclick="twitter_share()"> <i class="fab fa-twitter"></i>트위터 공유</a>
+         <a href="#" onclick="naver_share()"><i class="fas fa-share-alt"></i>네이버 공유</a>
+         <a href="#" onclick="copyboard()"> <i class="fas fa-link"></i> URL 복사</a>
+			<th:block
+			    th:if="${session.goodPointStatusMap != null and session.goodPointStatusMap[reviewVO.review_seq] == 'on'}">
+			    <a href="#" th:attr="data-seq=${reviewVO.review_seq}"
+			        onclick="goodpoint_plus(this)">추천해제 [[${reviewVO.goodpoint}]]</a>
+			</th:block> <th:block
+			    th:if="${session.goodPointStatusMap == null or session.goodPointStatusMap[reviewVO.review_seq] != 'on'}">
+			    <a href="#" th:attr="data-seq=${reviewVO.review_seq}"
+			        onclick="goodpoint_plus(this)">추천하기 [[${reviewVO.goodpoint}]]</a>
+			</th:block> <th:block
+			    th:if="${session.bookmarkStatusMap != null and session.bookmarkStatusMap[reviewVO.review_seq] == 'on'}">
+			    <a href="#" th:attr="data-seq=${reviewVO.review_seq}"
+			        onclick="bookmark_plus(this)">북마크해제 [[${reviewVO.bookmark}]]</a>
+			</th:block> <th:block
+			    th:if="${session.bookmarkStatusMap == null or session.bookmarkStatusMap[reviewVO.review_seq] != 'on'}">
+			    <a href="#" th:attr="data-seq=${reviewVO.review_seq}"
+			        onclick="bookmark_plus(this)">북마크하기 [[${reviewVO.bookmark}]]</a>
+			</th:block>
+        </div>
+
+        <div class="review-content">
+            <!-- 상세내용 -->
+            <h2>제목 :[[${reviewVO.title}]]</h2>
+            <h3>
+            캠핑장 : [[${reviewVO.kakao_name}]]<br>
+            
+            <div class="star_rating">
+                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span class="star" th:classappend="${i <= reviewVO.reviewrate} ? 'on'"></span>
+                </th:block>
+            </div>
+            
+			등록일 : [[${#dates.format(reviewVO.write_date, "yyyy-MM-dd")}]]<br>
+			작성자 : <span th:text="(${#strings.length(reviewVO.member_data.name) > 1} ? ${#strings.substring(reviewVO.member_data.name, 0, 1)} + '**' : ${#strings.substring(reviewVO.member_data.name, 0, 1)} + '*')"></span><br>
+			조회수 : [[${reviewVO.cnt}]]<br>
+			리뷰내용
+            
+            <div class="review-box">
+            	<span th:utext="${reviewVO.content}"></span>
+            </div>
+            </h3>
+        </div>
+    </form>
+
+    <!-- 댓글입력 -->
+    <div class="review-content">
+    <h3>Comment</h3>
+        <form name="replyfrm" method="post">
+            <input type="hidden" name="review_seq" id="review_seq" th:value="${reviewVO.review_seq}">
+            <table id="Board_deatail_List">
+                <tr>
+                    <td colspan="2">
+                        <textarea name="reply_content" id="reply_content"></textarea>
+                    </td>
+                </tr>
+            </table>
+            <input type="button" value="저장" onClick="reply_save()" style="margin-bottom:10px;">
+        </form>
+    </div>
+
+    <div class="review-content">
+        <!-- 댓글 목록 -->
+        <form name="reply" method="post">
+            <table id="reply_list">
+                <tr>
+                    <th>댓글</th>
+                </tr>
+                <th:block th:each="replyVO : ${ReplyList}">
+                    <tr th:attr="data-replynum=${replyVO.replynum}">
+                        <td th:text="(${#strings.length(reviewVO.member_data.name) > 1} ? ${#strings.substring(reviewVO.member_data.name, 0, 1)} + '**' : ${#strings.substring(reviewVO.member_data.name, 0, 1)} + '*')"></td>
+                        <td>
+                        	<span th:text="${replyVO.content}" th:attr="data-content-view=${replyVO.replynum}">
+                        		Reply Content</span> 
+                            <textarea th:attr="data-content-edit=${replyVO.replynum}"
+                                style="display: none;" th:text="${replyVO.content}"></textarea>
+                        </td>
+                        <td th:if="${session.loginUser != null and replyVO.member_data.id.equals(session.loginUser.id)}">
+                            <button class="btn" th:attr="data-replynum=${replyVO.replynum}" onclick="toggleEditMode(this, event);">수정</button>
+                            <button class="btn" th:attr="data-replynum=${replyVO.replynum},data-save-button=${replyVO.replynum}"
+                                onclick="saveChanges(this, event);" style="display: none;">저장</button>
+                            <button class="btn" th:attr="onclick='deleteReply(' + ${replyVO.replynum} + ', event)'">삭제</button>
+                        </td>
+                    </tr>
+                </th:block>
+            </table>
+        </form>
+    </div>
+
+        <!-- 버튼들 -->
+        <form name="buttonfrm" method="get">
+            <input type="hidden" value="[[${reviewVO.review_seq}]]"> <input
+                type="button" value="목록" onClick="go_list()">
+            <th:block
+                th:if="${session.loginUser != null and (reviewVO.member_data.no_data)==(session.loginUser.no_data)}">
+                <input type="button" value="수정" onClick="review_update()">
+                <input type="button" value="삭제" onClick="review_delete()">
+            </th:block>
+        </form>
+	
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

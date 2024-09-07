@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <title>검색 결과</title>
+</head>
+    <script>
+    // 중복 키워드를 방지하기 위한 Set 생성
+    var selectedKeywords = new Set();
+
+    function registerKeyword(button) {
+        // 선택된 키워드 가져오기
+        var keyword = button.parentElement.parentElement.querySelector("td").innerText.trim();
+
+        // 이미 선택된 키워드인지 확인
+        if (!selectedKeywords.has(keyword)) {
+            // 부모 창의 키워드 표시 요소 가져오기
+            var keywordDisplay = window.opener.document.getElementById("keyword_display");
+            // 현재 키워드 목록 가져오기
+            var currentKeywords = keywordDisplay.innerText.split(",").map(kw => kw.trim()).filter(kw => kw.length > 0);
+
+            if (currentKeywords.length < 3) {
+                // 키워드 추가
+                selectedKeywords.add(keyword);
+                alert("등록되었습니다.");
+                // 키워드 표시 텍스트 업데이트
+                keywordDisplay.innerText = currentKeywords.concat(keyword).join(", ");
+                // 검색 목록 페이지로 이동
+                window.location.href = "/go_searchList";
+            } else {
+                alert("선택재료가 초과되었습니다.");
+                window.close();
+            }
+        } else {
+            // 이미 선택된 키워드라면 알림
+            alert("이미 선택된 키워드입니다.");
+        }
+    }
+</script>
+<body>
+    <h1>음식 재료 검색 결과</h1>
+    <form method="post" action="getSearchKeywords">
+        <label>검색</label>
+        <input type="text" id="searchInput" name="searchInput">
+        <input type="submit" value="검색">
+    </form>
+    <!-- 검색된 결과를 표시할 테이블 -->
+    <table>
+        <thead>
+            <tr>
+                <th>키워드</th>
+                <th>등록</th> <!-- 등록 버튼을 위한 열 추가 -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- filteredList가 비어있는 경우 -->
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Egg</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Milk</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Grain</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Shrimp</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Crab</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Mackerel</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Nuts</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Pork</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Shell</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Peach</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Bean</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Tomato</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Beef</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Chicken</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Mussel</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Oyster</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(keywordList)}">
+                <td>Squid</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+            </tr>
+            <!-- filteredList가 비어있지 않은 경우 -->
+            <tr th:each="keyword : ${keywordList}">
+                <td th:text="${keyword}">키워드</td>
+                <td>
+                	<input type="button" value="등록" onclick="registerKeyword(this)">
+                </td>
+                <!-- 등록 버튼 추가 -->
+                
+            </tr>
+        </tbody>
+    </table>
+    <a href="javascript:window.close()">창닫기</a>
+
+</body>
+</html>

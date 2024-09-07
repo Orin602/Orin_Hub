@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" th:src="@{js/notice.js}"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<title>공지사항 / 이벤트 </title>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div class="notice-container">
+	<!-- 정렬버튼 -->
+	<div class="notice-main">
+		<button type="button" onclick="go_list()">모두 보기</button>
+		<button type="button" id="공지사항" data-category="notice" onclick="keyClick(event)">공지사항 보기</button>
+		<button type="button" id="이벤트" data-category="event" onclick="keyClick(event)">이벤트만 보기</button>
+	</div>
+	
+	<!-- 검색란 -->
+	<div class="notice-main">
+		<form id="searchForm" name="searchForm" method="get" onsubmit="return submitSearch()">
+			<select name="searchType" id="searchType">
+				<option value="title">▼ 제목</option>
+			</select> 
+			<input type="text" name="searchKeyword" id="searchKeyword"> 
+			<input type="hidden" name="page" id="page" value="1">
+			 <input type="hidden" name="category" id="category" value="">
+			<button type="submit">검색버튼</button>
+		</form>
+	</div>
+	
+	<!-- 리뷰 게시글 리스트 -->
+	<div class="notice-list">
+		<form name="frm" method="get">
+			<table style="width: 100%">
+				<thead>
+					<tr>
+						<th>No.</th>
+						<th>카테고리</th>
+						<th>제목</th>
+						<th>날짜</th>
+						<th>조회수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="noticeVO, iterStat : ${NoticeList}">
+						<tr>
+							<td>[[${startNumber - iterStat.index}]]</td>
+							<td>[[${noticeVO.notice_cate}]]</td>
+							<td>
+								<a href="javascript:void(0);" th:onclick="'go_view(' + ${noticeVO.notice_seq} + ');'" th:text="${noticeVO.notice_title}" class="truncate">[[${noticeVO.notice_title}]]</a>
+							</td>
+							<td>[[${#dates.format(noticeVO.notice_date, 'yyyy-MM-dd')}]]</td>
+							<td>[[${noticeVO.notice_cnt}]]</td>
+						</tr>
+					</th:block>
+					</tbody>
+			</table>
+		</form>
+	</div>
+	
+	<!-- 페이징처리 -->
+ 	<div class="pagination">
+        <ul>
+            <li th:if="${pageNumber > 1}">
+                <a href="javascript:void(0);" th:onclick="'go_page(' + (${pageNumber} - 1) + ');'">&laquo; 이전</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == pageNumber} ? ' active'">
+                <a href="javascript:void(0);" th:onclick="'go_page(' + ${i} + ');'" th:text="${i}">1</a>
+            </li>
+            <li th:if="${pageNumber < totalPages}">
+                <a href="javascript:void(0);" th:onclick="'go_page(' + (${pageNumber} + 1) + ');'">다음 &raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

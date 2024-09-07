@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+
+<!--  각 화면의 페이지 번호가 표시되는 영역의 구현 -->
+<div id="page_area">
+	<ul class="pagination" th:with="start=${T(java.lang.Math).floor(pageInfo.number/10)*10 + 1},
+														   last=(${start + 9 < pageInfo.totalPages ? start+9 : pageInfo.totalPages})">
+  		<th:block th:with="
+  			firstPage=@{/community_list(page=1)},
+  			previous=@{/community_list(page=${pageInfo.number})},
+  			next=@{/community_list(page=${pageInfo.number + 2})},
+  			lastPage=@{/community_list(page=${pageInfo.totalPages})}">														   	
+
+			<li th:class="paging">
+				<a th:href="${firstPage}" aria-label="First">
+					<span aria-hidden="true">First</span>
+				</a>
+			</li>
+			<!--  이전 페이지로 가기 버튼  -->
+			<li th:class="${pageInfo.first} ? 'disabled'"  class="paging">
+				<a th:href="${pageInfo.first} ? '#' : ${previous}" aria-label="Previous">
+					<span aria-hidden="true">&lt;</span>
+				</a>
+			</li>
+	
+			<!-- [1][2][3]... 표시 부분 -->
+			<li th:each="page : ${#numbers.sequence(start, last)}" th:class="${page == pageInfo.number + 1} ? 'active'" class="paging">
+				<a th:text="${page}" th:href="@{/community_list(page=${page})}"></a> 
+			</li>
+		
+			<!--  다음 페이지로 -->
+			<li th:class="${pageInfo.last} ? 'disabled'" class="paging">
+				<a th:href="${pageInfo.last ? '#' : next}" aria-label="Next">
+					<span aria-hidden="true">&gt;</span>
+				</a>
+			</li>
+			
+			<!-- 맨 마지막 페이지로 이동 -->
+			<li>
+				<a th:href="${lastPage}" aria-label="Last">
+					<span aria-hidden="true">Last</span>
+				</a>
+			</li>
+	</ul>
+</div>

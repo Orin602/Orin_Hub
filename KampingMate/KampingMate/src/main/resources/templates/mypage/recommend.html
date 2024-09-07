@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내가 본 캠핑장들</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+</head>
+<body class="recombody">
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+
+<!-- 메뉴 -->
+<th:block th:insert="~{mypage/menu}"></th:block>
+    <div class="recomcontainer">
+        <h1 class="recomh1">내가 본 캠핑장들</h1>
+
+        <div class="recommendations">
+            <table class="recomtable">
+                <thead>
+                    <tr>
+                        <th>캠핑장 이미지</th>
+                        <th>캠핑장 이름</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="camping : ${recommendedCampingList}">
+                        <td class="recomtd">
+                            <a th:href="@{'/detailView?contentId=' + ${camping.contentId}}">
+                                <img class="recomimg" th:src="${camping.firstImageUrl}" alt="Camping Image" style="width: 300px; height: auto;">
+                            </a>
+                        </td>
+                        <td th:text="${camping.facltNm}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="css/chat.css">
+<title>단순 음식 계산기</title>
+<body>
+<div class="chat-container">
+        <h1>영양성분이 궁금한 음식을 물어보세요!</h1>
+        <div class="chat-box" id="messages"></div>
+        <div class="input-box">
+            <input type="text" id="calmessage" placeholder="Type a message" onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+async function sendMessage(message) {
+    if (!message) {
+        message = document.getElementById("calmessage").value;
+    }
+    if (message.trim() === "") return;
+
+    const messagesDiv = document.getElementById("messages");
+    const userMessageElement = document.createElement("div");
+    userMessageElement.textContent = message;
+    userMessageElement.className = "message user-message";
+    messagesDiv.appendChild(userMessageElement);
+    document.getElementById("calmessage").value = "";
+
+    const response = await fetch('/api/chat/send?message=' + encodeURIComponent(message), {
+        method: 'POST',
+    });
+    const chatbotResponse = await response.text();
+
+    const botMessageElement = document.createElement("div");
+    botMessageElement.innerHTML = "음식사전 헬퍼:<br>" + chatbotResponse;
+    botMessageElement.className = "message bot-message";
+    messagesDiv.appendChild(botMessageElement);
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+function sendKeywordMessage(keyword) {
+    sendMessage(keyword);
+}
+</script>
+</html>

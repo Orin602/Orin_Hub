@@ -1,0 +1,108 @@
+@charset "EUC-KR";
+
+body {
+	margin: 0;
+}
+/* 헤더 */
+/* ul, li 요소의 스타일링 제외 */
+ul, li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.h-container {
+    /* 헤더 컨테이너 설정 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-image: url('/images/camping1.jpg'); /* 이미지 경로 수정 */
+    filter: brightness(70%); /* 밝기 조절 */
+    background-size: cover;
+    background-position: center 55%; /* 이미지를 중앙 상단에 위치시킴 */
+}
+.header-top {
+	/* 헤더의 최상단에 가로 배치 */
+	display: flex;
+	justify-content: flex-end;
+	color: white;
+	padding: 10px;
+}
+.header-top ul,
+.header-bottom ul {
+    display: flex; /* ul을 가로 배치로 변경 */
+}
+.header-top li,
+.header-bottom li {
+	margin-left: 10px; /* 각 li 요소 사이의 간격 설정 */
+	font-weight: bold; /* 텍스트에 bold 효과 적용 */
+}
+.logo {
+	border-radius: 50%; /* 둥근 형태로 설정 */
+    position: absolute; /* 절대적인 위치 설정 */
+    top: 20px; /* 상단 여백 */
+    left: 20px; /* 좌측 여백 */
+    width: 120px; /* 너비 설정 */
+    height: 120px; /* 높이 설정 */
+    z-index: 999; /* 로고가 다른 요소 위에 올라오도록 z-index 설정 */
+}
+.logo2 {
+	display: inline-block; /* 인라인 블록 요소로 설정 */
+	border-radius: 50%;
+	width: 50px; /* 너비 설정 */
+    height: 50px; /* 높이 설정 */
+	object-fit: cover; /* 이미지가 요소를 채우도록 설정 */
+    vertical-align: middle; /* 텍스트와 수직 정렬 */
+}
+.fixed-header {	/* 고정되는 헤더 */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: white; /* 배경색 변경 */
+	z-index: 1000;
+	display: none;
+}
+.header-mid {
+	/* 헤더 정중앙 배치 */
+	display: flex;
+	justify-content: center; /* 수평 중앙 정렬 */
+	text-align: center;
+	padding: 20px;
+	font-weight: bold; /* 텍스트에 bold 효과 적용 */
+}
+.header-bottom {
+	/* 로고와 사이트 이름 밑에 중앙 가로 배치 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	height: 40px;
+}
+/* 링크 스타일 설정 */
+a {
+	color: white;
+	text-decoration: none; /* 밑줄 제거 */
+	transition: color 0.3s; /* 색 변환 애니메이션 */
+}
+a:hover {
+	color: #ff7f50; /* 호버 시 색상 변경 */
+}
+
+
+
+
+/* 메인 */
+
+
+
+
+
+
+/* 푸터 */
+
+
+
+
+
+
+/* 다크모드 */

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recipes</title>
+    <style>
+        .recipe-item {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .recipe-item img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recipes</h1>
+    <div th:each="recipe : ${recipes}" class="recipe-item">
+        <h2 th:text="${recipe.title}">Recipe Title</h2>
+        <img th:src="${recipe.imgUrl}" alt="Recipe Image"/>
+    </div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>캠핑장 찾기</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fce0b8a7ee9bc8a40e8d1d30dee82622&libraries=services,clusterer,drawing"></script>
+    <style>
+        #map { width: 100%; height: 400px; }
+    </style>
+</head>
+<body>
+    <h3>캠핑장 검색</h3>
+    <form onsubmit="searchPlaces(); return false;">
+        <input type="text" id="keyword" placeholder="캠핑장 이름을 입력하세요" />
+        <button type="submit">검색</button>
+    </form>
+    <div id="map"></div>
+    <ul id="placesList"></ul>
+    <div id="pagination"></div>
+    <script>
+        var mapContainer = document.getElementById('map');
+        var mapOption = { 
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        var ps = new kakao.maps.services.Places();
+        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+        var geocoder = new kakao.maps.services.Geocoder(); // 좌표로 행정구역정보 받기 서비스 객체 생성
+        var markers = [];
+
+        function searchPlaces() {
+            var keyword = document.getElementById('keyword').value + '캠핑';
+            if (!keyword.trim()) {
+                alert('키워드를 입력해주세요!');
+                return false;
+            }
+            ps.keywordSearch(keyword, placesSearchCB);
+        }
+
+        function placesSearchCB(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+                displayPlaces(data);
+                displayPagination(pagination);
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                alert('검색 중 오류가 발생했습니다.');
+                return;
+            }
+        }
+
+        function displayPlaces(places) {
+            var listEl = document.getElementById('placesList'), 
+                fragment = document.createDocumentFragment(), 
+                bounds = new kakao.maps.LatLngBounds();
+
+            removeAllChildNods(listEl);
+            removeMarker();
+
+            for (var i = 0; i < places.length; i++) {
+                var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+                    marker = addMarker(placePosition, i), 
+                    itemEl = getListItem(i, places[i]);
+
+                bounds.extend(placePosition);
+                (function(marker, title, lat, lng, id) {
+                    itemEl.onclick = function() {
+                        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + title + '</div>');
+                        infowindow.open(map, marker);
+
+                        // 좌표로 행정구역정보 받기
+                        geocoder.coord2RegionCode(lng, lat, function(result, status) {
+                            if (status === kakao.maps.services.Status.OK) {
+                                var regionId = result[0].code; // 행정구역 코드 사용
+                                window.opener.postMessage({
+                                    type: 'selectedCampsite',
+                                    name: title,
+                                    id: regionId, // 행정구역 코드로 설정
+                                    lat: lat,
+                                    lng: lng
+                                }, '*');
+                                window.close();
+                            }
+                        });
+                    };
+                })(marker, places[i].place_name, places[i].y, places[i].x, places[i].id); // id 값 추가
+
+                fragment.appendChild(itemEl);
+            }
+
+            listEl.appendChild(fragment);
+            map.setBounds(bounds);
+        }
+
+        function getListItem(index, places) {
+            var el = document.createElement('li'), 
+                itemStr = '<span>' + (index + 1) + '</span>' +
+                    '<div>' +
+                    '   <h5>' + places.place_name + '</h5>';
+
+            if (places.road_address_name) {
+                itemStr += '    <span>' + places.road_address_name + '</span>' +
+                    '   <span>' + places.address_name + '</span>';
+            } else {
+                itemStr += '    <span>' + places.address_name + '</span>';
+            }
+
+            itemStr += '  <span>' + places.phone + '</span>' +
+                '</div>';
+
+            el.innerHTML = itemStr;
+            el.className = 'item';
+
+            return el;
+        }
+
+        function addMarker(position, idx) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', 
+                imageSize = new kakao.maps.Size(36, 37), 
+                imgOptions = {
+                    spriteSize: new kakao.maps.Size(36, 691), 
+                    spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10), 
+                    offset: new kakao.maps.Point(13, 37) 
+                },
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: position, 
+                    image: markerImage 
+                });
+
+            marker.setMap(map); 
+            markers.push(marker);  
+            return marker;
+        }
+
+        function removeAllChildNods(el) {   
+            while (el.hasChildNodes()) {
+                el.removeChild(el.lastChild);
+            }
+        }
+
+        function removeMarker() {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }   
+            markers = [];
+        }
+
+        function displayPagination(pagination) {
+            var paginationEl = document.getElementById('pagination'), 
+                fragment = document.createDocumentFragment(), 
+                i; 
+
+            while (paginationEl.hasChildNodes()) {
+                paginationEl.removeChild(paginationEl.lastChild);
+            }
+
+            for (i = 1; i <= pagination.last; i++) {
+                var el = document.createElement('a');
+                el.href = "#";
+                el.innerHTML = i;
+
+                if (i === pagination.current) {
+                    el.className = 'on';
+                } else {
+                    el.onclick = (function(i) {
+                        return function() {
+                            pagination.gotoPage(i);
+                        }
+                    })(i);
+                }
+
+                fragment.appendChild(el);
+            }
+            paginationEl.appendChild(fragment);
+        }
+    </script>
+</body>
+</html>

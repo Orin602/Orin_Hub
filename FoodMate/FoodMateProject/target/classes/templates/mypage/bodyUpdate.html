@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Body Update</title>
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/mypage.js}" defer></script>
+<script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<!-- 헤더 -->
+	<th:block th:insert="~{includes/header}"></th:block>
+
+	<!-- 메뉴 -->
+	<th:block th:insert="~{mypage/menu}"></th:block>
+
+	<div class="container1">
+	
+		<!-- 바디데이터 수정 내용 -->
+		<section id="bodyUpdate">
+			<div id="content">
+				<h3>바디데이터 수정하기</h3>
+				<form action="update_body" id="update_body" method="post" name="formm">
+					<fieldset>
+						<label>성별 : </label> <select name="gender" id="gender">
+							<option value="Male">남자</option>
+							<option value="Female">여자</option>
+						</select><br>
+						<label>나이 : </label>
+						<input type="text" th:value="${loginUser.age}" name="age" id="age"><br>
+						<label>키 : </label>
+						<input type="text" th:value="${loginUser.height}" name="height" id="height"><br>
+						<label>몸무게 : </label>
+						<input type="text" th:value="${loginUser.weight}" name="weight" id="weight"><br>
+						<label>BMI : </label>
+						<input type="text" name="bmi" id="bmi" readonly>
+						<input type="button" value="계산하기" onclick="my_bmi()" class="dup btn"><br>
+						<label>목표체중 : </label>
+						<input type="text" th:value="${loginUser.goal}" name="goal" id="goal"><br>
+						<label>다이어트 기간(선택입력)</label>
+                		<input type="text" name="goalDay" id="goalDay">
+						<div>	
+							<input type="button" value="저장하기" onclick="change_bodydata()" class="btn">
+							<input type="button" value="취소" onclick="location.href='/mypage';" class="btn">
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</section>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

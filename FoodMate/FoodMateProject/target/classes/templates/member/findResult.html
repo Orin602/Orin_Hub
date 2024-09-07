@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>아이디 찾기</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f5f5f5;
+	color: #333;
+	margin: 0;
+	padding: 0;
+}
+
+#wrap {
+	width: 400px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+	text-align: center;
+	color: #4CAF50;
+}
+
+form {
+	text-align: center;
+}
+
+input[type="text"] {
+	width: 80%;
+	padding: 8px;
+	margin: 10px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+input[type="button"] {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+input[type="button"]:hover {
+	background-color: #45a049;
+}
+
+.message {
+	margin-top: 20px;
+	text-align: center;
+	color: #ff0000;
+}
+</style>
+<script type="text/javascript">
+        function idok(){
+            self.close();
+        }
+    </script>
+</head>
+<body>
+	<div id="wrap">
+		<h1>ID 찾기 결과</h1>
+		<form method="post" name="formm" style="margin-right: 0"
+			action="id_check_form">
+			User ID <input type="text" name="id" th:value="${id}">
+			<div style="margin-top: 20px">
+				<th:block th:if="${message == 1}">
+					<script type="text/javascript">
+                    opener.document.formm.id.value="";
+                </script>
+                요청하신 ID는 [[${id}]]입니다.
+            </th:block>
+				<th:block th:if="${message == -1}">
+                가입하지 않은 ID입니다.
+            </th:block>
+			</div>
+			<input type="button" value="확인" class="cancel" onclick="idok()">
+		</form>
+	</div>
+</body>
+</html>

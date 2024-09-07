@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>네이버 카페 글내용 크롤링</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var link = urlParams.get('url');
+        
+        if (link) {
+            $.ajax({
+                url: '/cafecontent',
+                method: 'GET',
+                data: { url: link },
+                success: function(data) {
+                    console.log("Content loaded: " + data);
+                    $('#cafeText').html(data); 
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        } else {
+            $('#cafeText').html('No URL provided.');
+        }
+    });
+</script>
+</head>
+<body>
+<h3>네이버 카페 검색결과</h3>
+<!-- 글내용 등장부분 -->
+<div id="cafeText"></div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="assets/css/main.css" />
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet"
+	href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css">
+<link rel="stylesheet" href="css/skel.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body id="boardlistbody">     
+	<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+	<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <th:block th:insert="~{includes/header.html}"></th:block>
+        <section id="banner" data-video="images/banner" style="background-image:url('../../images/market.jpg');">
+            <div class="inner">
+                <header>
+                    <h1 style="color: #fff">Community Board</h1>
+                    <p>
+                        사람들과 일상의 이야기를 나누어보세요!<br> 
+                    </p>
+                </header>
+            </div>
+        </section>
+	<article>
+		<div id="main">
+			<div class="inner">
+				<a href="#" id="toggleButton" class="material-symbols-outlined">top_panel_close</a>
+				접기
+				<div id="main_head">
+					<div class="search-and-write-container">
+						<form id="searchForm" name="searchForm" method="get">
+							<select name="searchType" id="searchType">
+								<option value="title">▼ 제목</option>
+								<option value="id">▼ ID</option>
+							</select> <input type="text" name="searchKeyword" id="searchKeyword">
+							<a href="#" onclick="submitSearch()"><span
+								class="material-symbols-outlined">search</span></a>
+						</form>
+						<form id="writeForm" method="get" action="/communityboard_write">
+							<button type="submit" class="btn" id="colorbtn">글쓰기</button>
+						</form>
+					</div>
+					<br>
+				</div>
+				<hr>
+					<form name="frm" method="get">
+						<table>
+						<th:block th:each="com_boardVO : ${boardList}">
+						<tr>
+							<td>[[${com_boardVO.community_seq}]]</td>
+							<td style="width:60%; text-align:center;"><a href="javascript:void(0);"
+									th:onclick="'go_view(' + ${com_boardVO.community_seq} + ');'"
+									th:text="${com_boardVO.community_title}" class="truncate">
+									[[${com_boardVO.community_title}]]</a></td>
+									<td th:if="${com_boardVO.member_data.id.length() > 15}">
+										작성자 : [[${#strings.substringBefore(com_boardVO.member_data.email, '@')}]]
+									</td>
+									<td th:if="${com_boardVO.member_data.id.length() < 15}">
+										작성자 : [[${com_boardVO.member_data.id}]]
+									</td>
+									<td>조회수 : [[${com_boardVO.community_cnt}]]</td>
+									<td>추천수 : [[${com_boardVO.community_goodpoint}]]</td>
+									</tr>
+						</th:block>
+						</table>
+					</form>
+				</div>
+				<th:block th:insert="~{./page_areac}"></th:block>
+			</div>
+	</article>
+	<th:block th:insert="~{includes/footer.html}"></th:block>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/Community.js}"></script>
+</html>

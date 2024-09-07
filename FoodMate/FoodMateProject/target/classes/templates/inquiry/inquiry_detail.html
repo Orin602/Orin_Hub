@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{includes/header.html}"></th:block>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry Detail</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css" />
+    <!-- 수정된 Font Awesome CSS 링크 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+    /* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+    width: 40px;
+    text-align:center;
+    
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .inquiry-detail {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .inquiry-detail h2 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .inquiry-detail p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .reg-date {
+            color: #999;
+            font-size: 0.8em;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        /* 질문 부분에 배경색 및 패딩 추가 */
+        .subject {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* 답변 부분 스타일 */
+        .response {
+            background-color: #e9f7ef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* 질문 밑에 구분선 스타일 */
+        .subject-divider, .response-divider {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        /* 목록보기 버튼 스타일 */
+        .btn-list {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #5cb85c; /* Light green color */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .btn-list:hover {
+            background-color: #4cae4c; /* Darker green on hover */
+            transition: background-color 0.3s ease; /* 색상 변경에 대한 전환 효과 추가 */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* 홈 아이콘 스타일 */
+        .home-icon {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+
+    <div class="inquiry-detail">
+        <p class="author-info">작성자 | <span th:text="관리자"></span></p>
+        <div class="subject">
+        <h2>제목 : </h2>
+            <h3 th:text="${inquiryDetail.subject}"></h3>
+            <!-- 질문 아래에 구분선 -->
+            <div class="subject-divider"></div>
+            <h2>내용 : </h2>
+            <p th:text="${inquiryDetail.message}"></p>
+        </div>
+        
+        <div class="response">
+            <h3>답변</h3>
+            <!-- 답변 아래에 구분선 -->
+            <div class="response-divider"></div>
+            <p th:text="${inquiryDetail.comments}"></p>
+            
+        </div>
+
+        <p class="reg-date"
+            th:text="${#dates.format(inquiryDetail.regdate, 'yyyy-MM-dd HH:mm:ss')}"></p>
+
+        <!-- 목록보기 버튼 -->
+        <a href="/inquiry/inquiryList" class="btn-list"><i
+            class="fas fa-home home-icon"></i>목록보기</a>
+    </div>
+    <script>
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }</script>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>공지사항 게시판(관리자페이지)</title>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body id="admin-body">
+    <nav class="admin-nav">
+        <div class="admin-side"><!--테두리-->
+            <a class="admin-a" th:href="@{/admin_main}">
+        <i class="fas fa-home"></i> 관리자 메인
+        </a>
+        </div>
+        <div class="admin-side">
+            <a class="admin-a" th:href="@{/memberList.do}">
+                <i class="fas fa-tachometer-alt"></i>&nbsp;회원 목록
+            </a><br>
+             <a class="nav-link" href="admin_QnA.do"><i class="fas fa-question-circle"></i> Q&A 게시판</a><br>
+            <a class="nav-link" href="admin_ask.do"><i class="fas fa-comments"></i> 1:1 문의 게시판</a><br>
+            <a class="nav-link" href="admin_noticelist.do"><i class="fas fa-bullhorn"></i> 공지사항 게시판</a><br>
+            <a class="nav-link" href="admin_eventlist.do"><i class="fas fa-calendar-alt"></i> 이벤트 게시판</a><br>
+            <a class="nav-link" href="admin_bookinglist.do"><i class="fas fa-book"></i> 예약 목록</a>
+            <!-- 채팅방 추가 -->
+		    <div class="chat-icon" onclick="openChatRoom()">
+		    	<i class="fas fa-comment-dots"></i>&nbsp;채팅방 관리
+		    </div>
+		    <script>
+		    function openChatRoom() {
+		    	window.open("/chatService", "_blank", "width=600,height=600");
+		    }
+		    </script>
+        </div>
+        <div class="admin-side">
+            <h4>관리자 계정 : [[${loginUser.id}]]</h4>
+            <a class="admin-a" th:href="@{/admin_logout}">
+            <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </a>
+        </div>
+    </nav>
+    <main id="admin-main">
+        <div class="admin-content">
+            <h1>공지사항 & 이벤트 게시판(관리자페이지)</h1>
+            <div class='content-box'>
+                <form class="form-1" name="NoticeForm" action="/noticeReg.do" method="post" enctype="multipart/form-data" onsubmit="submitForm()">
+                    <input class="write-1" type="text" name="notice_title" maxlength="44" placeholder="제목 입력, 최대 44자까지 가능합니다" required>
+                    <textarea class="write-2" name="notice_content" rows="20" cols="20" maxlength="254" placeholder="내용 입력, 최대 254자 가능합니다" required></textarea>
+                    <label for="notice_cate">공지 종류:</label>
+                    <select name="notice_cate" id="notice_cate" required>
+                        <option value="notice">공지</option>
+                        <option value="event">이벤트</option>
+                    </select><br><br>
+                    <label for="file">파일 첨부:</label>
+                    <input type="file" id="file" name="file" accept="image/*" multiple onchange="previewImages()">
+                    <div id="preview" style="margin-top: 10px;"></div>
+                    <hr>
+                    <button type="submit">작성 완료</button>
+                    <button type="reset">다시 입력</button>
+                    <button type="button" onclick="window.location.href='admin_noticelist.do'">목록 보기</button>
+                </form>
+            </div>
+        </div>
+    </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script>
+function submitForm() {
+    var selectedValue = document.getElementById("notice_cate").value;
+    if (selectedValue === "notice") {
+        document.NoticeForm.action = "noticeReg.do"; // 공지사항 등록 처리 페이지로 설정
+    } else if (selectedValue === "event") {
+        document.NoticeForm.action = "noticeReg.do"; // 이벤트 등록 처리 페이지로 설정
+    }
+    return true; // 폼 제출 진행
+}
+
+function previewImages() {
+    var preview = document.getElementById('preview');
+    preview.innerHTML = '';
+    var files = document.getElementById('file').files;
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        if (file.type.startsWith('image/')) {
+            var reader = new FileReader();
+            reader.onload = (function(f) {
+                return function(e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '200px';
+                    img.style.maxHeight = '200px';
+                    img.style.margin = '10px';
+                    preview.appendChild(img);
+                };
+            })(file);
+            reader.readAsDataURL(file);
+        }
+    }
+}
+</script>
+</body>
+</html>

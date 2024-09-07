@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Header</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script type="text/javascript" src="js/MapApi.js"></script>
+    <script>
+    document.addEventListener("scroll", function() {
+        var header = document.querySelector(".h-container");
+        var fixedHeader = document.querySelector(".fixed-header");
+
+        // header와 fixedHeader가 존재하는지 확인
+        if (header && fixedHeader) {
+            var headerBottom = header.getBoundingClientRect().bottom;
+
+            // h-container가 화면 밖으로 벗어나면 보이도록 클래스 추가
+            if (headerBottom <= 0) {
+                fixedHeader.classList.add("visible");
+            } else {
+                fixedHeader.classList.remove("visible");
+            }
+        }
+    });
+
+    // 테마
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        localStorage.setItem('darkTheme', isDarkTheme);
+
+        // 아이콘 토글
+        document.getElementById('themeToggleButtonLight').style.display = isDarkTheme ? 'none' : 'inline';
+        document.getElementById('themeToggleButtonDark').style.display = isDarkTheme ? 'inline' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 페이지 로드 시 저장된 이미지가 있으면 헤더에 설정
+        const savedProfileImage = localStorage.getItem('profileImage');
+        if (savedProfileImage) {
+            const headerProfileImage = document.getElementById('headerProfileImage');
+            if (headerProfileImage) {
+                headerProfileImage.src = savedProfileImage;
+            }
+        }
+    });
+    </script>
+</head>
+<body>
+<div class="h-container">
+    <a href="/main"><img class="logo" src="/images/logo.png" alt="Kamping-Mate"></a>
+    <div class="header-top">
+        <ul>
+            <th:block th:if="${session.loginUser == null}">
+                <li><a th:href="@{/login}">로그인</a></li>
+                <li><a th:href="@{/admin}">관리자</a></li>
+            </th:block>
+            <th:block th:unless="${session.loginUser == null}">
+                <li><a th:href="@{/logout}">로그아웃</a></li>
+                <li>
+                    <a th:href="@{/mypage}" th:text="${session.loginUser.name}"></a>
+                    <img id="headerProfileImage" class="header-profile-image" alt="Profile Image" width="30" height="30" />
+                </li>
+            </th:block>
+            <li><a th:href="@{/customer_service}">고객센터</a></li>
+        </ul>
+    </div>
+        
+    <div class="header-mid">
+        <h1><a href="/main">Kamping-Mate</a></h1>
+    </div>
+    <div class="header-bottom">
+        <!-- <form onsubmit="searchPlaces(); return false;">
+            <input type="text" value="" id="keyword" size="15" placeholder="검색어를 입력하세요.">
+            <button type="submit" class="header-serarch"><i class="fas fa-search"></i></button>
+        </form> -->
+            <ul>
+            <li><h3><a th:href="@{/introduce}">소개</a></h3></li>
+            <li><h3><a th:href="@{/step}">가이드라인</a></h3></li>
+            <li><h3><a th:href="@{/map}">지도</a></h3></li>
+            <li><h3><a th:href="@{/recommend}">추천시스템</a></h3></li>
+            <li><h3><a th:href="@{/notice}">공지/이벤트</a></h3></li>
+            <li><h3><a th:href="@{/review}">리뷰</a></h3></li>
+            <li><h3><a th:href="@{/book}">예약</a></h3></li>
+            
+        </ul>
+    </div>
+</div>
+<!-- 고정 헤더 -->
+<div class="fixed-header">
+    <div class="fix-header-bottom">
+        <a href="/main"><img class="logo2" src="/images/logo.png" alt="Kamping-Mate"></a>
+        <ul>
+            <li><a th:href="@{/introduce}">소개</a></li>
+            <li><a th:href="@{/step}">가이드라인</a></li>
+            <li><a th:href="@{/map}">지도</a></li>
+            <li><a th:href="@{/recommend}">추천시스템</a></li>
+            <li><a th:href="@{/notice}">공지/이벤트</a></li>
+            <li><a th:href="@{/review}">리뷰</a></li>
+            <li><a th:href="@{/book}">예약</a></li>
+            <li>
+                <i id="themeToggleButtonLight" class="fas fa-sun" style="cursor: pointer;"
+                     onclick="toggleTheme()" title="라이트 테마로 변경"></i>
+                <i id="themeToggleButtonDark" class="fas fa-moon" style="cursor: pointer;
+                     display: none;" onclick="toggleTheme()" title="다크 테마로 변경"></i>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

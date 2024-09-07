@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Main</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-scrollbars/1.1.0/chartjs-plugin-scrollbars.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<style>
+.items-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 30%;
+    line-height: 0;
+    box-sizing: border-box;
+}
+
+.item {
+    display: inline-block;
+    width: 33%;
+    margin-right: 40px;
+    margin-bottom: 10px;
+    vertical-align: top;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+</style>
+<script th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+	<section id="main-container">
+        <!--메인페이지에 보여질 내용을 section으로 감쌈-->
+        <div class="main-top">
+	        <!-- 제목 -->
+		    <!-- 에러 메시지 표시 -->
+		    <div th:if="${error}" th:text="${error}"></div>
+		    <!-- 에러가 없을 경우 캠핑 사이트 목록 표시 -->
+		    <div th:unless="${error}" style="width:100%;">
+
+			    <!-- 애니메이션 제어 버튼 -->
+			    <div class="controls">
+			         <button id="pauseBtn"><i class="fas fa-stop"></i></button>
+			         <button id="playBtn" style="display: none;"><i class="fas fa-play"></i></button>
+			    </div>
+			       <!-- 각 캠핑 사이트 아이템 -->
+			    <div class="items-container">
+			        <div class="scrolling">
+			            <div th:each="item : ${items}" class="item">
+			                <div style="height:100%;">
+			                    <!-- 이미지 및 링크 -->
+			                    <a th:if="${item.firstImageUrl == 'N/A'}" th:href="${item.homepage}">
+								    <img th:src="@{/images/no_img.jpg}" alt="이미지 준비중">
+								</a>
+								<a th:unless="${item.firstImageUrl == 'N/A'}" th:href="${item.homepage}">
+								    <img th:src="${item.firstImageUrl}" alt="대표이미지">
+								</a>
+			                    <!-- 야영장명 -->
+			                    <h2 th:text="${item.facltNm}">야영장명</h2>
+			                    <p><strong>번호:</strong> <span th:text="${item.tel}"></span></p>
+			                    <p><strong>주소:</strong> <span th:text="${item.addr1}">주소</span></p>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+        <div class="banner-container">
+        	<h2>캠핑 추천 용품</h2>
+	        <div th:each="item, iterStat : ${Banneritems}" th:classappend="${iterStat.index == 0} ? 'active'" class="banner-item">
+	            <a th:href="${item.link}" style="text-decoration: none; /* 밑줄 제거 */">
+	                <img th:src="${item.image}" alt="Item Image" />
+	                <div><span th:utext="${item.title}"></span></div>
+	                <div><span th:text="${item.lprice}" class="price"></span>원</div>
+	            </a>
+	        </div>
+	    </div>
+        <div class="main-mid">
+        <!--main top 밑에 위치할 div-->
+            <div class="mid-weather">
+                <div id="weatherInfo">
+                    <p><span id="currentWeather"></span></p>
+                    <p><span id="maxTemperature"></span> / <span id="minTemperature"></span></p>
+                    <p>하늘 상태 : <span id="skyStatus"></span></p>
+                    <p>습도 : <span id="humidity"></span></p>
+                </div>
+                <div id="weatherChart">
+                    <h3 style="display: inline;">날씨 그래프</h3>
+                    &nbsp;&nbsp;&nbsp; <span class="clickable" id="today"> 오늘 </span> <span
+                        class="clickable" id="tomorrow"> 내일 </span> <span class="clickable"
+                        id="dayAfterTomorrow"> 모레 </span>
+                    <canvas id="temperatureChartCanvas"></canvas>
+                </div>
+                <div id="weatherYoutube">
+                	<h3>일기예보&nbsp;<i class="fas fa-play" style="color:red;"></i></h3>
+                	<div id="video-container"></div>
+                </div>
+            </div>
+            <div class="mid-news">
+               <h1 class="news-h1"><i class="fas fa-newspaper"></i>&nbsp;네이버 뉴스 검색 결과</h1>
+    			<div id="news-list" class="news-list"></div>
+		        <div class="pagination">
+		            <button id="prevBtn" onclick="prevPage()" disabled>Previous</button>&nbsp;&nbsp;
+		            <button id="nextBtn" onclick="nextPage()">Next</button>
+		        </div>
+            </div>
+            
+            <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var newsItems = /*[[${responseBody}]]*/ '[]';
+        newsItems = JSON.parse(newsItems);
+        var currentPage = 0;
+
+        function renderPage(page) {
+            var newsList = document.getElementById('news-list');
+            newsList.innerHTML = '';
+
+            if (page >= 0 && page < newsItems.length) {
+                var item = newsItems[page];
+                var newsItem = `
+                    <div class='news-item'>
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <a href='${item.link}' target='_blank' style="text-decoration: none;">바로가기</a>
+                        <p>${item.pubDate}</p>
+                    </div>
+                `;
+                newsList.innerHTML = newsItem;
+
+                currentPage = page;
+                document.getElementById('prevBtn').disabled = currentPage === 0;
+                document.getElementById('nextBtn').disabled = currentPage === newsItems.length - 1;
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                renderPage(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < newsItems.length - 1) {
+                renderPage(currentPage + 1);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPage(0);
+        });
+        /*]]>*/
+    </script>
+        </div>
+    </section>
+	<div class="calendar-icon" onclick="openCalendarWindow()">
+        <i class="fas fa-calendar-alt"></i>
+    </div>
+    <script th:inline="javascript">
+        // 사용자 ID를 서버에서 전달된 값으로 설정합니다.
+        const user_id = /*[[${loginUserNumberData}]]*/ 'test';
+
+        // 사용자 ID가 null인 경우 'test'로 설정합니다.
+        if (user_id === 'null' || user_id === null) {
+            user_id = 'test';
+        }
+
+        function openCalendarWindow() {
+            window.open(`callender.html?user_id=${encodeURIComponent(user_id)}`, '_blank', 'width=460,height=700');
+        }
+    </script>
+    <!-- gpt 추가 -->
+    <div class="gpt-icon" onclick="openGPTWindow()">
+    	<i class="fas fa-question"></i>
+    </div>
+    <script>
+    function openGPTWindow() {
+    	window.open("/api/chat", "_blank", "width=600,height=400");
+    }
+    </script>
+    <!-- 채팅방 추가 -->
+    <div class="chat-icon" onclick="openChatRoom()">
+    	<i class="fas fa-comment-dots"></i>
+    </div>
+    <script>
+    function openChatRoom() {
+    	window.open("/chatService", "_blank", "width=600,height=600");
+    }
+    </script>
+    <!-- 배너용 스크립트 -->
+    <script th:inline="javascript">
+    function formatPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var items = document.querySelectorAll('.banner-item');
+        var currentIndex = 0;
+        var prices = document.querySelectorAll('.price');
+
+        prices.forEach(function(priceElement) {
+            var price = priceElement.textContent;
+            priceElement.textContent = formatPrice(price);
+        });
+
+        function showNextItem() {
+            items[currentIndex].style.display = 'none';
+            currentIndex = (currentIndex + 1) % items.length;
+            items[currentIndex].style.display = 'block';
+        }
+
+        items[currentIndex].style.display = 'block';
+        setInterval(showNextItem, 5000);
+    });
+    </script>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var scrollingDiv = document.querySelector('.scrolling');
+    var pauseBtn = document.getElementById('pauseBtn');
+    var playBtn = document.getElementById('playBtn');
+
+    pauseBtn.addEventListener('click', function() {
+        scrollingDiv.style.animationPlayState = 'paused';
+        pauseBtn.style.display = 'none';
+        playBtn.style.display = 'inline-block';
+    });
+
+    playBtn.addEventListener('click', function() {
+        scrollingDiv.style.animationPlayState = 'running';
+        playBtn.style.display = 'none';
+        pauseBtn.style.display = 'inline-block';
+    });
+});
+</script>
+</body>
+</html>

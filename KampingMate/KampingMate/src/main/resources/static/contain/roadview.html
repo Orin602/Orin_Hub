@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로드뷰</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fce0b8a7ee9bc8a40e8d1d30dee82622&libraries=services"></script>
+    <script>
+        function initRoadview() {
+            var rvContainer = document.getElementById('roadview');
+            var params = new URLSearchParams(window.location.search);
+            var panoId = params.get('panoId');
+            var lat = parseFloat(params.get('lat'));
+            var lng = parseFloat(params.get('lng'));
+            var rvPosition = new kakao.maps.LatLng(lat, lng);
+            
+            var roadview = new kakao.maps.Roadview(rvContainer);
+            var roadviewClient = new kakao.maps.RoadviewClient();
+
+            if (panoId) {
+                roadview.setPanoId(panoId, rvPosition);
+            } else {
+                roadviewClient.getNearestPanoId(rvPosition, 50, function(panoId) {
+                    roadview.setPanoId(panoId, rvPosition);
+                });
+            }
+
+            // 로드뷰 위치가 변경될 때 메시지를 보냄
+            kakao.maps.event.addListener(roadview, 'position_changed', function() {
+                var rvPosition = roadview.getPosition();
+                window.opener.postMessage({
+                    type: 'updatePosition',
+                    position: {
+                        lat: rvPosition.getLat(),
+                        lng: rvPosition.getLng()
+                    }
+                }, '*');
+            });
+
+            window.addEventListener('message', function(event) {
+                if (event.data.type === 'updatePosition') {
+                    var newPos = new kakao.maps.LatLng(event.data.position.lat, event.data.position.lng);
+                    roadviewClient.getNearestPanoId(newPos, 50, function(panoId) {
+                        roadview.setPanoId(panoId, newPos);
+                    });
+                }
+            });
+
+            window.onbeforeunload = function() {
+                window.opener.postMessage({
+                    type: 'closeRoadview'
+                }, '*');
+            };
+        }
+        window.onload = initRoadview;
+    </script>
+    <style>
+        body, html { width: 100%; height: 100%; margin: 0; padding: 0; }
+        #roadview { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="roadview"></div>
+</body>
+</html>

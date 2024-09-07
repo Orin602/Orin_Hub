@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/Book.js}"></script>
+<link rel="stylesheet" th:href="@{/css/book.css}">
+<style>
+
+.star_rating {
+    width: 100%; 
+    box-sizing: border-box; 
+    display: inline-flex; 
+    float: left;
+    flex-direction: row; 
+    justify-content: flex-start;
+}
+.star_rating .star {
+    width: 25px; 
+    height: 25px; 
+    margin-right: 10px;
+    display: inline-block; 
+    background: url('images/nostar.png') no-repeat; 
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+.star_rating .star.on {
+    width: 25px; 
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block; 
+    background: url('images/star.png') no-repeat;
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+</style>
+<title>예약페이지</title>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+    <div class="book-container">
+        <h1>예약하기</h1>
+        <form id="frm" name="frm" method="Post">
+            <input type="hidden" name="userId" id="userId" th:value="${session.loginUser.id}">
+            <div class="book-content">
+                <h3>여행 기간</h3>
+                <label class="b-label">시작일자</label>
+                <input type="date" name="bookdateS" id="bookdateS" onchange="onStartDateChange()">
+                <labe class="b-label">종료일자</labe>
+                <input type="date" name="bookdateE" id="bookdateE" onchange="onEndDateChange()"><br>
+                <h4>여행기간 (<span id="period">0</span>)일</h4>
+            </div>
+            <div class="book-content">
+                <h3>캠핑장소</h3>
+                <input type="text" name="campingname" id="campingname" onclick="book_campingsearch()"> 
+                <button type="button" onclick="book_campingsearch()">캠핑장찾기</button>
+                <input type="hidden" name="campingid" id="campingid"> 
+            </div>
+            <div class="book-content">
+                <h3>상세정보</h3>
+                <label class="b-label">인원수</label>
+                <select name="headcount" id="headcount" class="b-select">
+                    <option value="0">선택하세요</option>
+                    <option value="1">1명</option>
+                    <option value="2">2명</option>
+                    <option value="3">3명</option>
+                    <option value="4">4명</option>
+                    <option value="5">5명</option>
+                    <option value="6">6명</option>
+                </select><br>
+                <label class="b-label">예약자 성함</label>
+                <input type="text" name="bookname" id="bookname" th:value="${session.loginUser.name}" placeholder="이름을 입력하세요."><br>
+                <label class="b-label">연락처</label>
+                <input type="text" name="phone" id="phone" th:value="${session.loginUser.telephone}" placeholder="'-'없이 숫자만 입력해 주세요."><br>
+                <label class="b-label">예약관련 상세</label>
+                <textarea name="message" id="message" placeholder="예약관련 상세한 내용을 적어주세요"></textarea><br>
+            </div>
+            <button type="button" onclick="gobook(event)">예약하기</button><br>
+            <button type="button" onclick="goBookList()">나의 예약 목록</button>
+        </form>
+    </div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var campingid = urlParams.get('campingid');
+    var campingname = urlParams.get('campingname');
+
+    if (campingid) {
+        document.getElementById('campingid').value = campingid;
+    }
+    if (campingname) {
+        document.getElementById('campingname').value = campingname;
+    }
+});
+</script>
+</html>

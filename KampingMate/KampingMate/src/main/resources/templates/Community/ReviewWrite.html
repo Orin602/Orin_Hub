@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>리뷰쓰기</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<style>
+.star_rating {
+  margin: 0 auto;
+  width: 100%; 
+  box-sizing: border-box; 
+  display: flex; 
+  float: left;
+  flex-direction: row; 
+  justify-content: center;
+}
+.star_rating .star {
+  width: 25px; 
+  height: 25px; 
+  margin-right: 10px;
+  display: inline-block; 
+  background: url('images/nostar.png') no-repeat; 
+  background-size: 100%; 
+  box-sizing: border-box; 
+}
+.star_rating .star.on {
+  width: 25px; 
+  height: 25px;
+  margin-right: 10px;
+  display: inline-block; 
+  background: url('images/star.png') no-repeat;
+  background-size: 100%; 
+  box-sizing: border-box; 
+}
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+
+<div class="review-write">
+    <h2>리뷰 작성 페이지입니다</h2>
+    	제목 : <input type="text" id="title" placeholder="제목을 입력하세요" />&nbsp;&nbsp;&nbsp;
+        캠핑장 : <input type="text" id="kakao_name" onclick="review_campingsearch()" />
+    			<input type="hidden" id="kakao_id" name="kakao_id" /><br>
+        캠핑장찾기 : 
+        <button type="button" onclick="gocamping_search()" class="btn">이름으로 검색</button>
+        <button type="button" onclick="review_campingsearch()" class="btn">지도에서 찾기</button>
+    
+        <div class ="star_rating" style="margin-top:5px; margin-bottom:5px;">
+            별점 : 
+            <span class="star" data-value="1"> </span>
+            <span class="star" data-value="2"> </span>
+            <span class="star" data-value="3"> </span>
+            <span class="star" data-value="4"> </span>
+            <span class="star" data-value="5"> </span>
+        </div>
+        <hr>
+        <!-- div부분이 에디터 -->
+        <div id="content"></div>
+        <button type="button" onclick="wsubmitReview()" class="btn" style="margin-top:10px;">리뷰 제출</button>
+    </div>
+</div>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" th:src="@{js/ReviewW_U.js}"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+
+<!-- script -->
+<script>
+const editor = new toastui.Editor({
+    el: document.querySelector('#content'),
+    height: '500px',
+    initialEditType: 'wysiwyg',
+    initialValue: '',
+    previewStyle: 'vertical',
+    placeholder: '내용을 입력해 주세요.',
+    hooks: {
+        async addImageBlobHook(blob, callback) {
+            try {
+                const formData = new FormData();
+                formData.append('image', blob);
+                const response = await fetch('/tui-editor/image-upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (response.ok) {
+                    const imageUrl = await response.text();
+                    callback(imageUrl, 'image alt attribute');
+                } else {
+                    console.error('업로드 실패 : ', response.statusText);
+                }
+            } catch (error) {
+                console.error('업로드 실패 : ', error);
+            }
+        }
+    }
+});
+</script>
+</html>

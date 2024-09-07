@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmarked Reviews</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <script th:src="@{/js/mypage.js}" defer></script>
+</head>
+<body id="bookMark">
+    <!-- 헤더 -->
+    <th:block th:insert="~{include/header}"></th:block>
+
+    <!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+
+    <div class="container">
+        <h2>내가 북마크한 리뷰</h2>
+        <table id="bookmarked_reviews_table">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>캠핑장</th>
+                    <th>작성자</th>
+                    <th>제목</th>
+                    <th>작성일</th>
+                    <!-- 추가적인 열들을 필요에 따라 여기에 추가 -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Thymeleaf를 사용하여 반복적으로 리뷰를 테이블에 추가 -->
+                <tr th:each="review, rowStat : ${bookmarkedReviews}">
+                    <td th:text="${rowStat.index + 1}"></td>
+                    <td th:text="${review.kakao_name}"></td>
+                    <td th:text="(${#strings.length(review.member_data.name) > 1} ? ${#strings.substring(review.member_data.name, 0, 1)} + '**' : ${#strings.substring(review.member_data.name, 0, 1)} + '*')"></td>
+                    <td>
+                        <a th:href="@{/review/{reviewId}(reviewId=${review.review_seq})}" th:text="${review.title}"></a>
+                    </td>
+                    <td th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></td>
+                    <!-- 추가적인 열들을 필요에 따라 여기에 추가 -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

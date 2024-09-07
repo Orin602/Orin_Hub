@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Recipe List</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
+</head>
+<body>
+
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
+
+	<!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <div class="container1">
+        
+        <!-- 내가 작성한 레시피 내용 -->
+        <section id="main">
+            <div id="content">
+            	<div style="display: flex; justify-content: space-between; align-items: center;">
+	                <h3>내가 작성한 레시피</h3>
+	                <input type="button" value="작성하기" class="btn" onclick="location.href='/board_write'">
+            	</div>
+				<div class="tbl-container">
+					<table cellpadding="0" cellspacing="0" border="0">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>제목</th>
+								<th>작성일</th>
+							</tr>
+						</thead>
+						<tbody th:if="${#lists.size(recipeList) != 0}">
+							<tr th:each="myRecipe : ${recipeList}">
+								<td th:text="${myRecipe.seq}"></td>
+								<td>
+									<a th:text="${myRecipe.com_recipe.rcp_nm}"
+									th:href="'/com_board_detail?seq=' + ${myRecipe.seq}"></a>
+								</td>
+								<td th:text="${#dates.format(myRecipe.d_regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<th:block th:if="${#lists.size(recipeList) == 0}">
+                    <h3 style="color: red; text-align: center;">작성한 레시피가 없습니다.</h3>
+                </th:block>
+            </div>
+            
+        </section>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

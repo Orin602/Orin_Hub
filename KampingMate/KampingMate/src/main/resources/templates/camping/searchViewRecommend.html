@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/camping.css}">
+    <title>검색 결과</title>
+</head>
+
+
+<body class="search">
+    <div class="searchcontainer">
+        <h1 class="search1">캠핑장 리스트</h1>
+        
+       
+        <div th:if="${#lists.isEmpty(goCampingList)}" class="no-results">검색 결과가 없습니다.</div>
+        <ul>
+            <li th:each="camp : ${goCampingList}">
+                <h2 class="camp_tt">[[${camp.facltNm}]]</h2>
+                <div class="c_list update">
+                    <a th:href="@{/detailView(contentId=${camp.contentId})}" class="dc_none">
+                        <div class="img_box">
+                            <img th:src="@{${camp.firstImageUrl}}" alt="캠핑장 이미지">
+                        </div>    
+                    </a>
+                    
+                    <div class="camp_cont">
+                        <span class="camp_stt" th:text="${camp.intro}">일몰과 바다 전망이 장관인 솔섬오토캠핑장.</span>
+                        <span class="camp_txt">
+                            <span th:text="${camp.intro}">캠핑장 소개 텍스트</span>
+                        </span>
+                        <ul class="camp_info01">
+                            <li class="addr" th:text="${camp.addr1}">주소 텍스트</li>
+                            <li class="call_num" th:text="${camp.tel}">전화번호</li>
+                        </ul>
+                        <!-- 아이콘 모음 -->
+                        <div class="camp_item_box">
+                            <ul>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('전기')}"><i class="ico_volt"><span>전기</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('와이파이')}"><i class="ico_wifi"><span>와이파이</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('장작판매')}"><i class="ico_wood"><span>장작판매</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('온수')}"><i class="ico_hotwater"><span>온수</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('물놀이장')}"><i class="ico_pool"><span>물놀이장</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('놀이터')}"><i class="ico_playzone"><span>놀이터</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('운동시설')}"><i class="ico_ico_sports"><span>운동시설</span></i></li>
+                            </ul>
+                        </div>
+                        <!-- //아이콘 모음 -->
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/Book.js}"></script>
+<link rel="stylesheet" th:href="@{/css/book.css}">
+<title>예약결과</title>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+
+<div class="book-container">
+<button type="button" onclick="goBookList()">목록으로 </button>
+<button class="newBtn" onclick="printContent()">Print하기</button>
+<form name="pdffrm" id="pdffrm" method="get">
+	<input type="hidden" name="book_seq" id="book_seq" th:value="${BookVO.bookseq}">         
+<button type="button" onclick="downloadPDF()">PDF로 다운</button>      
+</form>
+    <h1>예약 수정</h1>
+    <div class="book-content">
+        <form name="frm" id="frm">
+            <input type="hidden" name="bookseq" id="bookseq" th:value="${BookVO.bookseq}" />
+            <h3>
+                예약일자 : [[${#dates.format(BookVO.bookdateS, 'yyyy-MM-dd')}]] ~ [[${#dates.format(BookVO.bookdateE, 'yyyy-MM-dd')}]]<br>
+                캠핑장명 : [[${BookVO.campingname}]]<br>
+                인원수 : [[${BookVO.headcount}]] 명<br>
+			    예약자 성함: [[${BookVO.member_data.name}]]<br>
+			    연락처 : [[${BookVO.member_data.telephone}]]<br>
+			    예약관련 상세 : [[${BookVO.message}]]<br>
+				상태 : <span id="condition" th:data-condition="${BookVO.condition}" th:switch="${BookVO.condition}">
+                    <span th:case="0">대기중</span>
+                    <span th:case="1">예약완료</span>
+                    <span th:case="2">예약불가</span>
+                </span>
+                <button type="button" th:onclick="'bookupdate(' + ${BookVO.bookseq} + ', ' + ${BookVO.condition} + ');'">수정</button>
+                <button type="button" onclick="bookdelete()">예약 취소</button>
+            </h3>
+        </form>
+        <hr>
+        <p class="b-p">이미 확정된 예약은 수정 및 취소가 불가능합니다.<br> 해당 캠핑장으로 직접 연락주세요.</p>
+        <hr>
+    </div>
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+<script>
+function printContent() {
+    window.print();
+  }
+  
+async function downloadPDF() {
+    const form = document.forms['pdffrm'];
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData).toString();
+    const url = `/api/generate-pdf?${params}`;
+
+    const response = await fetch(url, {
+        method: 'GET',
+    });
+
+    if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const filename = form.book_seq.value + '.pdf';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } else {
+        console.error('PDF 파일로 다운받는데 실패하였습니다');
+    }
+}
+
+</script>
+</html>

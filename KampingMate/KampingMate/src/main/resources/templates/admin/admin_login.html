@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Admin Login</title>
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<div class="login-container">
+    <h2>Admin Login</h2>
+    <form action="/admin/login" method="post">
+        <input type="text" id="id" name="id" required placeholder="ID">
+        <input type="password" id="password" name="password" required placeholder="PASSWORD">
+        <button type="submit">Login</button>
+    </form>
+    <button type="button" onclick="window.location.href='main';">메인페이지로 이동</button>
+</div>
+</body>
+</html>

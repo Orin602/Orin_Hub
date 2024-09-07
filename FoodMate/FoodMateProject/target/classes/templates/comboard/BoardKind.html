@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/css/main.css">
+<th:block th:insert="~{includes/header.html}"></th:block>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<title>카테고리별 요리 분류</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+</head>
+<body>
+	<article>
+		<h2>요리 목록</h2>
+		<th:block th:each="com_boardVO : ${boardKindList}">
+			<tr>
+				<td><img th:src="${com_boardVO.com_recipe.att_file_no_mk}"
+					style="width: 200px; height: 180px;" /></td>
+				<td><a href="javascript:void(0);"
+					th:onclick="'go_view(' + ${com_boardVO.seq} + ');'">[[${com_boardVO.com_recipe.rcp_nm}]]</a>
+				</td>
+				<td>[[${com_boardVO.member_data.id}]]</td>
+				<td>[[${com_boardVO.cnt}]]</td>
+			</tr>
+		</th:block>
+		<th:block th:insert="~{./page_area}"></th:block>
+	</article>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

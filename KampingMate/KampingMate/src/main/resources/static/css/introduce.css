@@ -1,0 +1,113 @@
+@charset "EUC-KR";
+
+#intro-container {
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 20px;
+    width: 80%;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: center;
+    position: relative;
+    background-image: url('/images/camp3.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.intro-head h1 {
+    animation: fadeIn 2s ease-in-out, moveUpDown 3s infinite alternate;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes moveUpDown {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+
+.intro-main h2 {
+    background-color: rgba(255, 255, 255, 0.7); /* 배경색을 조금 더 투명하게 설정 */
+    padding: 10px;
+    border-radius: 5px;
+    color: #333;
+}
+
+.highlight-text {
+    color: #ff7f50;
+    font-weight: bold;
+}
+
+.intro-box {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.intro-box .box1,
+.intro-box .box2,
+.intro-box .box3 {
+    width: 30%;
+    background-color: rgba(255, 255, 255, 0.7); /* 배경색을 조금 더 투명하게 설정 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    cursor: pointer; /* li를 클릭했을 때 마우스 커서가 포인터로 변경 */
+}
+
+.intro-box .box1:hover,
+.intro-box .box2:hover,
+.intro-box .box3:hover {
+    transform: scale(1.05); /* 호버 효과 적용 */
+}
+
+.intro-box ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.intro-box li {
+    margin: 10px 0;
+    transition: color 0.3s;
+    color: #333;
+    font-weight: bold; /* li 요소의 텍스트를 굵게 수정 */
+    font-size: 16px; /* li 요소의 텍스트 크기를 조금 더 크게 수정 */
+}
+
+.intro-box li:hover {
+    color: #ff7f50; /* 호버 효과 적용 */
+}
+
+.intro-bottom h3 {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* 배경색을 조금 더 투명하게 설정 */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+#img2 {
+    display: none;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #ff7f50;
+}

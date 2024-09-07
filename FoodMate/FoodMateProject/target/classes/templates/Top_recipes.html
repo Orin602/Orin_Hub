@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <title>Top Recipes</title>
+    <!-- Chart.js 불러오기 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header th:insert="~{includes/header}"></header>
+
+    <h1 style="text-align: center;">가장 많이 조회된 레시피 Top 10</h1>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="myChart" width="400" height="350"></canvas>
+    </div>
+    
+    <footer th:insert="~{includes/footer}"></footer>
+
+    
+    <script src="js/Chart.js"></script>
+    
+</body>
+</html>

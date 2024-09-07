@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" th:src="@{js/ReviewList.js}"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<style>
+
+.star_rating {
+    width: 100%; 
+    box-sizing: border-box; 
+    float: left;
+    flex-direction: row; 
+    justify-content: flex-start;
+}
+.star_rating .star {
+    width: 25px; 
+    height: 25px; 
+    margin-right: 10px;
+    display: inline-block; 
+    background: url('images/nostar.png') no-repeat; 
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+.star_rating .star.on {
+    width: 25px; 
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block; 
+    background: url('images/star.png') no-repeat;
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+</style>
+<title>캠핑장 리뷰</title>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div class="review-container">
+	<!-- 정렬버튼 -->
+	<div class="review-main">
+		<button type="button" onclick="go_list()">최신순정렬</button>
+		<button type="button" data-category="cnt_sort" onclick="keyClick(event)">조회수정렬</button>
+		<button type="button" data-category="goodpoint_sort" onclick="keyClick(event)">추천수정렬</button>
+		<button type="button" data-category="bookmark_sort" onclick="keyClick(event)">북마크수정렬</button>
+	</div>
+	
+	<!-- 글쓰기버튼 -->
+	<div style="margin-bottom: 10px;">
+		<form id="writeForm" method="get" action="/reviewwrite">
+			<button type="submit">글쓰기</button>
+		</form>
+	</div>
+	
+	<!-- 검색란 -->
+	<div class="review-main">
+		<form id="searchForm" name="searchForm" method="get" onsubmit="return submitSearch()">
+			<select name="searchType" id="searchType">
+				<option value="title">▼ 글제목</option>
+				<option value="id">▼ ID</option>
+				<option value="Kamping">▼ 캠핑장명</option>
+			</select> 
+			<input type="text" name="searchKeyword" id="searchKeyword"> 
+			<input type="hidden" name="page" id="page" value="1">
+			<input type="hidden" name="sort" id="sort" value="">
+			<button type="submit">검색버튼</button>
+		</form>
+	</div>
+
+	<!-- 리뷰 게시글 리스트 -->
+	<div class="review-list">
+		<form name="frm" method="get">
+			<table>
+				<tr>
+					<th>No.</th>
+					<th>캠핑장소</th>
+					<th style="width:25%; text-align: center;" colspan="2">내용</th>
+					<th>별점</th>
+					<th>작성자</th>
+					<th>조회수</th>
+					<th>추천수</th>
+					<th>날짜</th>
+					<th>북마크수</th>
+					
+				</tr>
+				<th:block th:each="reviewVO, iterStat : ${reviewList}">
+					<tr>
+						<td>[[${startNumber - iterStat.index}]]</td>
+						<td>[[${reviewVO.kakao_name}]]</td>
+						<td style="width:25%; text-align: center;" colspan="2">
+							<a href="javascript:void(0);" th:onclick="'go_view(' + ${reviewVO.review_seq} + ');'" th:text="${reviewVO.title}" class="truncate">[[${reviewVO.title}]]</a>
+						</td>
+						<td>
+							<div class="star_rating">
+				                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+				                    <span class="star" th:classappend="${i <= reviewVO.reviewrate} ? 'on'"></span>
+				                </th:block>
+				            </div>
+			            </td>
+						<td th:text="(${#strings.length(reviewVO.member_data.name) > 1} ? ${#strings.substring(reviewVO.member_data.name, 0, 1)} + '**' : ${#strings.substring(reviewVO.member_data.name, 0, 1)} + '*')"></td>
+						<td>[[${reviewVO.cnt}]]</td>
+						<td>[[${reviewVO.goodpoint}]]</td>
+						<td>[[${#dates.format(reviewVO.write_date, 'yyyy-MM-dd')}]]</td>
+						<td>[[${reviewVO.bookmark}]]</td>
+					</tr>
+				</th:block>
+			</table>
+		</form>
+	</div>
+
+	<!-- 페이징처리 -->
+	<div class="pagination">
+	    <ul>
+	        <!-- 이전 버튼 -->
+	        <li th:if="${pageNumber > 10}">
+	            <a href="javascript:void(0);" th:onclick="go_pri_page();">&laquo; 이전</a>
+	        </li>
+	
+	        <!-- 페이지 번호 표시 -->
+	        <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:if="${i >= ((pageNumber - 1) / 10) * 10 + 1} and ${i <= ((pageNumber - 1) / 10 + 1) * 10}">
+	            <a href="javascript:void(0);" th:onclick="go_page([[${i}]]);" th:text="${i}" th:classappend="${i == pageNumber} ? ' active'">1</a>
+	        </li>
+	
+	        <!-- 다음 버튼 -->
+	        <li th:if="${((pageNumber - 1) / 10 + 1) * 10 < totalPages}">
+	            <a href="javascript:void(0);" th:onclick="go_next_page();">다음 &raquo;</a>
+	        </li>
+	    </ul>
+	</div>
+
+
+
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+<script th:inline="javascript">
+    var pageNumber = /*[[${pageNumber}]]*/ 1;
+    var totalPages = /*[[${totalPages}]]*/ 1;
+
+</script>
+</html>

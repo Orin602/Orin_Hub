@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>콜백 페이지</title>
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        // 네이버 로그인 초기화
+        var naver_id_login = new naver_id_login("REfPFFPLoRkg_l0X6Ro0", "http://localhost:8090/oauth/naver/callback");
+        // 접근 토큰 값 출력
+        // alert(naver_id_login.oauthParams.access_token);
+        // 네이버 사용자 프로필 조회
+        naver_id_login.get_naver_userprofile("naverSignInCallback()");
+
+        // 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
+        function naverSignInCallback() {
+            var email = naver_id_login.getProfileData('email');
+            var id = naver_id_login.getProfileData('id');
+            var provider = 'naver';
+
+            // 사용자 정보를 서버로 전송하여 세션에 저장
+            saveUserToSession(email, id, provider);
+        }
+
+        function saveUserToSession(email, id, provider) {
+            $.ajax({
+                url: '/oauth/saveUserSession',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ email: email, id: id, provider: provider }),
+                success: function() {
+                    closeAndRedirect();
+                },
+                error: function(err) {
+                    console.error('세션 저장 중 오류 발생:', err);
+                }
+            });
+        }
+
+        function closeAndRedirect() {
+            window.opener.location.href = "/oauth/contract";
+            window.close();
+        }
+    </script>
+</body>
+</html>

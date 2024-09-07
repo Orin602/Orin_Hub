@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Kamping-Mate</title>
+<link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+	<!-- 배경 이미지 -->
+	<div id="backgroundImage"></div>
+
+	<!-- 내용 -->
+	<div class="overlay" id="overlay">
+		<!-- 웹사이트 이름과 환영 인사 -->
+		<div class="welcome-text">
+			<h1>
+				'<span class="tex">캠핑메이트</span>'에 오신 것을 환영합니다.
+			</h1>
+			<p>
+				<span class="tex">로그인</span>을 통해 '<span class="tex">캠핑메이트</span>'를
+				더욱 편리하게 이용해보세요.
+			</p>
+			<p>
+				(<span class="tex">로그인</span> 없이도 <span class="tex">메인 페이지</span>로
+				바로 이동하실 수 있습니다.)
+			</p>
+		</div>
+		<div class="button-container">
+		    <div class="login-button">
+		        <a th:href="@{/login}">로그인하러 가기</a>
+		    </div>
+		    <div class="main-button">
+		        <a th:href="@{/main}">메인으로 이동</a>
+		    </div>
+		</div>
+	</div>
+	<!-- 스크립트 -->
+	<script>
+//페이지가 로드될 때마다 실행
+window.addEventListener("load", function() {
+    // 배경 이미지가 천천히 나타나게 함
+    const backgroundImage = document.getElementById('backgroundImage');
+    backgroundImage.classList.add('visible');
+
+    // 배경 이미지가 완전히 나타난 후 텍스트와 버튼이 나타나게 함
+    backgroundImage.addEventListener('transitionend', function() {
+        const overlay = document.getElementById('overlay');
+        overlay.classList.add('visible');
+    });
+});
+</script>
+</body>
+</html>

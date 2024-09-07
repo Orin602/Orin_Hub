@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의 검색 결과</title>
+    <!-- Font Awesome CSS -->
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+            color: #555;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .page-icon {
+            font-size: 24px;
+            color: #45a049;
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .contact-info {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .note {
+            font-size: 0.8em;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .inquiry-list-container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .inquiry-list {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .inquiry-list th,
+        .inquiry-list td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .inquiry-list th {
+            background-color: #f2f2f2;
+        }
+
+        .inquiry-list tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .empty-message {
+            font-style: italic;
+            color: #999;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .subject-text {
+            color: #5cb85c;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .subject-text:hover {
+            color: #3d8b3d;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <i class="fas fa-comment-dots page-icon"></i>
+        <h1>1:1 문의 검색 결과</h1>
+    </div>
+    <div class="contact-info">
+        <!-- 생략 -->
+    </div>
+    <div class="inquiry-list-container">
+        <table class="inquiry-list">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>이름</th>
+                    <th>제목</th>
+                    <th>상태</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 조회된 문의 목록을 여기에 표시할 것입니다. -->
+            </tbody>
+        </table>
+    </div>
+    <!-- 생략 -->
+</body>
+
+</html>

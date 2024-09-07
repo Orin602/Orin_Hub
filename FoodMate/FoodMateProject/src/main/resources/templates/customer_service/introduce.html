@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:insert="~{includes/header.html}"></th:block>
+    <title>FOOD MATE 시작하기</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        /* 챗봇 아이콘 스타일 */
+        #chatbot-icon,
+        #calorie-icon {
+            position: fixed;
+            bottom: 30px;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        #chatbot-icon {
+            left: 10px;
+        }
+
+        #calorie-icon {
+            left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+            width: 40px;
+            text-align: center;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container1 {
+            width: 100%; /* 가로로 가득 채우기 */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            text-align: center; /* 가운데 정렬 추가 */
+        }
+
+        .box {
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f2f2f2;
+            margin-bottom: 30px;
+            animation: slide-up 1s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .box img {
+            max-width: 100%;
+            border-radius: 10px; /* 모서리 둥글게 */
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .box .caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.7); /* 반투명 배경색 */
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* 다양한 크기의 상자를 위한 스타일 */
+        .box:nth-child(odd) {
+            width: 250px;
+        }
+
+        .box:nth-child(3) {
+            width: 350px;
+        }
+
+        /* 각 상자에 대한 애니메이션 효과 */
+        .box:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        .header1 {
+           text-align:center;
+           
+        }
+        
+        .img {
+           border-radius: 100px; /* 모서리 둥글게 */
+        }
+        
+        .highlight-text {
+            color: #28a745; /* 강조 색상 */
+            font-weight: bold;
+        }
+        
+         #img2 {
+            width: 300px; /* 너비 설정 */
+            height: auto; /* 높이 자동 조정 */
+            position: relative;
+            top: 100px; /* 아래로 내리기 */
+            left:200px;
+        }
+        
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .flex-container .text {
+            max-width: 600px;
+            margin-left: 500px; /* 왼쪽으로 이동 */
+            font-size: 30px; /* 글씨 크기 키우기 */
+        }
+        
+@keyframes moveTitle {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+#h1_1 {
+    text-align: center;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 36px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    animation: moveTitle 2s ease infinite; /* 애니메이션 적용 */
+}
+
+        
+        
+    </style>
+    <script>
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }</script>
+</head>
+<body>
+    <a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    
+    <div class="header1">
+    <br>
+        <h1 id="h1_1">FOOD MATE에 오신 것을 환영합니다</h1> <!-- h1 가운데 정렬 -->
+        <br><br><br><br><br>
+        <img src="https://www.adobe.com/content/dam/cc/us/en/products/creativecloud/photography/hub/CODERED_B1_food-photography_hero-img_900x420.jpg.img.jpg" alt="건강한 식습관" style="border-radius: 30px; width: 90%;" />
+        </div>
+        
+        <div class="flex-container">
+        <img id="img2" src="/images/free-icon-nutrients-5286612.png" alt="건강한 식습관">
+        <div class="text">
+            사용자가 <span class="highlight-text">다이어트 과정에서<br></span> <span class="highlight-text">동반자처럼</span> 함께 식사를 즐기고 <br>동기부여를 받는다는 메시지를 전달
+        </div>
+    </div>
+    
+    <br><br><br><br><br><br><br><br><br><br>
+    <div class="container1">
+        <div class="box">
+            <!-- 첫 번째 상자 -->
+            <h2>FOOD MATE란?</h2>
+            <p><i class="fas fa-apple-alt"></i> FOOD MATE는 건강한 식습관을 촉진하기 위한 온라인 플랫폼입니다. 사용자가 건강 정보를 제공하면, FOOD MATE는 해당 사용자에게 맞는 식이 계획 및 영양 정보를 제공합니다.</p>
+        </div>
+        <div class="box">
+            <!-- 두 번째 상자 -->
+            <h2>어떻게 이용하나요?</h2>
+            <ul>
+                <li><i class="fas fa-user"></i> 사용자가 성별, 나이, 키, 몸무게, BMI 및 목표 체중을 입력합니다.</li>
+                <li><i class="fas fa-play-circle"></i> 메인 페이지의 <a href="#" class="start-button">시작하기</a> 버튼을 클릭합니다.</li>
+                <li><i class="fas fa-clipboard-list"></i> FOOD MATE는 제공된 정보를 기반으로 해당 사용자에게 건강한 식이 계획을 생성합니다.</li>
+            </ul>
+        </div>
+        <div class="box">
+            <!-- 세 번째 상자 -->
+            <h2>FOOD MATE를 무료로 사용할 수 있나요?</h2>
+            <p><i class="fas fa-check-circle"></i> 네, FOOD MATE는 완전히 무료로 사용할 수 있습니다.</p>
+            <p><span class="highlight">지금 건강한 삶을 시작하세요!</span></p>
+        </div>
+    </div>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

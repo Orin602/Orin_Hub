@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>QnA List</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+</head>
+<body>
+    <h2>QnA List</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>질문</th>
+                <th>답변</th>
+                <th>등록일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="qna : ${qnaList}">
+                <td th:text="${qna.qna_boardnum}"></td>
+                <td th:text="${qna.question}"></td>
+                <td th:text="${qna.answer}"></td>
+                <td th:text="${#dates.format(qna.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

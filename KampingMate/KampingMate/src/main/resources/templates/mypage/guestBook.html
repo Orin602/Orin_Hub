@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Reviews</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <script th:src="@{/js/mypage.js}" defer></script>
+</head>
+<body id="guestBook">
+<!-- 헤더 -->
+    <th:block th:insert="~{include/header}"></th:block>
+
+    <!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <div class="container">
+    <h2>내가 작성한 리뷰</h2>
+    <table id="my_reviews_table">
+        <thead>
+            <tr>
+                <th id="review_number">번호</th>
+                <th id="review_title">제목</th>
+                <th id="review_date">작성일</th>
+                <!-- 필요한 다른 열들을 여기에 추가 -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 반복문을 사용하여 리뷰 목록을 테이블에 추가 -->
+            <tr th:each="review, rowStat : ${myReviews}">
+                <td th:text="${rowStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{/review/{reviewId}(reviewId=${review.review_seq})}" th:text="${review.title}"></a>
+                </td>
+                <td th:text="${#dates.format(review.write_date, 'yyyy-MM-dd HH:mm')}"></td>
+                <!-- 필요한 다른 열들을 여기에 추가 -->
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <!-- 푸터 -->
+    <th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

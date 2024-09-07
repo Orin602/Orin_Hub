@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<style>
+</style>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/member.js}" defer></script>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js"
+            charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+function openInPopup(url) {
+        window.location.href(url);
+    }
+</script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #join-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+    }
+
+    #join-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    #join-container p {
+        font-weight: bold;
+        margin: 10px 0 5px;
+        color: #333;
+    }
+
+    #join-container input[type="text"],
+    #join-container input[type="button"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    #join-container input[type="text"] {
+        background-color: #f9f9f9;
+    }
+
+    #join-container input[type="button"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #join-container input[type="button"]:hover {
+        background-color: #45a049;
+    }
+</style>
+<title>Join</title>
+</head>
+<body>
+
+	<div id="join-container">
+		<form method="post" action="join_naver" id="join" name="formm">
+			<h2>회원가입</h2><br>
+			
+			<input type="hidden" id="id" class="text id_input" name="id">
+			<p>사용자명(*필수입력)</p>
+			<input type="text" name="name" id="name" class="text" placeholder="사용자 이름을 입력해주세요">
+			<p>이메일(네이버)</p>
+			<input type="text" id="email" class="email" name="email" placeholder="Email" readonly="readonly">
+			<p>닉네임</p>
+			<input type="text" id="nickname" class="text" name="nickname"><br><br>
+			<input type="button" value="가입하기" onclick="go_save_naver()">
+		</form>
+	</div>
+<script type="text/javascript">
+    var naver_id_login = new naver_id_login("REfPFFPLoRkg_l0X6Ro0", "http://localhost:8080/oauth/login");
+    
+    // 네이버 사용자 프로필 조회
+    naver_id_login.get_naver_userprofile("naverSignInCallback()");
+
+    // 네이버 사용자 프로필 조회 이후 프로필 정보를 처리할 callback function
+    function naverSignInCallback() {
+        
+    	var email = naver_id_login.getProfileData('email');
+        var nickname = naver_id_login.getProfileData('nickname');
+        var id = naver_id_login.getProfileData('id');
+    	
+        // 서버로 사용자 정보 전송
+        $.ajax({
+            url: '/checkUser',
+            method: 'POST',
+            data: { id: id },
+            success: function(response) {
+                // 사용자 정보 확인 후 자동 로그인 여부 결정
+                if (response.exists == 1) {
+                    // 사용자가 데이터베이스에 존재하면 자동으로 로그인
+                    window.opener.location.href = '/oauth/autologin?id=' + id; // 부모 창으로 이동하여 로그인 처리 후 이동
+                    window.close(); // 현재 창 닫기
+                } else {
+                	 
+                     document.getElementById('email').value = email;
+                     document.getElementById('nickname').value = nickname;
+                     document.getElementById('id').value = id;
+                }
+            }
+        });
+        
+    }
+        
+
+</script>
+
+</body>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>QnA Detail</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/customer.css}">
+</head>
+<body>
+<div class="qna-detail">
+    <h1 class="author-info">작성자 | <span th:text="관리자"></span></h1>
+
+    <div class="question">
+        <h2>질문 : [[${qnaDetail.question}]]</h2>
+        <hr>
+        <h3>답변 : [[${qnaDetail.answer}]]</h3>
+        <hr><hr>
+        <p class="reg-date" th:text="${#dates.format(qnaDetail.regdate, 'yyyy-MM-dd HH:mm:ss')}"></p>
+        <hr>
+        <!-- 목록보기 버튼 -->
+	    <h3>
+	    <a href="/qna/all" class="btn-list"><i class="fas fa-home home-icon"></i>목록보기</a>
+	    </h3>
+    </div>
+</div>
+    <script>
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }</script>
+</body>
+
+</html>

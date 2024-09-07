@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+  <head>
+    <title>outdooractive platform - API Template</title>
+    <script th:src="@{/js/mypage.js}" defer></script>
+
+    
+    <!-- load Outdooractive Javascript API -->
+    <script type="text/javascript" 
+            src="https://api-oa.com/jscr/oa_head.js?proj=api-dev-oa&amp;key=yourtest-outdoora-ctiveapi&amp;lang=en"></script>
+
+
+  </head>
+  <body>
+    <h1>세계적인 아웃도어를 즐겨보세요!</h1>
+
+    <!-- container used by FlexView API -->
+    <div class="oax-top-cont"></div>
+
+
+    <!-- and some lines of javascript inside a script tag -->
+    <script type="text/javascript">
+
+      var conf = {
+          frontendtype:   "tour",          // choose content type
+          zoom:           11,              // set initial zoom level
+          center:       [ 10.292, 47.546 ] // set initial map center
+      };
+      
+      var fvp = oa.api.flexviewpage( conf );
+
+    </script>
+  </body>
+</html>

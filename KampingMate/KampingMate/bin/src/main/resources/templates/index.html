@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Kamping-Mate</title>
+<link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+<!-- 배경 이미지 -->
+<div id="backgroundImage"></div>
+
+<!-- 내용 -->
+<div class="overlay" id="overlay">
+	<!-- 웹사이트 이름과 환영 인사 -->
+	<div class="welcome-text">
+	    <h1>Welcome to Kamping-Mate</h1>
+	    <p>Your perfect companion for camping adventures!</p>
+	</div>
+	<!-- 소셜 버튼 -->
+	<div class="social-buttons">
+	    <a href="#">Facebook</a>
+	    <a href="#">Twitter</a>
+	    <a href="#">Instagram</a>
+	</div>
+	<!-- 메인 화면 이동 버튼 -->
+    <div class="main-button">
+        <a th:href="@{/main}">Go to Main</a>
+    </div>
+</div>
+<!-- 스크립트 -->
+<script>
+//페이지가 로드될 때마다 실행
+window.addEventListener("load", function() {
+    // 배경 이미지가 천천히 나타나게 함
+    const backgroundImage = document.getElementById('backgroundImage');
+    backgroundImage.classList.add('visible');
+
+    // 배경 이미지가 완전히 나타난 후 텍스트와 버튼이 나타나게 함
+    backgroundImage.addEventListener('transitionend', function() {
+        const overlay = document.getElementById('overlay');
+        overlay.classList.add('visible');
+    });
+});
+</script>
+</body>
+</html>

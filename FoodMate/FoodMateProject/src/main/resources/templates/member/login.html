@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/member.css}">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/member.js}" defer></script>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+    <!-- 네이버 로그인 SDK -->
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"></script>
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<title>Login</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<script>
+    function openFindIdWindow() {
+        window.open("findId", "_blank", "width=600,height=400");
+    }
+
+    function openFindPasswordWindow() {
+        window.open("findPassword", "_blank", "width=600,height=400");
+    }
+    
+    function openInPopup(url) {
+            window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        }
+</script>
+
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<!-- 헤더 -->
+	<th:block th:insert="~{includes/header}"></th:block>
+
+	<div id="login-container">
+		<h2>로그인</h2>
+		<form id="login-form" action="/login" method="post">
+			<!-- <a href="#" class="kakao-login-button" onclick="openkakao()">
+			<i class="kakao-icon"></i></a> -->
+			<input type="text" name="id" placeholder="ID"> 
+			<input type="password" name="password" placeholder="Password"> 
+			<input type="submit" value="로그인">&nbsp;
+				[ <a href="#" onclick="openFindIdWindow()">아이디 찾기</a> / 
+				<a href="#" onclick="openFindPasswordWindow()">비밀번호 찾기</a> ]&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="contract">회원가입</a> ]
+		</form>
+		<div id="naver_id_login"></div>
+	<script type="text/javascript">
+	
+	
+	
+        // 네이버 로그인 초기화
+        var naver_id_login = new naver_id_login("REfPFFPLoRkg_l0X6Ro0", "http://localhost:8080/oauth/login");
+        var state = naver_id_login.getUniqState();
+        naver_id_login.setButton("green", 2, 40);
+        naver_id_login.setDomain("localhost:8080");
+        naver_id_login.setState(state);
+        naver_id_login.setPopup();
+        naver_id_login.init_naver_id_login();
+        
+    </script> 
+	</div>
+	
+	<!-- 푸터 -->
+	<th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Favicon 설정 -->
+<meta charset="UTF-8">
+<!-- 헤더 파일 삽입 -->
+<th:block th:insert="~{include/header.html}"></th:block>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1:1 문의 접수</title>
+<link rel="stylesheet" th:href="@{/css/customer.css}">
+<!-- Font Awesome 아이콘 CDN(콘텐츠 전송 네트워크) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<div class=saveinquiry>
+<!-- 1:1 문의 제목 -->
+	<h2>1:1 문의 접수</h2>
+	<form action="/saveInquiry" method="post">
+		<div class="inquiry1"><!-- 테두리로 강조하는 느낌의 css -->
+		<!-- 문의 안내 내용 -->
+			<ul style="font-size: 1.0em; color: black;">
+				<li>* 1:1 문의건에 대해서는 <span style="font-weight: bold;">실시간 답변이 어려울수 있는점</span> 양해 바 랍니다.</li>
+				<li>* 실시간 답변이 필요한 부분은 고객지원센터 &#x1F4DE; (xxxx-xxxx)나 질문도우미를 이용부탁드립니다.</li>
+			</ul>
+		</div>
+		<div class="inquiry2"><!-- 다른 구역과 구분하기 위한 테두리 css -->
+		<!-- 제목 입력 필드 -->
+			<label for="subject">제목 : </label>
+			<input type="text" id="subject" name="subject" required><br>
+			<!-- 내용 입력 필드 -->
+			<label for="message">내용:</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+		</div>
+        <div class="inquiry3">
+        <!-- 답변 등록 정보 -->
+            <h3>문의에 대한 답변 등록시 알려드립니다.</h3>
+            <!-- 전화번호 입력 필드 -->
+            <label for="phoneNumber">전화번호:</label>
+            <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="000-0000-0000" required><br>
+            <!-- 이메일 입력 필드 -->
+            <label for="email">이메일:</label>
+            <!-- Thymeleaf를 이용하여 로그인한 사용자의 이메일이 자동으로 입력되도록 설정 -->
+            <input type="email" id="email" name="email" th:value="${loginUser.email}" required><br>
+            
+        </div>
+        <div class="inquiry4">
+        <!-- 개인정보 동의 -->
+            <h3>개인(신용)정보 수집 및 이용에 동의하십니까?</h3>
+            <!-- 동의 여부 라이도 버튼 -->
+            <label>
+        <input type="radio" id="disagreeRadio" name="agree" value="false"> 동의하지 않음
+    </label>
+            <label>
+        <input type="radio" id="agreeRadio" name="agree" value="true"> 동의함
+    </label>
+    <!-- 제출 버튼 -->
+            <button type="submit" id="submitButton" disabled><i class="fas fa-paper-plane icon"></i>제출</button>
+        </div>
+	</form>
+</div>
+
+    <!-- JavaScript -->
+    <script>
+        // 동의함 버튼 클릭 시 동의 여부 확인
+    document.getElementById("agreeRadio").addEventListener("click", function () {
+    if (confirm("개인(신용)정보 수집 및 이용에 동의하시겠습니까?")) {
+        // 동의한 경우의 처리
+        alert("동의하셨습니다.");
+        document.getElementById("submitButton").disabled = false; // 제출 버튼 활성화
+        document.getElementById("agreeRadio").checked = true; // 동의함 라디오 버튼 체크
+    } else {
+        // 동의하지 않은 경우의 처리
+        document.getElementById("disagreeRadio").checked = true; // 동의하지 않음 라디오 버튼 체크
+        alert("동의하지 않으셨습니다.");
+        document.getElementById("submitButton").disabled = true; // 제출 버튼 비활성화
+    }
+});
+
+        // 동의하지 않음 버튼 클릭 시 처리
+document.getElementById("disagreeRadio").addEventListener("click", function () {
+    alert("개인(신용)정보 수집 및 이용에 동의하지 않으면 제출이 불가능합니다.");
+    document.getElementById("submitButton").disabled = true; // 제출 버튼 비활성화
+});
+
+        // 폼 제출 시 개인정보 수집 및 이용 동의 확인
+document.getElementById("inquiryForm").addEventListener("submit", function (event) {
+    if (document.getElementById("disagreeRadio").checked) {
+        // "동의하지 않음" 선택 시 폼 제출 방지
+        alert("개인(신용)정보 수집 및 이용에 동의하지 않으면 제출이 불가능합니다.");
+        event.preventDefault();
+    }
+});
+        function openInPopup(url) {
+            window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        }
+    </script>
+</body>
+<th:block th:insert="~{include/footer.html}"></th:block>
+</html>

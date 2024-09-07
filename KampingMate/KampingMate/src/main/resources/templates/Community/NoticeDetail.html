@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/notice.js}"></script>
+<link rel="stylesheet" th:href="@{/css/review.css}">
+<title>공지사항/이벤트</title>
+</head>
+<body id="replyjs">
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div class="notice-detail">
+	<h1>공지사항 / 이벤트</h1>
+        <form name="frm" method="post"class="nd-content">
+            <input type="hidden" name="notice_seq" id="notice_seq" th:value="${noticeVO.notice_seq}">
+
+                <h2>[[${noticeVO.notice_cate}]]</h2>
+                <a href="#" onclick="copyboard()"> 공유하기</a>
+                <hr>
+                <h2>제목 :[[${noticeVO.notice_title}]]</h2>
+                <h3>등록일 : [[${#dates.format(noticeVO.notice_date, "yyyy-MM-dd")}]]</h3>
+                <h3>조회수 : [[${noticeVO.notice_cnt}]]</h3>
+                <h3>내용 </h3>
+                <div class="nd-box">
+                    <span th:utext="${noticeVO.notice_content}"></span>
+                    <th:block th:each="image : ${noticeVO.notice_images}">
+                            <img th:src="${image}">
+                        </th:block>
+                </div>
+
+        </form>
+
+	<input type="button" value="목록" onClick="go_list()" style="margin-top: 10px;">
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

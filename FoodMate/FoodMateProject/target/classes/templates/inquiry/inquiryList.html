@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1 문의</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/customer.css}">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+
+    <th:block th:insert="~{includes/header.html}"></th:block>
+
+    <div class="inquirylist">
+        <h1><i class="fas fa-comment-dots"></i>1:1문의</h1>
+        <div class="contact-info">
+            <ul>
+                <li>1:1 문의 내역 조회는 최대 3년까지 가능합니다.</li>
+                <li><i class="fas fa-phone-alt"></i> 전화 상담 xxxx-xxxx |
+                    평일 09:00~18:00 (<span class="text-red">주말 및 공휴일 휴무</span>) | 점심 12:00~13:00</li>
+            </ul>
+        </div>
+        <div class="list-container">
+            <table id="inquiryTable">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>이름</th>
+                        <th>제목</th>
+                        <th>상태</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="inquiry, row : ${inquiries}" th:class="${row.odd} ? 'odd' : 'even'">
+                        <td th:text="${row.index + 1}"></td>
+                        <td th:text="${inquiry.name}"></td>
+                        <td class="subject">
+                            <a th:href="@{/inquiry/inquiry_detail/{id}(id=${inquiry.inquiry_id})}"
+                                th:text="${inquiry.subject}" class="subject-text"></a>
+                        </td>
+                        <td th:text="${inquiry.status}"></td>
+                        <td th:text="${#dates.format(inquiry.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(inquiries)}">
+                        <td colspan="5" class="empty-message">해당 기간 문의 내역이 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="pagination" class="pagination"></div>
+
+    <th:block th:insert="~{includes/footer.html}"></th:block>
+
+    <script>
+    
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+        const rowsPerPage = 10;
+        let currentPage = 1;
+        const inquiryTable = document.getElementById('inquiryTable');
+        const inquiries = Array.from(inquiryTable.querySelectorAll('tbody tr:not(.empty-message)'));
+
+        function displayRows(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            inquiries.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+            updatePaginationButtons(page);
+        }
+
+        function setupPagination() {
+            const totalRows = inquiries.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            const paginationContainer = document.getElementById('pagination');
+
+            paginationContainer.innerHTML = '';
+            if (totalPages > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.innerText = '이전';
+                prevButton.className = 'prev';
+                prevButton.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayRows(currentPage);
+                    }
+                });
+                paginationContainer.appendChild(prevButton);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.innerText = i;
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        displayRows(currentPage);
+                    });
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                const nextButton = document.createElement('button');
+                nextButton.innerText = '다음';
+                nextButton.className = 'next';
+                nextButton.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        displayRows(currentPage);
+                    }
+                });
+                paginationContainer.appendChild(nextButton);
+            }
+        }
+
+        function updatePaginationButtons(currentPage) {
+            const paginationButtons = document.querySelectorAll('.pagination button');
+            paginationButtons.forEach(button => {
+                if (button.innerText === String(currentPage)) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('load', () => {
+            displayRows(currentPage);
+            setupPagination();
+        });
+
+        function openInPopup(url) {
+            window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        }
+    </script>
+</body>
+
+</html>

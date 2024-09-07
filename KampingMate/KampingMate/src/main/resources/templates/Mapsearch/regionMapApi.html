@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+<title>지역별 카카오 맵 API 적용</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fce0b8a7ee9bc8a40e8d1d30dee82622&libraries=services,clusterer,drawing"></script>
+<style>
+/* 아래는 카카오에서 제공하는 기본 css */
+/* 검색 */
+.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+.map_wrap {position:relative;width:100%;height:500px;}
+#menu_wrap {height:680px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;}
+.bg_white {background:#fff;}
+#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+#menu_wrap .option{text-align: center;}
+#menu_wrap .option p {margin:10px 0;}  
+#menu_wrap .option form {display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;}
+#placesList li {list-style: none;}
+#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+#placesList .item span {display: block;margin-top:4px;}
+#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+#placesList .item .info{padding:10px 0 10px 55px;}
+#placesList .info .gray {color:#8a8a8a;}
+#placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+#placesList .info .tel {color:#009900;}
+#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
+#placesList .item .marker_1 {background-position: 0 -10px;}
+#placesList .item .marker_2 {background-position: 0 -56px;}
+#placesList .item .marker_3 {background-position: 0 -102px}
+#placesList .item .marker_4 {background-position: 0 -148px;}
+#placesList .item .marker_5 {background-position: 0 -194px;}
+#placesList .item .marker_6 {background-position: 0 -240px;}
+#placesList .item .marker_7 {background-position: 0 -286px;}
+#placesList .item .marker_8 {background-position: 0 -332px;}
+#placesList .item .marker_9 {background-position: 0 -378px;}
+#placesList .item .marker_10 {background-position: 0 -423px;}
+#placesList .item .marker_11 {background-position: 0 -470px;}
+#placesList .item .marker_12 {background-position: 0 -516px;}
+#placesList .item .marker_13 {background-position: 0 -562px;}
+#placesList .item .marker_14 {background-position: 0 -608px;}
+#placesList .item .marker_15 {background-position: 0 -654px;}
+#pagination {margin:10px auto;text-align: center;}
+#pagination a {display:inline-block;margin-right:10px;}
+#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+/* 카테고리 */
+.map_wrap, .map_wrap * {margin:0; padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+.map_wrap {position:relative;width:100%;height:350px;}
+#category {position:absolute;bottom:10px;right:10px;border-radius: 5px; border:1px solid #909090;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);background: #fff;overflow: hidden;z-index: 2;}
+#category li {float:left;list-style: none;width:50px;border-right:1px solid #acacac;padding:6px 0;text-align: center; cursor: pointer;}
+#category li.on {background: #eee;} 
+#category li:hover {background: #ffe6e6;border-left:1px solid #acacac;margin-left: -1px;}
+#category li:last-child{margin-right:0;border-right:0;}
+#category li span {display: block;margin:0 auto 3px;width:27px;height: 28px;}
+#category li .category_bg {background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png) no-repeat;}
+#category li .bank {background-position: -10px 0;}
+#category li .mart {background-position: -10px -36px;}
+#category li .pharmacy {background-position: -10px -72px;}
+#category li .oil {background-position: -10px -108px;}
+#category li .cafe {background-position: -10px -144px;}
+#category li .store {background-position: -10px -180px;}
+#category li.on .category_bg {background-position-x:-46px;}
+.placeinfo_wrap {position:absolute;bottom:28px;left:-150px;width:300px;}
+.placeinfo {position:relative;width:100%;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;padding-bottom: 10px;background: #fff;}
+.placeinfo:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.placeinfo_wrap .after {content:'';position:relative;margin-left:-12px;left:50%;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+.placeinfo a, .placeinfo a:hover, .placeinfo a:active{color:#fff;text-decoration: none;}
+.placeinfo a, .placeinfo span {display: block;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+.placeinfo span {margin:5px 5px 0 5px;cursor: default;font-size:13px;}
+.placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+.placeinfo .tel {color:#0f7833;}
+.placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
+
+#container {
+	width: 95%;
+    border: 2px solid deepskyblue;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row; /* 가로 방향으로 배치 */
+    position: relative; /* 상대 위치 설정 */
+}
+
+#menu_wrap {
+    width: 300px; /* 고정 너비 */
+}
+
+#mapWrapper {
+    flex: 1; /* 남은 공간 채우기 */
+}
+
+#map {
+    width: 700px; /* 고정 너비 */
+    height: 700px; /* 고정 높이 */
+}
+
+/* 지도 옵션 버튼 스타일 */
+#container .bg_white .option button {
+    display: flex;
+    width: 80%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: deepskyblue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+#container button:hover {
+    opacity: 0.8; /* 호버 효과 */
+}
+#frm {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding: 10px;
+}
+.map-btn {
+    position: absolute; /* 절대 위치 설정 */
+    top: 10px; /* 위쪽 여백 */
+    right: 10px; /* 오른쪽 여백 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 수평 중앙 정렬 */
+    z-index: 3;
+}
+.map-btn button {
+    display: block;
+    width: 200px; /* 고정 너비 */
+    height: 40px; /* 고정 높이 */
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: skyblue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center; /* 텍스트 가운데 정렬 */
+    font-size: 14px; /* 텍스트 크기 */
+    border-radius: 5px; /* 버튼 모서리 둥글게 */
+}
+
+.map-btn button:hover {
+    background-color: skyblue; /* 호버 시 배경색 */
+    opacity: 0.9; /* 호버 시 불투명도 */
+}
+</style>
+</head>
+<body>
+	<!-- 헤더 -->
+	<th:block th:insert="~{include/header}"></th:block>
+<!-- 지도 -->
+<div id="container"> 
+	<!-- 지도 검색&결과 (뭘 검색하든지 자동 캠핑장으로 되어있음)-->
+	<div id="menu_wrap" class="bg_white">
+	    <div class="option">
+	        <div>
+	            <form onsubmit="searchPlaces(); return false;">
+	                <input type="text" value="" id="keyword" size="15" placeholder="검색어를 입력하세요."> 
+	                <button type="submit">검색하기</button> 
+	            </form>
+	        </div>
+	    </div>
+	    <hr>
+	    <ul id="placesList"></ul>
+	    <div id="pagination"></div>
+	</div>
+	
+    <div id="mapWrapper">
+        <div id="map" style="width:100%;height:700px;"></div>
+    </div>
+
+	<!-- 지도 옵션버튼 -->
+	<div class="map-btn">
+		<button type="button" onclick="mylocation()">내위치 기준으로 보기</button>
+		<button id="roadviewControl" type="button" onclick="setRoadviewRoad()">로드뷰</button>
+		<button type="button" onclick="traffic_check()">실시간 교통상황 확인하기</button>
+		<button type="button" onclick="area_check()">지역선택하기</button>
+		<!-- 지역 선택 창 -->
+		<div id="areaSelection" style="display:none;">
+		    <iframe src="contain/korea_area.html" width="100%" height="600px" frameborder="0"></iframe>
+		</div>
+	</div>
+	
+	<!-- 지도 카테고리 메뉴 -->
+	<ul id="category">
+        <li id="BK9" data-order="0" onclick="searchCategory('BK9')"> 
+            <span class="category_bg bank"></span>
+            은행
+        </li>       
+        <li id="MT1" data-order="1" onclick="searchCategory('MT1')"> 
+            <span class="category_bg mart"></span>
+            마트
+        </li>  
+        <li id="PM9" data-order="2" onclick="searchCategory('PM9')"> 
+            <span class="category_bg pharmacy"></span>
+            약국
+        </li>  
+        <li id="OL7" data-order="3" onclick="searchCategory('OL7')"> 
+            <span class="category_bg oil"></span>
+            주유소
+        </li>  
+        <li id="CE7" data-order="4" onclick="searchCategory('CE7')"> 
+            <span class="category_bg cafe"></span>
+            카페
+        </li>  
+        <li id="CS2" data-order="5" onclick="searchCategory('CS2')"> 
+            <span class="category_bg store"></span>
+            편의점
+        </li>        
+    </ul>
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+<script type="text/javascript" src="js/MapApi.js"></script>
+</body>
+</html>

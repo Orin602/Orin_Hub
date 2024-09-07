@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>FoodMate - 다이어트 식단 추천</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css" />
+<script>
+	document.addEventListener("scroll", function() {
+	    var header = document.getElementById("header");
+	    var fixedHeader = document.getElementById("fixedHeader");
+	    var headerBottom = header.getBoundingClientRect().bottom;
+	
+	    if (headerBottom <= 0) {
+	        fixedHeader.style.display = "block";
+	    } else {
+	        fixedHeader.style.display = "none";
+	    }
+	});
+	// 테마
+    function toggleTheme() {
+	    document.body.classList.toggle('dark-theme');
+	    const isDarkTheme = document.body.classList.contains('dark-theme');
+	    localStorage.setItem('darkTheme', isDarkTheme);
+
+        // 아이콘 토글
+        document.getElementById('themeToggleButtonLight').style.display = isDarkTheme ? 'none' : 'inline';
+        document.getElementById('themeToggleButtonDark').style.display = isDarkTheme ? 'inline' : 'none';
+    }
+
+    window.onload = function() {
+        const darkTheme = localStorage.getItem('darkTheme') === 'true';
+        if (darkTheme) {
+            document.body.classList.add('dark-theme');
+            document.getElementById('themeToggleButtonLight').style.display = 'none';
+            document.getElementById('themeToggleButtonDark').style.display = 'inline';
+        }
+    }
+</script>
+</head>
+<body>
+<header id="header">
+    <div class="h_container">
+    	<!-- 로고 -->
+    	<div id="logo">
+    	<a href="/"><img class="logo" src="/images/logo.png" alt="Food Logo"></a>
+    	</div>
+        <h1><a href="/" style="text-decoration: none; color: inherit;">FoodMate</a></h1>
+        <nav id="nav">
+            <ul>
+                <li><a href="/customer_service/introduce">FoodMate</a></li>
+                <th:block th:if="${session.loginUser == null}">
+                	<li><a th:href="@{/login}">Login</a></li>
+                </th:block>
+                <th:block th:unless="${session.loginUser==null}">
+                	<li><a th:href="@{/logout}">Logout</a></li>
+                </th:block>
+                <li><a th:href="@{/board_list_main}">Community</a>
+						<ul>
+							<li><a th:href="@{/board_list}"><i
+									class="fas fa-comments"></i>&nbsp;유저 레시피 공유</a></li>
+							<li><a th:href="@{/community_list}"><i
+									class="fas fa-handshake"></i>&nbsp;자유 게시판</a></li>
+						</ul></li>
+                <li><a th:href="@{/mypage}">MyPage&nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a>
+                	<ul>
+                		<li><a th:href="@{/infoView}"><i class="fas fa-user"></i>&nbsp;내 정보</a></li>
+				        <li><a th:href="@{/infoUpdate}"><i class="fas fa-pen"></i>&nbsp;내 정보 수정</a></li>
+				        <li><a th:href="@{/bodyUpdate}"><i class="fas fa-check"></i>&nbsp;바디데이터 수정</a></li>
+				        <li><a th:href="@{/myWeightChart}"><i class="fas fa-chart-line"></i>&nbsp;체중 변화 기록</a></li>
+				        <li><a th:href="@{/myRecipeList}"><i class="fas fa-utensils"></i>&nbsp;나의 레시피</a></li>
+				        <li><a th:href="@{/foodRecommend}"><i class="fas fa-history"></i>&nbsp;받은 추천 기록</a></li>
+                	</ul></li>
+                <li><a th:href="@{/customer_service}">Customer Service&nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a>
+                	<ul>
+		            <li><a href="/qna/all"><i class="fas fa-question-circle"></i>&nbsp;Q&A</a></li>
+					<li><a href="/inquiry/inquiryForm"><i class="fas fa-edit"></i>&nbsp;1:1 문의 작성</a></li>
+					<li><a href="/inquiry/inquiryList"><i class="fas fa-list"></i>&nbsp;1:1 문의 내역</a></li>
+                	</ul></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<!-- 고정 헤더 -->
+<div class="fixed-header" id="fixedHeader">
+	<nav id="nav2">
+	<a href="/"><img class="logo2" src="/images/logo.png" alt="Food Logo"></a>
+		<ul>
+		    <li><a href="/customer_service/introduce">FoodMate</a></li>
+		    <th:block th:if="${session.loginUser == null}">
+		        <li><a th:href="@{/login}">Login</a></li>
+		    </th:block>
+		    <th:block th:unless="${session.loginUser==null}">
+		        <li><a th:href="@{/logout}">Logout</a></li>
+		    </th:block>
+		    <li><a th:href="@{/board_list_main}">Community</a>
+						<ul>
+							<li><a th:href="@{/board_list}"><i
+									class="fas fa-comments"></i>&nbsp;유저 레시피 공유</a></li>
+							<li><a th:href="@{/community_list}"><i
+									class="fas fa-handshake"></i>&nbsp;자유 게시판</a></li>
+						</ul></li>
+		    <li><a th:href="@{/mypage}">MyPage&nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a>
+		        <ul>
+		            <li><a th:href="@{/infoView}"><i class="fas fa-user"></i>&nbsp;내 정보</a></li>
+			        <li><a th:href="@{/infoUpdate}"><i class="fas fa-pen"></i>&nbsp;내 정보 수정</a></li>
+			        <li><a th:href="@{/bodyUpdate}"><i class="fas fa-check"></i>&nbsp;바디데이터 수정</a></li>
+			        <li><a th:href="@{/myWeightChart}"><i class="fas fa-chart-line"></i>&nbsp;체중 변화 기록</a></li>
+			        <li><a th:href="@{/myRecipeList}"><i class="fas fa-utensils"></i>&nbsp;나의 레시피</a></li>
+			        <li><a th:href="@{/foodRecommend}"><i class="fas fa-history"></i>&nbsp;받은 추천 기록</a></li>
+		        </ul>
+		    </li>
+		    <li><a th:href="@{/customer_service}">Customer Service&nbsp;&nbsp;<i class="fas fa-chevron-down"></i></a>
+		        <ul>
+		            <li><a href="/qna/all"><i class="fas fa-question-circle"></i>&nbsp;Q&A</a></li>
+					<li><a href="/inquiry/inquiryForm"><i class="fas fa-edit"></i>&nbsp;1:1 문의 작성</a></li>
+					<li><a href="/inquiry/inquiryList"><i class="fas fa-list"></i>&nbsp;1:1 문의 내역</a></li>
+		        </ul>
+		    </li>
+		</ul>
+		<i id="themeToggleButtonLight" class="fas fa-sun" style="cursor: pointer;" onclick="toggleTheme()" title="라이트 테마로 변경"></i>
+        <i id="themeToggleButtonDark" class="fas fa-moon" style="cursor: pointer; display: none;" onclick="toggleTheme()" title="다크 테마로 변경"></i>
+	</nav>
+</div>
+
+
+</body>
+</html>
+<!-- <li><a th:href="@{/Top_recipes}">Top_recipes</a><li> --><!-- 탑 레시피 -->

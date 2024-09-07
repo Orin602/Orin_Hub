@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Detail Select</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/campingSites.css}">
+<script>
+    let regionMapping = {};
+
+    $(document).ready(function() {
+        // Fetch region mapping from server
+        fetchRegionMapping().then(mapping => {
+            regionMapping = mapping;
+        });
+
+        $('input[name="doNm"]').on('change', function() {
+            const selectedSiDo = $(this).val();
+            if (this.checked) {
+                fetchGunGuData(selectedSiDo).then(data => {
+                    updateGunGuCheckboxes(selectedSiDo, data);
+                });
+            } else {
+                $('#gun_gu_' + selectedSiDo).remove();
+            }
+        });
+
+        $('#searchForm').on('submit', function(event) {
+            event.preventDefault(); // 기본 폼 제출을 방지
+            submitForm();
+        });
+    });
+
+    async function fetchRegionMapping() {
+        const response = await fetch('/regionMapping');
+        return response.json();
+    }
+
+    async function fetchGunGuData(siDo) {
+        const mappedSiDo = regionMapping[siDo] || siDo;
+        const response = await fetch('/get_sigungu?siDo=' + encodeURIComponent(mappedSiDo));
+        return response.json();
+    }
+
+    function updateGunGuCheckboxes(siDo, gunGuData) {
+    	gunGuData.sort((a, b) => a.localeCompare(b)); // 오름차순 정렬
+        const gunGuContainer = document.getElementById('gun_gu_container');
+        const siDoDiv = document.createElement('div');
+        siDoDiv.id = 'gun_gu_' + siDo;
+        siDoDiv.className = 'sido-container';
+
+        const toggleButton = document.createElement('span');
+        toggleButton.textContent = '+';
+        toggleButton.className = 'toggle-btn';
+        toggleButton.onclick = function() {
+            const popup = document.getElementById('popup_' + siDo);
+            if (popup.style.display === 'none') {
+                popup.style.display = 'block';
+                toggleButton.textContent = '-';
+            } else {
+                popup.style.display = 'none';
+                toggleButton.textContent = '+';
+            }
+        };
+
+        const title = document.createElement('p');
+        title.textContent = siDo;
+        title.style.display = 'inline';
+
+        siDoDiv.appendChild(toggleButton);
+        siDoDiv.appendChild(title);
+
+        const popupDiv = document.createElement('div');
+        popupDiv.id = 'popup_' + siDo;
+        popupDiv.className = 'popup';
+        gunGuData.forEach(item => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'gun_gu';
+            checkbox.value = item;
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(item));
+            popupDiv.appendChild(label);
+            popupDiv.appendChild(document.createElement('br'));
+        });
+
+        siDoDiv.appendChild(popupDiv);
+        gunGuContainer.appendChild(siDoDiv);
+    }
+
+    function submitForm() {
+        const formData = {
+            doNm: getCheckedValues('doNm'),
+            gungu: getCheckedValues('gun_gu'),
+            faclt: getCheckedValues('faclt_div'),
+            lct: getCheckedValues('lctCl'),
+            induty: getCheckedValues('induty'),
+            bottom: getCheckedValues('siteBottom'),
+            sbrs: getCheckedValues('sbrsCl'),
+            keyword: $('#keyword').val() || ''  // 빈 문자열로 설정
+        };
+
+        $.ajax({
+            url: '/processKeywords',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+            	if (response.redirectUrl) {
+                    // 부모 페이지를 이동시키고 현재 페이지를 닫음
+                    window.opener.location.href = response.redirectUrl;
+                    window.close();
+                }
+                // 서버 응답 처리
+                console.log(response);
+            },
+            error: function(error) {
+                // 에러 처리
+                console.error(error);
+            }
+        });
+    }
+
+    function getCheckedValues(name) {
+        return $('input[name="' + name + '"]:checked').map(function() {
+            return this.value;
+        }).get();
+    }
+</script>
+</head>
+<body>
+    <h1>상세검색</h1>
+    <form id="searchForm">
+        <div class="region-section">
+            <p>지역을 선택하세요:</p>
+            <div>
+                <span th:each="doNm : ${do_list}"> 
+                    <label class="checkbox-label"> 
+                        <input type="checkbox" name="doNm" th:value="${doNm}"> 
+                        <span class="checkbox-custom"></span>
+                        <span th:text="${doNm}"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div class="sido-section">
+            <p>시/군/구를 선택하세요:</p>
+            <div id="gun_gu_container">
+                <!-- 군/구 체크박스가 여기 동적으로 추가됩니다 -->
+            </div>
+        </div>
+        <div class="faclt-section">
+            <p>운영 형태:</p>
+            <div>
+                <span th:each="faclt_div : ${faclt_div_list}"> 
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="faclt_div" th:value="${faclt_div}">
+                        <span class="checkbox-custom"></span>
+                        <span th:text="${faclt_div}"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div class="lct-section">
+            <p>입지 구분:</p>
+            <div>
+                <span th:each="lctCl : ${lct_cl_list}"> 
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="lctCl" th:value="${lctCl}">
+                        <span class="checkbox-custom"></span>
+                        <span th:text="${lctCl}"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div class="induty-section">
+            <p>주요 시설:</p>
+            <div>
+                <span th:each="induty : ${induty_list}"> 
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="induty" th:value="${induty}">
+                        <span class="checkbox-custom"></span>
+                        <span th:text="${induty}"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div class="site-section">
+            <p>바닥 형태:</p>
+            <div>
+                <span th:each="siteBottom : ${site_bottom_list}"> 
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="siteBottom" th:value="${siteBottom}">
+                        <span class="checkbox-custom"></span>
+                        <span th:text="${siteBottom}"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <div class="sbrs-section">
+            <p>부대시설:</p>
+            <div>
+                <span th:each="sbrsCl : ${sbrs_cl_list}"> 
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="sbrsCl" th:value="${sbrsCl}">
+                        <span class="checkbox-custom"></span>
+                        <span th:text="${sbrsCl}"></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+        <button class="detail-btn" type="submit">Submit</button>
+    </form>
+</body>
+</html>

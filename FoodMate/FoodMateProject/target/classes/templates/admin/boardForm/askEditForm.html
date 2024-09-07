@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>관리자 페이지(Admin)</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
+	rel="stylesheet" />
+<link href="/css/admin_styles.css" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style_write.css">
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+// 폼 제출 함수
+function submitFormAndCloseWindow() {
+    var form = document.querySelector('.form-1');
+    var formData = new FormData(form);
+
+    // AJAX를 사용하여 폼 데이터 제출
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            alert('답변이 등록되었습니다.');
+            window.close();  // 응답이 성공적이면 창 닫기
+        } else {
+            window.close()
+        }
+    }).catch(error => {
+        window.close()
+    });
+
+    return false; // 기본 폼 제출 동작 방지
+}
+
+function go_close(){
+	window.close()
+}
+</script>
+
+</head>
+<body class="sb-nav-fixed">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="main.do">관리자 메인</a>
+	</nav>
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_nav">
+			<nav class="sb-sidenav accordion sb-sidenav-dark"
+				id="sidenavAccordion">
+				<div class="sb-sidenav-menu">
+					<div class="nav">
+						<div class="sb-sidenav-menu-heading">회원정보</div>
+						<a class="nav-link" href="memberList.do">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-tachometer-alt"></i>
+							</div> 회원관리
+						</a>
+						<div class="sb-sidenav-menu-heading">게시판 관리</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							data-bs-target="#collapseLayouts" aria-expanded="false"
+							aria-controls="collapseLayouts">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div> 관리자 게시판
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="collapseLayouts"
+							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav">
+								<a class="nav-link" href="admin_food.do">음식레시피 게시판</a> <a
+									class="nav-link" href="admin_QnA.do">Q&A 게시판</a> <a
+									class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
+							</nav>
+						</div>
+						<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
+						<a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
+						<a class="sb-sidenav-menu-heading" href="/">사용자 페이지로 이동</a>
+					</div>
+				</div>
+				<div class="sb-sidenav-footer">
+					<div class="small">현재 로그인한 관리자 계정:</div>
+					[[${loginUser.id}]]
+					<!-- 이 부분에 로그인한 관리자 계정 표시되게 -->
+				</div>
+			</nav>
+		</div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">1:1 답변</h1>
+					<div class='form-0'>
+
+						<form class='form-1' name="BoardForm" action="askUpdate.do"
+							method="post" enctype="multipart/form-data">
+							<input type="hidden" name="askNum" th:value="${ask.inquiry_id}">
+							<input class='write-1' type="text" name="subject" maxlength="44"
+								placeholder="제목 입력, 최대 44자까지 가능합니다" th:value="${ask.subject}"
+								readonly="readonly">
+							<hr>
+							<textarea class='write-2' name="message" rows="20" cols="20"
+								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" readonly="readonly">[[${ask.message}]]</textarea>
+
+							<hr>
+							
+							<textarea class='write-2' name="comments" rows="20" cols="20"
+								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" required th:if="${end_view != 'view'}"></textarea>
+							
+							<textarea class='write-2' name="comments" rows="20" cols="20"
+								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" required th:if="${end_view == 'view'}">[[${ask.comments}]]</textarea>
+							
+							
+							<button type="submit" onclick="submitFormAndCloseWindow()" th:if="${end_view != 'view'}">답변 등록</button>
+							<input type="reset" value="다시 입력" th:if="${end_view != 'view'}">
+							
+							<button type="button" onclick="go_close()" th:if="${end_view == 'view'}">닫 기</button>
+							
+						</form>
+
+					</div>
+			</main>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div
+						class="d-flex align-items-center justify-content-between small">
+						<div class="text-muted">Copyright &copy; Your Website 2024</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+</body>
+</html>

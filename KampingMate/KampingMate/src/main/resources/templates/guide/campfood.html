@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>도전 요리</title>
+<link rel="stylesheet" th:href="@{/css/guide.css}">
+</head>
+<body>
+<div class="food-container">
+	<h1 class="guide-h1">도전 요리</h1>
+	<div th:if="${recipes != null}">
+        <div th:each="recipe : ${recipes['COOKRCP01']['row']}" class="food-content">
+            <img th:src="${recipe['ATT_FILE_NO_MAIN']}" style="height:100px; width:150px;">
+            <a href="#" class="recipe-link" th:attr="data-seq=${recipe.RCP_SEQ}">
+                <h2 th:text="${recipe['RCP_NM']}"></h2>
+            </a>
+        </div>
+    </div>
+    <div th:if="${recipes == null}">
+        <p>레시피가 없습니다</p>
+    </div>
+</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var recipeLinks = document.querySelectorAll('.recipe-link');
+            recipeLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var seq = this.getAttribute('data-seq');
+                    window.location.href = '/detailrecipe?seq=' + seq;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

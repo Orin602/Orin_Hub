@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Login & Join</title>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script th:src="@{/js/login.js}" defer></script>
+</head>
+<!-- 헤더 -->
+<th:block th:insert="~{include/Header}"></th:block>
+<body>
+<div class="login">
+	<div class="login-nav">
+		<ul>
+			<li id="login-tab" class="active">
+				<a href=# id="login-btn">로그인</a>
+			</li>
+			<li id="join-tab" class="active">
+				<a href=# id="join-btn">회원가입</a>
+			</li>
+		</ul>
+	</div>
+	<div id="form-container">
+		<!-- 로그인 -->
+		<div id="login-container" class="form-content">
+			<form id="login" action="/login" method="post">
+				<input type="text" name="id" placeholder="ID">
+				<input type="password" name="password" placeholder="Password">
+				<input type="submit" value="로그인">
+				[ <a href="#" id="findId-btn">아이디 찾기</a> / 
+                <a href="#" id="findPW-btn">비밀번호 찾기</a> ]
+			</form>
+		</div>
+		<!-- 약관 -->
+		<div id="terms-container" class="form-content">
+			<h2>이용 약관</h2>
+			<p>여기에 이용 약관 내용을 작성하세요...</p>
+				<div class="buttons">
+				    <input type="button" value="동의함" id="agree-btn">
+				    <input type="button" value="동의안함" id="disagree-btn">
+				</div>
+		</div>
+		<!-- 회원가입 -->
+		<div id="join-container" class="form-content">
+			<form id="join" action="join" method="post">
+				<input type="text" id="id2" name="id" th:value="${id}" placeholder="ID">
+				<input type="hidden" name="reid" id="reid" th:value="${reid}">
+				<input type="button" class="id-check" onclick="idcheck()" value="id 중복확인">
+				<input type="password" id="pwd2" name="password" placeholder="비밀번호를 입력하세요.">
+				<input type="password" id="pwd_confirm" name="pwd_confirm" placeholder="비밀번호를 입력하세요.">
+				<input type="text" id="name2" name="name" placeholder="Name">
+				<input type="email" id="email2" name="email" th:value="${email}" placeholder="Email">
+				<input type="hidden" name="reemail" id="reemail" th:value="{reemail}">
+				<input type="button" class="email-check" onclick="emailcheck()" value="email 중복확인">
+				<input type="button" value="가입하기" onclick="go_save()">
+			</form>
+		</div>
+		<!-- 아이디 찾기 -->
+		<div id="findId-container" class="form-content">
+			<div id="find">
+				<form name="findId" id="findId" action="find_id" method="post">
+					<table>
+						<tr>
+							<td><input type="text" name="name" id="find-id-name" placeholder="Name"></td>
+						</tr>
+						<tr>
+							<td><input type="email" name="email" id="find-id-email" placeholder="Email"></td>
+						</tr>
+						<tr>
+							<td colspan="2"><input type="button" value="아이디 찾기" onclick="findId()">
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<!-- 비밀번호 찾기 -->
+		<div id="findPwd-container" class="form-content">
+			<div id="find">
+				<form name="findPwd" id="findPwd" action="find_pwd" method="post">
+					<table>
+						<tr>
+							<td><input type="text" name="id" id="find-pwd-id" placeholder="ID"></td>
+						</tr>
+						<tr>
+							<td><input type="text" name="name" id="find-pwd-name" placeholder="Name"></td>
+						</tr>
+						<tr>
+							<td><input type="email" name="email" id="find-pwd-email" placeholder="Email"></td>
+						</tr>
+						<tr>
+							<td colspan="2"><input type="button" value="비밀번ㅇ호 찾기" onclick="findId()">
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<!-- 푸터 -->
+<th:block th:insert="~{include/Footer}"></th:block>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,137 @@
+/* calculate.css */
+
+/* 전체 폼 스타일링 */
+
+
+form {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+/* 헤더 스타일링 */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+/* 체크박스 스타일링 */
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* 제출 버튼 스타일링 */
+button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 제출 버튼 호버 효과 */
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* 푸터 스타일링 */
+footer {
+    margin-top: 50px;
+    text-align: center;
+}
+
+/* userChoice.css */
+
+#bmiGraphic {
+  width: 700px; /* 막대의 전체 너비 */
+  height: 30px; /* 막대의 높이 */
+  border: 1px solid black; /* 막대 테두리 */
+  margin-top: 20px; /* 막대와 상단 간격 */
+  display: flex; /* 내부 요소들을 수평으로 배치하기 위해 flex 속성 추가 */
+  position: relative;
+}
+#status {
+    display: flex;
+}
+
+.individual {
+	margin-left: 30px;
+    margin-right: 100px;
+}
+
+.good {
+    margin-right: 120px;
+}
+.danger{
+	margin-right: 100px;
+}
+.wow{
+	margin-right: 60px;
+}
+
+
+/* 각 카테고리의 스타일 지정 */
+.bmiCategory {
+  height: 100%; /* 각 카테고리의 높이를 막대 높이와 동일하게 설정하여 막대 내부에 꽉 차게 함 */
+  text-align: center; /* 각 칸에 입력되는 글자 가운데로 */
+  flex-grow: 1; /* 각 칸이 동일한 너비를 가지도록 설정 */
+  position: relative; /* 절대 위치 지정을 위해 상대 위치 설정 */
+}
+
+/* 각 카테고리별 색상 설정 */
+#underweight { background-color: rgba(0, 0, 255, 0.5); } /* 저체중 */
+#normal { background-color: rgba(0, 128, 0, 0.4); } /* 정상 */
+#overweight { background-color: rgba(255, 255, 0, 0.6); } /* 과체중 */
+#obese { background-color: rgba(255, 165, 0, 0.7); } /* 비만 */
+#severelyObese { background-color: rgba(255, 0, 0, 0.7); } /* 고도비만 */
+
+
+/* 라벨 스타일 지정 */
+.bmiLabels {
+    display: flex;
+    justify-content: space-between; /* 라벨을 동일한 간격으로 분산 정렬 */
+    margin-top: 5px; /* 막대와 라벨 간격 조정 */
+    font-size: 12px; /* 라벨의 폰트 크기 */
+}
+
+.bmiLabels span {
+    flex: 1; /* 각 라벨이 동일한 너비를 가지도록 설정 */
+    text-align: center; /* 라벨 가운데 정렬 */
+}
+
+
+
+.bmiCategory span {
+    position: absolute;
+    bottom: -20px; /* 숫자를 막대 아래로 이동 */
+    left: 0; /* 맨 왼쪽에 배치 */
+    width: 100%;
+    text-align: center; /* 가운데 정렬 */
+}
+
+/* 숫자를 표시하는 스타일 */
+    .bmiCategory::after {
+        content: attr(data-label); /* 각 칸의 숫자를 표시 */
+        position: absolute; /* 숫자를 각 칸의 하단에 위치시킴 */
+        bottom: -25px; /* 각 숫자를 막대 아래로 이동 */
+        left: 30px; /* 각 숫자를 왼쪽 정렬 */
+        width: 150%; /* 각 숫자의 너비를 막대의 전체 너비로 설정 */
+        text-align: center; /* 각 숫자를 가운데 정렬 */
+    }
+    
+ 
+    #bmiGraphic::before {
+        content: "BMI";
+        position: absolute;
+        bottom: -25px;
+        left: -15px;
+    }
+

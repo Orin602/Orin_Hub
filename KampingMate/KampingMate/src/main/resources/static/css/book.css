@@ -1,0 +1,167 @@
+/* book.html  */
+/* 컨테이너 스타일 */
+.book-container {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+    background-image: url('/images/camp10.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.book-container h1 {
+    margin-bottom: 20px;
+}
+
+/* book-content 스타일 */
+.book-content {
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.6); /* 반투명 배경색 */
+}
+
+.book-content h3, .book-content h4 {
+    margin-bottom: 10px;
+}
+
+/* label과 input[type="date"] 스타일 */
+.b-label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="date"], input[type="text"], textarea, select {
+    width: calc(100% - 50px);
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* select와 option 스타일 */
+.b-select {
+    appearance: none;
+    background-color: #fff;
+    background-size: 8px 10px;
+    background-position-x: calc(100% - 10px);
+}
+
+.b-select option {
+    padding: 10px;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #a2d5f2;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #7bb1d1;
+}
+
+/* textarea와 label 위치 조정 */
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.b-label[for="message"] {
+    display: block;
+    position: relative;
+    top: -70px;
+    left: 0;
+    transform: translateY(50%);
+    margin-left: 10px;
+}
+
+
+.pagination {
+    text-align: center;
+    margin-top: 20px; /* 페이징 부분과의 간격 조절 */
+}
+
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.pagination ul li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination ul li a {
+    padding: 8px 16px;
+    background-color: #f9f9f9;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.pagination ul li.active a {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination ul li a:hover {
+    background-color: #ddd;
+}
+
+.book-box {
+    margin: 10px auto;
+    border: 1px solid #2e829a;
+    border-radius: 10px;
+}
+/* 공통 a 태그 스타일 */
+a {
+    color: inherit; /* 색깔 유지 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+/* class="b-a"인 a 태그 스타일 */
+.b-a {
+    padding: 0 5px;
+    background-color: #e0f7fa; /* 파스텔 하늘색 계열 배경 */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin: 10px auto;
+}
+
+.b-a:hover {
+    background-color: #b2ebf2; /* 호버 시 조금 더 진한 파스텔 하늘색 계열 배경 */
+}
+.b-p {
+    font-weight: bold;
+    color: red; /* 경고 메시지에 맞게 붉은색으로 설정 */
+    background-color: #ffe6e6; /* 연한 붉은색 배경 */
+    padding: 10px;
+    border: 1px solid #ffcccc;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px 0;
+}

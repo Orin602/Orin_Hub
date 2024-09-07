@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="assets/css/main.css">
+<th:block th:insert="~{includes/header.html}"></th:block>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/BoardDetail.js}"></script>
+<article>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<div id="main">
+		<h1>유저 레시피 글쓰기</h1>
+		<form name="frm" id="write_form" method="post"
+			enctype="multipart/form-data">
+			<table id="Board_List">
+				<tr>
+					<th>카테고리</th>
+					<td colspan="5"><select name="kind" id="kind">
+							<th:block th:each="kind, status : ${kindList}">
+								<option th:value="${status.count}">[[${kind}]]</option>
+							</th:block>
+					</select>
+				<tr>
+					<th>요리명</th>
+					<td width="343" colspan="5"><input type="text" name="title"
+						id="title" size="47" maxlength="100"></td>
+				</tr>
+				<tr>
+					<th>주재료</th>
+					<td width="70"><input type="text" name="maingredient"
+						id="maingredient" size="11"></td>
+				</tr>
+				<tr>
+					<th>재료</th>
+					<td width="70"><textarea name="gredient" id="gredient"
+							rows="8" cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>대표 이미지 등록</th>
+					<td width="70"><input type="file" name="main_img"
+						id="manual_img"></td>
+				</tr>
+				<tr>
+					<th><br></th>
+					<td><br>
+					<h3>
+							<조리법>
+						</h3>
+						<hr></td>
+				</tr>
+				<tr>
+					<th>첫번째 조리법</th>
+					<td colspan="5"><textarea name="manual01" id="manual" rows="8"
+							cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>첫번째 조리법 이미지</th>
+					<td width="343" colspan="5"><input type="file"
+						name="manual_img01" id="manual_img">
+						<hr></td>
+				</tr>
+				<tr>
+					<th>두번째 조리법</th>
+					<td colspan="5"><textarea name="manual02" id="manual" rows="8"
+							cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>두번째 조리법 이미지</th>
+					<td width="343" colspan="5"><input type="file"
+						name="manual_img02" id="manual_img">
+						<hr></td>
+				</tr>
+				<tr>
+					<th>세번째 조리법</th>
+					<td colspan="5"><textarea name="manual03" id="manual" rows="8"
+							cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>세번째 조리법 이미지</th>
+					<td width="343" colspan="5"><input type="file"
+						name="manual_img03" id="manual_img">
+						<hr></td>
+				</tr>
+				<tr>
+					<th>네번째 조리법</th>
+					<td colspan="5"><textarea name="manual04" id="manual" rows="8"
+							cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>네번째 조리법 이미지</th>
+					<td width="343" colspan="5"><input type="file"
+						name="manual_img04" id="manual_img">
+						<hr></td>
+				</tr>
+				<tr>
+					<th>다섯번째 조리법</th>
+					<td colspan="5"><textarea name="manual05" id="manual" rows="8"
+							cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>다섯번째 조리법 이미지</th>
+					<td width="343" colspan="5"><input type="file"
+						name="manual_img05" id="manual_img">
+						<hr></td>
+				</tr>
+				<tr>
+					<th>여섯번째 조리법</th>
+					<td colspan="5"><textarea name="manual06" id="manual" rows="8"
+							cols="70"></textarea></td>
+				</tr>
+				<tr>
+					<th>여섯번째 조리법 이미지</th>
+					<td width="343" colspan="5"><input type="file"
+						name="manual_img06" id="manual_img">
+						<hr></td>
+				</tr>
+			</table>
+			<hr>
+			<br>
+			<div class="thumbnails">
+				<p />
+				<button class="btn" id="write_menu_btn" type="button" onClick="go_save()">등록</button>
+				<p />
+				<button class="btn" id="write_menu_btn" type="button" onClick="go_list()">취소</button>
+				<p />
+			</div>
+		</form>
+	</div>
+</article>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

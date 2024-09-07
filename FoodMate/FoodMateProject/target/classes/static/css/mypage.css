@@ -1,0 +1,814 @@
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+	width: 40px;
+	text-align: center;
+}
+
+
+
+
+/* 전체 스타일 */
+.container1 {
+    width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2em 1em;
+	text-align: center;
+    flex-direction: column; /* 아이템을 세로로 배치 */
+}
+
+/* 오른쪽 컨텐츠 */
+main {
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    text-align: center;
+}
+
+main h3 {
+    color: black;
+    text-align: center;
+}
+
+/* 메뉴 스타일 */
+#my_menu {
+    background: #8FBC8F; /* 배경색 변경 */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+#my_menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* 메뉴 항목을 가로로 배치하기 위해 추가 */
+}
+
+#my_menu li {
+    /* float: left; */
+    margin: 0 10px; /* 좌우 여백 추가 */
+}
+
+#my_menu li a {
+    display: block;
+    color: #fff; /* 텍스트 색상 변경 */
+    text-align: center;
+    padding: 10px 20px; /* 패딩 조정 */
+    text-decoration: none;
+    transition: background-color 0.3s; /* 호버 효과를 위한 전환 효과 추가 */
+}
+
+#my_menu li a:hover {
+    background-color: #a0d8a0; /* 호버 시 배경색 변경 */
+}
+/* 내 정보 섹션 스타일 */
+
+#mainInfo {
+    margin-top: 20px;
+}
+
+#mainInfo #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.my {
+    display: flex;
+    justify-content: space-between;
+}
+
+.my1,
+.my2 {
+    width: calc(50% - 10px); /* 각 섹션을 반으로 나누고 간격을 줍니다. */
+}
+
+.my1 h3,
+.my2 h3 {
+    text-align: center; /* 가운데 정렬합니다. */
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.my1 ul,
+.my2 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.my1 ul li,
+.my2 ul li {
+    margin-bottom: 10px;
+}
+
+#mainInfo #content strong {
+    color: #333;
+}
+
+/* Info Update 페이지 */
+#infoUpdate #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#infoUpdate {
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center; /* 수정된 부분 */
+}
+
+#infoUpdate h3 {
+    color: #4CAF50;
+}
+
+#infoUpdate span {
+    font-weight: bold;
+}
+
+#infoUpdate input[type="text"],
+#infoUpdate input[type="password"],
+#infoUpdate input[type="email"] {
+    width: 30%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Info Update 페이지 */
+#infoUpdate input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#infoUpdate input[type="button"]:hover {
+    background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+/* Body Update 페이지 */
+#bodyUpdate #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#bodyUpdate {
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center; /* 수정된 부분 */
+}
+
+#bodyUpdate h3 {
+    color: #4CAF50;
+}
+
+#bodyUpdate input[type="text"],
+#bodyUpdate select {
+    width: 30%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    
+}
+
+/* Body Update 페이지 */
+#bodyUpdate input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#bodyUpdate input[type="button"]:hover {
+    background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+/* 체중변화 */
+#weightChart #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#weightChart #content h3 {
+	color: #4CAF50;
+}
+
+#weightChart input[type="date"],
+#weightChart input[type="number"]{
+	width: 50%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+#weightChart {
+    display: flex;
+    justify-content: center; /* 요소를 가운데 정렬합니다. */
+}
+
+.record {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-panel,
+.right-panel {
+    width: 50%; /* 각 섹션을 반으로 나눕니다. */
+    padding: 1em; /* 내부 여백 추가 */
+    box-sizing: border-box; /* 내부 여백을 포함한 크기로 요소를 계산합니다. */
+    background-color: #f0f0f0;
+}
+
+.left-panel {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.right-panel h3 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+    width: 100%; /* h3가 전체 너비를 차지하도록 설정 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+.right-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.right-panel .wr_chart {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.chart-container {
+    display: flex;
+    flex-direction: column; /* 그래프와 설명문이 세로로 나타나도록 설정 */
+    align-items: center;
+    width: 100%;
+}
+
+.chart-container canvas {
+    width: 400px; /* 그래프의 가로 크기 */
+    height: 250px; /* 그래프의 세로 크기 */
+    margin-bottom: 10px; /* 그래프 아래 여백 추가 */
+}
+
+.chart-description {
+    width: 100%; /* 설명문의 가로 크기를 100%로 설정하여 부모 요소에 맞게 조절 */
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0; /* 기본 마진 제거 */
+    text-align: center; /* 설명문을 왼쪽 정렬 */
+    overflow-wrap: break-word; /* 긴 설명문이 줄 바꿈되도록 설정 */
+}
+
+.left-panel h3,
+.right-panel h3 {
+    text-align: center; /* 가운데 정렬합니다. */
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.left-panel input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.left-panel input[type="button"]:hover {
+    background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .right-panel .wr_chart {
+        flex-direction: column; /* 그래프와 설명문을 세로로 나열함 */
+    }
+
+    .chart-container {
+        width: 100%; /* 그래프와 설명문을 가로로 채움 */
+    }
+}
+
+/* 내 질문,각 리스트 섹션 */
+#main #content {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#main #content h3 {
+	color: #4CAF50;
+}
+
+#main {
+    position: relative;
+    max-width: 800px;
+    margin: 20px auto;
+}
+.tbl-container {
+    overflow-x: auto; /* 가로 스크롤 추가 */
+    position: relative; /* 상대적 위치 설정 */
+}
+
+.tbl-container table {
+    width: 100%;
+    background: linear-gradient(to bottom, #8FBC8F, #a0d8a0);
+    border-collapse: collapse;
+}
+
+.tbl-container th,
+.tbl-container td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.tbl-container th {
+	color: white;
+}
+
+.tbl-container td {
+	color: black;
+}
+
+.tbl-container tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* 호버 시 배경색 변경 */
+    cursor: pointer; /* 호버 시 마우스 커서를 포인터로 변경 */
+}
+
+.tbl-container th {
+    background-color: #8FBC8F;;
+}
+
+/* 수평 스크롤이 보이지 않도록 테이블 헤더와 셀의 박스 모델을 조정 */
+.tbl-container table {
+    table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
+}
+
+.tbl-container th,
+.tbl-container td {
+    white-space: nowrap; /* 넘치는 텍스트를 감추고 줄바꿈을 방지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트가 있을 경우 ...으로 표시 */
+}
+
+.tbl-container {
+    max-height: 300px; /* 내용이 너무 길 경우 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+
+/* 스크롤바 스타일 */
+.tbl-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tbl-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 스크롤바 트랙 배경색 */
+}
+
+.tbl-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 색상 */
+}
+
+.tbl-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 스크롤바 호버시 색상 */
+}
+
+#main input[type="button"] {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#main input[type="button"]:hover {
+    background-color: #45a049; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+.readonly-text {
+    color: red;
+    margin-left: 10px; /* 원하는 만큼의 간격을 지정하세요 */
+}
+
+/* recommendHistory.html */
+.r_container {
+	max-width: 1000px;
+	margin: 20px auto;
+	padding: 20px;
+	text-align: center;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#recommend h3 {
+	color: #4CAF50;
+}
+#recommend input[type="button"] {
+	background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#recommend input[type="button"]:hover {
+    background-color: #45a049; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+/* 테이블 */
+.date-header:hover {
+	background-color: #8FBC8F;
+	cursor: pointer;
+}
+.date-header {
+	width : 40%;
+	color: #4CAF50;
+	text-align: center;
+	padding: 10px;
+	font-weight: bold; /* 글자 굵기 설정 */
+}
+.tbi-content {
+	width: 100%;
+	text-align: center;
+	position: relative;
+	max-height: 600px; /* 내용이 너무 길 경우 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+.tbl-header {
+	border: 1px solid #4CAF50; /* 테두리 두께와 색상 설정 */
+    border-radius: 5px; /* 테두리의 모서리를 둥글게 설정 */
+	text-align: center;
+	height: 60px;
+    align-items: center;
+    display: flex;
+    font-weight: bold; /* 글자 굵기 설정 */
+}
+.tbl-header th {
+    width: 20%;
+    display: inline-block;
+    padding: 10px; /* 패딩 설정 */
+    text-align: center; /* 글자 정렬 */
+    color: black; /* 글자 색상 설정 */
+    box-sizing: border-box; /* 박스 크기 계산 방식 설정 */
+}
+#group-container {
+	display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+    
+}
+#group-container span{
+	width: 19.2%;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: bold; /* 글자 굵기 설정 */
+}
+#group-container img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+#recommend-box {
+    /* 기본 스타일 설정 */
+    appearance: none; /* 기본 체크박스 스타일 제거 (브라우저마다 다를 수 있음) */
+    width: 20px; /* 체크박스의 너비 설정 */
+    height: 20px; /* 체크박스의 높이 설정 */
+    border: 2px solid #4CAF50; /* 테두리 설정 */
+    border-radius: 3px; /* 테두리 둥글게 설정 */
+    background-color: white; /* 배경색 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+
+    /* 체크박스가 체크되었을 때의 스타일 */
+    position: relative;
+}
+
+#recommend-box:checked {
+    background-color: #4CAF50; /* 체크되었을 때 배경색 설정 */
+}
+
+#recommend-box:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 5px;
+    border: solid white;
+    border-width: 0 0 2px 2px;
+    transform: translate(-50%, -50%) rotate(-45deg); /* 체크 표시 생성 및 위치 조정 */
+}
+/* 삭제 버튼 스타일 */
+#del-button {
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px; /* 패딩 설정 */
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px; /* 테두리 둥글게 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+}
+
+#del-button:hover {
+    background-color: #45a049; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+
+
+
+
+
+
+
+
+/* 테마 */
+body.dark-theme {
+    background-color: black;
+    color: silver;
+}
+
+.dark-theme .container1 {
+    background-color: #1e1e1e;
+    color: silver;
+}
+.dark-theme .r_container {
+	background-color: #1e1e1e;
+	color: silver;
+}
+
+.dark-theme main {
+    color: silver;
+}
+
+.dark-theme main h3,
+.dark-theme #weightChart #content h3,
+.dark-theme #recommend h3,
+.dark-theme .date-header td {
+    color: gold;
+}
+
+.dark-theme .left-panel label,
+.dark-theme .left-panel span,
+.dark-theme .right-panel li{
+	color: gold;
+}
+.dark-theme #my_menu {
+    background: black;
+}
+
+.dark-theme #my_menu li a {
+    color: gold;
+}
+
+.dark-theme #my_menu li a:hover {
+    background-color: #555; /* 호버 시 배경색 변경 */
+}
+
+.dark-theme #mainInfo #content,
+.dark-theme #infoUpdate #content,
+.dark-theme #bodyUpdate #content,
+.dark-theme #weightChart #content,
+.dark-theme #main #content,
+.dark-theme #recommend {
+    background-color: #333;
+    color: silver;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* 골드색 그림자 */
+}
+
+.dark-theme .my1 h3,
+.dark-theme .my2 h3,
+.dark-theme .right-panel h3,
+.dark-theme .left-panel h3,
+.dark-theme #infoUpdate h3,
+.dark-theme #bodyUpdate h3,
+.dark-theme #weightChart h3,
+.dark-theme #main #content h3 {
+    color: gold;
+}
+
+.dark-theme .tbl-container table {
+    background: linear-gradient(to bottom, #333, #555); /* 다크 그라데이션 배경 */
+    color: silver; /* 실버 텍스트 색상 */
+}
+
+.dark-theme .tbl-container th {
+    background-color: #444; /* 다크 테이블 헤더 배경색 */
+    color: gold; /* 골드 텍스트 색상 */
+}
+
+.dark-theme .tbl-container td {
+    color: silver;
+}
+
+.dark-theme .tbl-container tbody tr:hover {
+    background-color: #555; /* 호버 시 다크 그레이 배경색 */
+}
+
+.dark-theme #main input[type="button"],
+.dark-theme #infoUpdate input[type="button"],
+.dark-theme #bodyUpdate input[type="button"],
+.dark-theme .left-panel input[type="button"] {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme #main input[type="button"]:hover,
+.dark-theme #infoUpdate input[type="button"]:hover,
+.dark-theme #bodyUpdate input[type="button"]:hover,
+.dark-theme .left-panel input[type="button"]:hover {
+    background-color: gold;
+    color: black;
+}
+.dark-theme #weightChart input[type="date"],
+.dark-theme #weightChart input[type="number"] {
+    border: 1px solid silver; /* 실버 테두리 */
+}
+
+.dark-theme .readonly-text {
+    color: gold;
+}
+
+.dark-theme .fixed-header {
+    background-color: black;
+}
+
+.dark-theme .nav2 ul li a {
+    color: gold;
+}
+
+.dark-theme #themeToggleButtonLight {
+    color: silver;
+}
+
+.dark-theme #themeToggleButtonDark {
+    color: gold;
+}
+
+.dark-theme .chart-container canvas {
+    background-color: #222; /* 다크모드에서 그래프 배경색 */
+}
+/* 스크롤바 스타일 */
+.dark-theme .tbl-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dark-theme .tbl-container::-webkit-scrollbar-track {
+    background: #444; /* 스크롤바 트랙 배경색 */
+}
+
+.dark-theme .tbl-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 색상 */
+}
+
+.dark-theme .tbl-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* 스크롤바 호버 시 색상 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .dark-theme .right-panel .wr_chart {
+        flex-direction: column; /* 그래프와 설명문을 세로로 나열함 */
+    }
+
+    .dark-theme .chart-container {
+        width: 100%; /* 그래프와 설명문을 가로로 채움 */
+    }
+}
+
+/* 다크 테마 전환 버튼 스타일 */
+.dark-theme #main input[type="button"] {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme #main input[type="button"]:hover {
+    background-color: gold;
+    color: black;
+}
+.dark-theme #recommend input[type="button"] {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme #recommend input[type="button"]:hover {
+    background-color: gold;
+    color: black;
+}
+
+.dark-theme .left-panel,
+.dark-theme .right-panel {
+    background-color: black;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.dark-theme .tbl-header {
+	border: 1px solid gold;
+}
+
+.dark-theme .tbl-header th {
+    color: white; /* 글자 색상 설정 */
+}
+
+/* 테이블 */
+.dark-theme .date-header:hover {
+	background-color: #555;
+}
+.dark-theme #recommend-box {
+    /* 기본 스타일 설정 */
+    appearance: none; /* 기본 체크박스 스타일 제거 (브라우저마다 다를 수 있음) */
+    width: 20px; /* 체크박스의 너비 설정 */
+    height: 20px; /* 체크박스의 높이 설정 */
+    border: 2px solid #cbc974; /* 테두리 설정 */
+    border-radius: 3px; /* 테두리 둥글게 설정 */
+    background-color: #828200; /* 배경색 설정 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+
+    /* 체크박스가 체크되었을 때의 스타일 */
+    position: relative;
+}
+
+.dark-theme #recommend-box:checked {
+    background-color: gold; /* 체크되었을 때 배경색 설정 */
+}
+
+/* 삭제 버튼 스타일 */
+.dark-theme #del-button {
+    background-color: black; /* 기본 배경 색상을 검은색으로 설정 */
+    color: gold; /* 기본 글자색을 금색으로 설정 */
+    border: 1px solid gold; /* 테두리 추가 및 색상 지정 */
+}
+
+.dark-theme #del-button:hover {
+    background-color: gold; /* 호버 시 배경색 변경 */
+    color: black; /* 호버 시 글자색 변경 */
+}

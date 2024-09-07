@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 변경</title>
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <script>
+        function validateNewPassword() {
+            var newPassword = document.getElementById("new_password").value;
+            // 비밀번호가 6자 이상인지 확인
+            if (newPassword.length < 6) {
+                document.getElementById("password_length_error").innerHTML = "비밀번호는 6자 이상이어야 합니다.";
+                return false;
+            } else {
+                document.getElementById("password_length_error").innerHTML = "";
+                var hasLowerCase = /[a-z]/.test(newPassword);
+                var hasUpperCase = /[A-Z]/.test(newPassword);
+                var hasNumber = /\d/.test(newPassword);
+
+                if (!hasNumber) {
+                    document.getElementById("password_number_error").innerHTML = "비밀번호에는 숫자가 포함되어야 합니다.";
+                    return false;
+                } else {
+                    document.getElementById("password_number_error").innerHTML = "";
+                }
+
+                if (!(hasLowerCase && hasUpperCase)) {
+                    document.getElementById("password_case_error").innerHTML = "비밀번호는 대소문자를 포함해야 합니다.";
+                    return false;
+                } else {
+                    document.getElementById("password_case_error").innerHTML = "";
+                }
+                // 모든 검사가 통과되었을 때 true를 반환합니다.
+                return true;
+
+            // 비밀번호에 숫자가 포함되어 있는지 확인
+            var hasNumber = /\d/.test(newPassword);
+            if (!hasNumber) {
+                document.getElementById("password_number_error").innerHTML = "비밀번호는 숫자를 포함해야 합니다.";
+                return false;
+            } else {
+                document.getElementById("password_number_error").innerHTML = "";
+            }
+
+            // 모든 조건을 만족하면 유효한 비밀번호
+            return true;
+        }
+        }
+        
+    </script>
+</head>
+<body>
+    <h2>비밀번호 변경</h2>
+    <form action="/change_password" method="post" onsubmit="return validateNewPassword()">
+        <div>
+            <label for="current_password">현재 비밀번호:</label>
+            <input type="password" id="current_password" name="current_password" required>
+        </div>
+        <div>
+            <label for="new_password">새 비밀번호:</label>
+            <input type="password" id="new_password" name="new_password" required>
+            <span id="password_length_error" style="color: red;"></span><br>
+            <span id="password_case_error" style="color: red;"></span><br>
+            <span id="password_number_error" style="color: red;"></span>
+        </div>
+        <div>
+            <label for="confirm_password">새 비밀번호 확인:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit">변경</button>
+    </form>
+</body>
+</html>

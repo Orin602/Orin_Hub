@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Info View</title>
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<script th:src="@{/js/mypage.js}" defer></script>
+</head>
+<body id="infoView">
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+
+<!-- 메뉴 -->
+<th:block th:insert="~{mypage/menu}"></th:block>
+
+<div class="container1">
+
+    <!-- 내 정보 내용 -->
+    <section id="mainInfo">
+        <div id="content">
+            <div class="my">
+                <section class="my1">
+                    <h3>가입 정보</h3>
+                    <ul>
+                        <li>이름 : <span>[[${session.loginUser.name}]]</span></li>
+                        <li>아이디 : <span>[[${session.loginUser.provider}]]</span> 계정</li>
+                        <li>비밀번호 : <span>****</span></li>
+                        <li>이메일 : <span>[[${session.loginUser.email}]]</span></li>
+                        <li>나이 : <span>[[${session.loginUser.age}]]</span></li>
+                        <li>전화번호 : <span>[[${session.loginUser.telephone}]]</span></li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* login.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: url("/images/login3.jpg");
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#naver_id_login, #kakao_id_login, #google_id_login {
+    margin-bottom: 20px;
+}
+.login-button:hover {
+    transform: scale(1.1); /* 호버 시 10% 확대 */
+}
+.button-no-style {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.button-no-style img {
+    border-radius: 5px;
+}
+
+.g_id_signin {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 30px;
+}
+
+
+
+.join-container {
+    width:70%;
+    margin: 20px auto;
+    padding: 10px;
+    border: 2px solid skyblue;
+    border-radius: 10px;
+    background: url("/images/join.jpg");
+    background-size: 100%;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.join-h1 {
+    padding:10px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.join-form {
+    padding: 10px;
+    width: 70%;
+    border: 1px solid skyblue;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.join-form input[type="text"],
+.join-form input[type="email"],
+.join-form input[type="password"],
+.join-form select {
+    width: 70%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.join-form input[type="submit"],
+.join-form input[type="button"] {
+    background-color: skyblue;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.join-form input[type="submit"]:hover,
+.join-form input[type="button"]:hover {
+    background-color: deepskyblue;
+}
+
+.join-form span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.join-form .info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.join-form .box {
+    width: calc(33% - 10px);
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.join-form hr {
+    width: 100%;
+    border: 0;
+    height: 1px;
+    background-color: #ccc;
+    margin: 20px 0;
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+    .join-form input[type="text"],
+    .join-form input[type="email"],
+    .join-form input[type="password"],
+    .join-form select,
+    .join-form .box {
+        width: calc(100% - 10px);
+    }
+
+    .join-form span {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .join-form span input[type="button"] {
+        width: calc(100% - 20px);
+        margin-top: 10px;
+    }
+}

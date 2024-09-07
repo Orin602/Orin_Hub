@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<title>닉네임 중복 체크</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f5f5f5;
+	color: #333;
+	margin: 0;
+	padding: 0;
+}
+
+#wrap {
+	width: 400px;
+	margin: 50px auto;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+	text-align: center;
+	color: #4CAF50;
+}
+
+form {
+	text-align: center;
+}
+
+input[type="text"] {
+	width: 80%;
+	padding: 8px;
+	margin: 10px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.submit, .cancel {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.submit:hover, .cancel:hover {
+	background-color: #45a049;
+}
+
+.message {
+	margin-top: 20px;
+	text-align: center;
+	color: #ff0000;
+}
+</style>
+<script type="text/javascript" th:inline="javascript">
+function idok(){
+  var nickname = [[${nickname}]];
+  opener.formm.nickname.value=nickname; 
+  opener.formm.renickname.value=nickname;
+  self.close();
+}
+</script>
+</head>
+<body>
+	<div id="wrap">
+		<h2>닉네임 중복확인</h2>
+		<form method=get name=formm id="theform" style="margin-right: 0"
+			action="nickname_check_form">
+			NickName <input type=text name="nickname" th:value="${nickname}">
+			<input type=submit value="검색" class="submit"><br>
+			<div style="margin-top: 20px">
+				<th:block th:if="${message == 1}">
+					<script type="text/javascript">
+          opener.document.formm.nickname.value=nickname;
+        </script>
+        [[${nickname}]]은(는) 이미 사용중인 닉네임입니다.
+      </th:block>
+				<th:block th:if="${message == -1}">
+					<th:block th:if="${nickname == null}">
+						수정하실 닉네임을 입력해주세요
+					</th:block>
+					<th:block th:if="${nickname != null}">
+        [[${nickname}]]은(는) 사용 가능한 닉네임입니다.
+        <input type="button" value="사용" class="cancel" onclick="idok()">
+        </th:block>
+         
+        </th:block>
+        
+				
+			</div>
+		</form>
+	</div>
+</body>
+</html>

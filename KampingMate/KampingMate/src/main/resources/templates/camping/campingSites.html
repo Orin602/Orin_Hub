@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Camping Sites</title>
+<link rel="stylesheet" th:href="@{/css/campingSites.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+.items-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap; /* 아이템을 한 줄로 배치 */
+        height: 30%;
+        line-height: 0; /* 라인 간격 0으로 설정 */
+        
+    }
+
+    .item {
+        display: inline-block; /* 아이템을 한 줄로 배치 */
+        width: 33%; /* 각 아이템의 너비 조정 */
+        margin-right: 40px; /* 아이템 간 간격 조정 */
+        margin-bottom: 10px;
+        vertical-align: top; /* 상단 정렬 */
+        background-color: rgba(255, 255, 255, 0.7); /* 반투명 흰색 배경 */
+        padding: 10px;
+    }
+
+    .scrolling {
+        display: inline-block;
+        animation: scroll 500s linear infinite;
+        height: 100%; /* .items-container에 맞게 높이 설정 */
+    }
+
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
+
+    .controls {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .controls button {
+        background-color: #4CAF50; /* 녹색 */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .controls button:hover {
+        background-color: #45a049;
+    }
+    .calendar-icon {
+	    position: fixed;
+	    bottom: 20px;
+	    right: 20px;
+	    font-size: 40px;
+	    cursor: pointer;
+	}
+</style>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div id="camp-container">
+    <!-- 제목 -->
+    <h1>Camping Sites</h1>
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${error}" th:text="${error}"></div>
+    <!-- 에러가 없을 경우 캠핑 사이트 목록 표시 -->
+    <div th:unless="${error}">
+		<div class="download-buttons">
+			<a th:href="@{/api/campingSites/csv}" download="campingSites.csv">Download CSV(저장데이터 엑셀오류, 한셀로 열어야함)</a>
+			<a th:href="@{/api/campingSites/xml}" download="campingSites.xml">Download XML</a>
+		</div>
+	    <!-- 애니메이션 제어 버튼 -->
+	    <div class="controls">
+	         <button id="pauseBtn">정지</button>
+	         <button id="playBtn" style="display: none;">재생</button>
+	    </div>
+	       <!-- 각 캠핑 사이트 아이템 -->
+	    <div class="items-container">
+	        <div class="scrolling">
+	            <div th:each="item : ${items}" class="item">
+	                <div style="height:100%;">
+	                    <!-- 이미지 및 링크 -->
+	                    <a th:if="${item.firstImageUrl == 'N/A'}" th:href="${item.homepage}">
+						    <img th:src="@{/images/no_img.jpg}" alt="이미지 준비중">
+						</a>
+						<a th:unless="${item.firstImageUrl == 'N/A'}" th:href="${item.homepage}">
+						    <img th:src="${item.firstImageUrl}" alt="대표이미지">
+						</a>
+	
+	                    <!-- 야영장명 -->
+	                    <h2 th:text="${item.facltNm}">야영장명</h2>
+	                    <p><strong>번호:</strong> <span th:text="${item.tel}"></span></p>
+	                    <p><strong>주소:</strong> <span th:text="${item.addr1}">주소</span></p>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+   </div>
+</div>
+
+<div class="calendar-icon" onclick="openCalendarWindow()">
+    <i class="fas fa-calendar-alt"></i>
+</div>
+    <script th:inline="javascript">
+        // 사용자 ID를 서버에서 전달된 값으로 설정합니다.
+        const user_id = /*[[${loginUserNumberData}]]*/ 'test';
+
+        // 사용자 ID가 null인 경우 'test'로 설정합니다.
+        if (user_id === 'null' || user_id === null) {
+            user_id = 'test';
+        }
+
+        function openCalendarWindow() {
+            window.open(`callender.html?user_id=${encodeURIComponent(user_id)}`, '_blank', 'width=460,height=700');
+        }
+    </script>
+    
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var scrollingDiv = document.querySelector('.scrolling');
+        var pauseBtn = document.getElementById('pauseBtn');
+        var playBtn = document.getElementById('playBtn');
+        var leftBtn = document.getElementById('leftBtn');
+        var rightBtn = document.getElementById('rightBtn');
+
+        pauseBtn.addEventListener('click', function() {
+            scrollingDiv.style.animationPlayState = 'paused';
+            pauseBtn.style.display = 'none';
+            playBtn.style.display = 'inline-block';
+            enableScrollButtons(false); // 스크롤 버튼 비활성화
+        });
+
+        playBtn.addEventListener('click', function() {
+            scrollingDiv.style.animationPlayState = 'running';
+            playBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
+            enableScrollButtons(true); // 스크롤 버튼 활성화
+        });
+
+        leftBtn.addEventListener('click', function() {
+            scrollLeft();
+        });
+
+        rightBtn.addEventListener('click', function() {
+            scrollRight();
+        });
+
+        function scrollLeft() {
+            var currentPosition = scrollingDiv.scrollLeft;
+            var itemWidth = scrollingDiv.offsetWidth;
+            var newPosition = currentPosition - itemWidth;
+            scrollingDiv.scrollTo({
+                left: newPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollRight() {
+            var currentPosition = scrollingDiv.scrollLeft;
+            var itemWidth = scrollingDiv.offsetWidth;
+            var newPosition = currentPosition + itemWidth;
+            scrollingDiv.scrollTo({
+                left: newPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        function enableScrollButtons(enable) {
+            leftBtn.disabled = !enable;
+            rightBtn.disabled = !enable;
+        }
+    });
+</script>
+</body>
+</html>

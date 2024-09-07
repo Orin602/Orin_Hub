@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css">
+<link rel="stylesheet" href="css/skel.css">
+<link rel="stylesheet" href="css/style.css">
+<th:block th:insert="~{includes/header.html}"></th:block>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/Community.js}"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.dropotron.min.js"></script>
+<script src="js/skel.min.js"></script>
+<script src="js/skel-layers.min.js"></script>
+<script src="js/init.js"></script>
+<article>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<div id="main">
+		<h1>자유게시판 글쓰기</h1>
+		<form name="frm" id="write_form" method="post">
+			<table id="Board_List" >
+				<tr>
+					<th width="10%">제목</th>
+					<td><input type="text" name="title"
+						id="title" size="47" maxlength="90"></td>
+				</tr>
+				<tr><th></th></tr>
+				<tr>
+					<th>내용</th>
+					<td><textarea name="content" rows="6"
+						id="content"></textarea></td>
+				</tr>
+			</table>
+			<hr>
+			<br>
+			<div class="thumbnails">
+				<button class="btn" id="write_menu_btn" type="submit" onClick="go_save()">등록</button>
+				<button class="btn" id="write_menu_btn" type="button" onClick="go_list()">취소</button>
+			</div>
+		</form>
+	</div>
+</article>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

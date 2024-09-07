@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- 
+data API2.0 활용 샘플
+ -->
+<meta charset="UTF-8">
+<title>브이월드 행정구역</title>
+</head>
+<link rel="stylesheet" href="http://openlayers.org/en/latest/css/ol.css" type="text/css">
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+$.support.cors = true;
+
+$(function(){
+	$.ajax({
+		type: "get",
+		url: "https://api.vworld.kr/req/data?key=CEB52025-E065-364C-9DBA-44880E3B02B8&domain=http://localhost:8080&service=data&version=2.0&request=getfeature&format=json&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)&data=LT_C_ADSIDO_INFO",
+		async: false,
+		dataType: 'jsonp',
+		success: function(data) {
+			let html = "<option>선택</option>";
+
+			data.response.result.featureCollection.features.forEach(function(f){
+				let 행정구역코드 = f.properties.ctprvn_cd;
+				let 행정구역명 = f.properties.ctp_kor_nm;
+				
+				html +=`<option value="${행정구역코드}">${행정구역명}</option>`
+				
+			})
+			
+            $('#sido_code').html(html);
+			
+		},
+		error: function(xhr, stat, err) {}
+	});
+	
+	
+	$(document).on("change","#sido_code",function(){
+		let thisVal = $(this).val();		
+
+		$.ajax({
+			type: "get",
+			url: "https://api.vworld.kr/req/data?key=CEB52025-E065-364C-9DBA-44880E3B02B8&domain=http://localhost:8080&service=data&version=2.0&request=getfeature&format=json&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)&data=LT_C_ADSIGG_INFO",
+			data : {attrfilter : 'sig_cd:like:'+thisVal},
+			async: false,
+			dataType: 'jsonp',
+			success: function(data) {
+				let html = "<option>선택</option>";
+
+				data.response.result.featureCollection.features.forEach(function(f){
+					let 행정구역코드 = f.properties.sig_cd;
+					let 행정구역명 = f.properties.sig_kor_nm;
+					
+					html +=`<option value="${행정구역코드}">${행정구역명}</option>`
+					
+				})
+	            $('#sigoon_code').html(html);
+				
+			},
+			error: function(xhr, stat, err) {}
+		});
+	});
+	
+	$(document).on("change","#sigoon_code",function(){ 
+		
+		let thisVal = $(this).val();		
+
+		$.ajax({
+			type: "get",
+			url: "https://api.vworld.kr/req/data?key=CEB52025-E065-364C-9DBA-44880E3B02B8&domain=http://localhost:8080&service=data&version=2.0&request=getfeature&format=json&size=1000&page=1&geometry=false&attribute=true&crs=EPSG:3857&geomfilter=BOX(13663271.680031825,3894007.9689600193,14817776.555251127,4688953.0631258525)&data=LT_C_ADEMD_INFO",
+			data : {attrfilter : 'emd_cd:like:'+thisVal},
+			async: false,
+			dataType: 'jsonp',
+			success: function(data) {
+				let html = "<option>선택</option>";
+
+				data.response.result.featureCollection.features.forEach(function(f){
+					let 행정구역코드 = f.properties.emd_cd;
+					let 행정구역명 = f.properties.emd_kor_nm;
+					let x = f.properties.x; // Assuming x and y are available
+					let y = f.properties.y;
+					html +=`<option value="${행정구역코드}" data-x="${x}" data-y="${y}">${행정구역명}</option>`
+				})
+	            $('#dong_code').html(html);
+			},
+			error: function(xhr, stat, err) {}
+		});
+	});
+
+	$(document).on("change", "#dong_code", function() {
+	    let sidoText = $("#sido_code option:selected").text();
+	    let sigoonText = $("#sigoon_code option:selected").text();
+	    let dongText = $("#dong_code option:selected").text();
+	    let fullAddress = sidoText + " " + sigoonText + " " + dongText;
+	    
+	    if (fullAddress) {
+	        parent.postMessage({ address: fullAddress }, '*');
+	    }
+	});
+ })
+	
+</script>
+<body>
+	<!-- 브이월드 행정구역도를 이용 국가공간정보포털보다 느림 -->
+	<form id="nsdiSearchForm" action="#" class="form_data" onsubmit="return false;search();">
+
+		<select id="sido_code">
+			<option>선택</option>
+		</select>
+		<select id="sigoon_code">
+			<option>선택</option>
+		</select>
+		<select id="dong_code">
+			<option>선택</option>
+		</select>
+	</form>
+</body>
+</html>

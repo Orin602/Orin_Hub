@@ -1,0 +1,475 @@
+/* menu */
+#my_menu {
+	background: #4682B4; /* 파란색 계열 */
+	overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+#my_menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* 메뉴 항목을 가로로 배치하기 위해 추가 */
+}
+#my_menu li {
+    /* float: left; */
+    margin: 0 10px; /* 좌우 여백 추가 */
+}
+#my_menu li a {
+    display: block;
+    color: #FFFFFF; /* 텍스트 색상을 흰색으로 변경하여 파란색 배경과 대비 */
+    text-align: center;
+    padding: 10px 20px; /* 패딩 조정 */
+    text-decoration: none;
+    transition: background-color 0.3s; /* 호버 효과를 위한 전환 효과 추가 */
+}
+#my_menu li a:hover {
+    background-color: #87CEEB; /* 호버 시 배경색을 밝은 파란색으로 변경 */
+}
+
+#my_menu li button {
+    display: block;
+    color: #000000; /* 텍스트 색상을 흰색으로 변경하여 파란색 배경과 대비 */
+    text-align: center;
+    padding: 10px 20px; /* 패딩 조정 */
+    text-decoration: none;
+    transition: background-color 0.3s; /* 호버 효과를 위한 전환 효과 추가 */
+}
+#my_menu li button:hover {
+    background-color: #87CEEB; /* 호버 시 배경색을 밝은 파란색으로 변경 */
+}
+
+
+
+/* 뉴스 관련 */
+.news-container {
+    border: 1px solid black;
+    border-radius: 10px; /* 테두리의 모서리를 둥글게 만듦 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    text-align: center; /* 안의 요소들을 가운데 정렬 */
+    margin: 20px auto; /* 마진 20px auto */
+    width: 80%; /* 넓이는 전체 넓이의 80% */
+}
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    margin: 0 auto; /* 테이블을 중앙 정렬 */
+    border: 1px solid #4682B4; /* 테이블에 테두리 추가 */
+    margin-bottom: 10px;
+}
+th, td {
+    border: 1px solid #4682B4; /* 파란색 테두리 */
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #4682B4; /* 진한 파란색 배경 */
+    color: white; /* 흰색 텍스트 */
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* 짝수 행 배경색 */
+}
+tr:hover {
+    background-color: #87CEEB; /* 호버 시 배경색 */
+}
+a {
+    color: #4682B4; /* 파란색 링크 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
+}
+
+/* main */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    text-align: center; /* 전체 요소 가운데 정렬 */
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left; /* 내용은 왼쪽 정렬 */
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+.profile-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+}
+
+.profile-image:hover {
+            transform: scale(1.05);
+        }
+
+.profile-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.profile-buttons button {
+            background-color: #428bca;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .profile-buttons button:hover {
+            background-color: #3071a9;
+            transform: scale(1.05);
+        }
+
+/* 프로필 이미지 선택 버튼 스타일 */
+#changeProfileButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#changeProfileButton:hover {
+    background-color: #0056b3;
+}
+
+#saveProfileButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#saveProfileButton:hover {
+    background-color: #0056b3;
+}
+
+.container1 {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#mainInfo {
+    margin-bottom: 20px;
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.my {
+    margin-top: 20px;
+}
+
+.my1 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.my1 h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+
+.my1 ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.my1 ul li {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.my1 ul li span {
+    font-weight: bold;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+    font-size: 24px;
+}
+
+#my_reviews_table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+#my_reviews_table th,
+#my_reviews_table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+#my_reviews_table th {
+    background-color: #4682B4;
+    color: white;
+}
+
+#my_reviews_table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#my_reviews_table tbody tr:hover {
+    background-color: #87CEEB;
+}
+
+#my_reviews_table a {
+    color: #4682B4;
+    text-decoration: none;
+}
+
+#my_reviews_table a:hover {
+    text-decoration: underline;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 600px) {
+    #my_reviews_table {
+        width: 100%;
+    }
+}
+
+#bookmarked_reviews_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#bookmarked_reviews_table th, 
+#bookmarked_reviews_table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+#bookmarked_reviews_table th {
+    background-color: #4682B4;
+    color: white;
+}
+
+#bookmarked_reviews_table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+#bookmarked_reviews_table a {
+    color: #4682B4;
+    text-decoration: none;
+}
+
+#bookmarked_reviews_table a:hover {
+    text-decoration: underline;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 600px) {
+    .container {
+        max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #bookmarked_reviews_table th, 
+    #bookmarked_reviews_table td {
+        padding: 6px;
+    }
+}
+
+#infoView {
+	background: url('/images/7488.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+#bookMark {
+	font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+	background: url('/images/7488.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+#reviewDetail {
+	background: url('/images/7488.jpg') no-repeat center center fixed;
+    background-size: cover;
+     font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+}
+
+#guestBook {
+	background: url('/images/7488.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+
+
+        #rdh2 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #rdh3 {
+            color: #4682B4;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        #rdp {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        #rdp span {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .recombody {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            background: url('/images/7488.jpg') no-repeat center center fixed;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-top: 50px; /* 헤더 공간 확보 */
+        }
+        .recomcontainer {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9); /* 투명한 배경 */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .recomh1 {
+            text-align: center;
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .recommendations {
+            margin-top: 20px;
+        }
+        .recomtable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .recomtable th, .recomtable td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .recomth {
+            color: #333;
+            background-color: #f2f2f2;
+        }
+        .recomtd {
+            background-color: #fff;
+            color: #666;
+        }
+        .recomimg {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        #rdContent {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+#rdContent h3 {
+    margin-bottom: 10px;
+}
+
+#rdContent p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+#myPageBody {
+	font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+}
+
+#mainContent{
+	width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+}
+
+.myh1 {
+	text-align: center;
+            font-size: 2.5em;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+}

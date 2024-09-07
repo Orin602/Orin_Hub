@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Footer</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <style>
+        /* 추가적인 CSS 스타일링 */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        #f-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+        }
+        .f-content {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .f-content h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .f-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .f-content ul li {
+            margin-bottom: 8px;
+        }
+        .f-content ul li a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .f-content ul li a:hover {
+            color: #428bca;
+        }
+        .copyright {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #999;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .f-icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="f-container">
+        <div class="f-content">
+            <h3><span class="f-icon">🔍</span> Explore</h3>
+            <ul>
+                <li><a href="https://korean.visitkorea.or.kr/main/main.do#home">추천 여행지</a></li>
+                <li><a href="http://www.msrgear.co.kr/%EC%98%A4%ED%86%A0%EC%BA%A0%ED%95%91%EC%9D%84-%EC%9C%84%ED%95%9C-12%EA%B0%80%EC%A7%80-%ED%8C%81/">캠핑 기술 팁</a></li>
+                <li><a th:href="@{/Outdoor}">세계적인 아웃도어</a></li>
+            </ul>
+        </div>
+        <div class="f-content">
+            <h3><span class="f-icon">👥</span> Community</h3>
+            <ul>
+                <li><a href="https://pixabay.com/ko/images/search/%EC%BA%A0%ED%95%91/">사진 공유</a></li>
+                <li><a href="https://prod.danawa.com/list/?cate=132424&searchOption=/innerSearchKeyword=&src=adwords&kw=%EC%BA%A0%ED%95%91%EC%9E%A5%EB%B9%84&utm_source=google&utm_medium=cpc&utm_campaign=keyword&gad_source=1&gclid=Cj0KCQjw4MSzBhC8ARIsAPFOuyVP9SqZDfCOM4oIMStaUv7O3zKn7IjeipzNcYm7ybibBx6QwPbrmC8aAkt8EALw_wcB">캠핑 장비 리뷰</a></li>
+                <li><a href="https://band.us/band/73773294">캠핑 동호회</a></li>
+            </ul>
+        </div>
+        <div class="f-content">
+            <h3><span class="f-icon">💬</span> Support</h3>
+            <ul>
+                <li><a th:href="@{/qna/all}">QnA</a></li>
+                <li><a th:href="@{/customer_service}">고객 지원</a></li>
+                <li><a th:href="@{/inquiry/inquiryForm}">문의하기</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="copyright">
+        Design by: <a href="https://github.com/KampingMate/KampingMate">TeamProject</a>
+    </div>
+</body>
+</html>

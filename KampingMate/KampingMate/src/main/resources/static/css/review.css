@@ -1,0 +1,478 @@
+body, html {
+    width: 100%;
+    height: 100%;
+}
+.notice-container {
+	width: 80%;
+    margin: 0 auto;
+    padding: 10px;
+    background-image: url('/images/idea.jpg');
+    background-size: cover;
+    background-position: center 20%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid gold;
+    border-radius: 10px;
+    text-align: center; /* 가운데 정렬 */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.review-container {
+	width: 80%;
+	margin: 0 auto;
+    padding: 10px;
+    background-image: url('/images/review2.jpg');
+    background-size: cover;
+    background-position: center; /* 이미지의 수직 위치를 조금 올리기 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid gold;
+    border-radius: 10px;
+    text-align: center; /* 가운데 정렬 */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.review-main,
+.notice-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.review-main button,
+.notice-main button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.review-main button:hover,
+.notice-main button:hover {
+    background-color: #0056b3;
+}
+
+#writeForm button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#writeForm button:hover {
+    background-color: #0056b3;
+}
+
+.sort-btn button:hover {
+    background-color: #0056b3;
+}
+
+.hidden-btns {
+    display: none;
+}
+
+.hidden-btns.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 40px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.hidden-btns button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+
+.hidden-btns button:last-child {
+    border-bottom: none;
+}
+
+.hidden-btns button:hover {
+    background-color: #f9f9f9;
+}
+
+.review-list {
+    width: 100%;
+}
+
+.review-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.review-list th, .review-list td {
+    border-bottom: 1px solid #ddd;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px; /* 페이징 부분과의 간격 조절 */
+    margin-bottom:20px;
+}
+
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.pagination ul li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination ul li a {
+    padding: 8px 16px;
+    background-color: #f9f9f9;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.pagination ul li.active a {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.pagination ul li a:hover {
+    background-color: #ddd;
+}
+
+/* 검색란 스타일 */
+#searchForm {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+#searchType, #searchKeyword {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+#searchKeyword {
+    width: 200px; /* 입력 필드 너비 조절 */
+}
+
+#searchForm a {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s; /* 텍스트 색상 변화 효과 추가 */
+}
+
+#searchForm a:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* review-detail */
+.review-detail {
+    width: 80%;
+    padding: 20px;
+    border-radius: 10px;
+    background-image: url('/images/camp1.jpg');
+    background-size: cover;
+    background-position: center 20%;
+    text-align: center; /* 가운데 정렬 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    /* 추가 스타일 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.r-content {
+    background-color: rgba(255, 255, 255, 0.7); /* 배경을 거의 투명하지 않은 흰색으로 설정 */
+    color: white; /* 텍스트 색상을 흰색으로 설정 */
+    padding: 20px; /* 적절한 패딩을 추가 */
+    border-radius: 10px; /* 테두리 모서리를 둥글게 */
+    margin: 20px 0; /* 위아래로 일정 간격 추가 */
+}
+.review-detail h1 {
+    padding: 10px;
+   background-color: rgba(255, 255, 255, 0.7); /* 배경을 거의 투명하지 않은 흰색으로 설정 */
+    border-radius: 5px;
+}
+
+.review-detail table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.review-detail a {
+    padding: 10px 15px; /* a 링크들에 패딩을 추가하여 버튼처럼 보이게 */
+    border-radius: 5px;
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 색깔 유지 */
+    display: inline-block;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.review-detail a:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* 호버 효과 */
+}
+
+.form-1 h2, .form-1 h3, .form-1 h4, .form-1 h5 {
+    text-align: left; /* 제목, 작성자, 등록일, 조회수 등의 위치는 왼쪽 정렬 */
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.form-1 h3 {
+    color: #333;
+}
+
+/* 댓글 입력 */
+textarea {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+input[type="button"] {
+	background-color: #a2d5f2;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="button"]:hover,
+.btn:hover {
+    background-color: #3385ff; /* 호버 시 색상 변경 */
+}
+
+
+/* 버튼들 */
+.form-1 input[type="button"] {
+    margin: 5px;
+}
+
+.form-1 {
+    margin-top: 20px; /* 일정 간격 */
+}
+
+.review-content {
+    border: 1px solid rgba(0, 0, 0, 0.2); /* 테두리를 약간 투명하게 설정 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자를 약간 투명하게 설정 */
+    border-radius: 10px; /* 테두리 둥글게 설정 */
+    background-color: rgba(255, 255, 255, 0.7); /* 배경을 거의 투명하지 않은 흰색으로 설정 */
+    margin-bottom: 20px;
+    width: 100%;
+}
+.review-box,
+.nd-box {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin: 10px auto;
+    padding: 10px;
+    width: 90%;
+}
+textarea {
+    height: 100px;
+    resize: none;
+    width: 90%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+.btn {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #66c2ff; /* 하늘색 파스텔톤 계열 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 호버 효과를 위한 전환 효과 */
+}
+.review-list {
+	border: 1px solid rgba(0, 0, 0, 0.2); /* 테두리를 약간 투명하게 설정 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자를 약간 투명하게 설정 */
+    border-radius: 10px; /* 테두리 둥글게 설정 */
+    background-color: rgba(255, 255, 255, 0.7); /* 배경을 거의 투명하지 않은 흰색으로 설정 */
+}
+
+.notice-list {
+	background-color: rgba(288, 288, 288, 0.7); /* 배경을 거의 투명하지 않은 흰색으로 설정 */
+}
+.notice-list a {
+    color: black; /* 링크 기본 색상을 검정색으로 설정 */
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.notice-list a:hover {
+	color: blue;
+	border-radius: 5px; 
+	background-color: #ffffff;
+    text-decoration: underline; /* 호버 시 밑줄 표시 */
+}
+
+/* 테이블 스타일 */
+.notice-list table {
+    border-collapse: collapse;
+    margin-bottom: 5px;
+}
+th, td {
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+th {
+    text-align: center;
+}
+tr:hover {
+    background-color: rgba(135, 206, 250, 0.6); /* 호버 시 배경색 변경 */
+}
+
+.notice-detail {
+    padding: 20px;
+    background-image: url('/images/comunity1.jpg');
+    background-size: cover;
+    width: 80%;
+    margin: 20px auto;
+    text-align: center; /* 가운데 정렬 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.nd-content {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 80%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.form-re {
+	width: 80%;
+}
+.nd-content h2 {
+    color: #1e90ff; /* 파스텔 파란색 계열 */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.nd-content a {
+    color: inherit; /* 링크 색상을 부모 요소에서 상속받음 (기본 검정색 유지) */
+    text-decoration: none; /* 밑줄 제거 */
+    display: inline-block;
+    background-color: #87ceeb; /* 파스텔 파란색 계열 */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nd-content a:hover {
+    background-color: #4682b4; /* 호버 시 배경색 변화 */
+}
+
+.nd-content input[type="button"] {
+    background-color: #87ceeb; /* 파스텔 파란색 계열 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nd-content input[type="button"]:hover {
+    background-color: #4682b4; /* 호버 시 배경색 변화 */
+}
+
+
+
+/* review-write, update */
+.review-write {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: url('/images/camp15.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.review-write h2 {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 5px;
+}
+
+.rw-content {
+    font-size: 20px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 1px solid #66c2ff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+#title, #kakao_name {
+    width: 30%; /* 너비 설정 */
+    margin: 20px auto; /* 가운데 정렬 및 위아래 여백 설정 */
+    padding: 10px; /* 내부 여백 설정 */
+    border: 1px solid #ccc; /* 테두리 설정 */
+    border-radius: 5px; /* 모서리 둥글게 설정 */
+    box-sizing: border-box; /* 박스 모델 설정 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    outline: none; /* 포커스시 테두리 제거 */
+}
+
+#title::placeholder {
+    color: #999; /* 플레이스홀더 색상 설정 */
+}

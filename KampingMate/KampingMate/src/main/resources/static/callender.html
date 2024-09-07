@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Interactive Calendar</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #calendar {
+            max-width: 100%;
+            height: 500px;
+            margin: 0 auto;
+        }
+        #noteModal, #editNoteModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            height: 100px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+        }
+        #noteModal textarea, #editNoteModal textarea {
+            width: 100%;
+            height: 100px;
+        }
+        .fc-event {
+            cursor: pointer;
+        }
+        #saveAsImage, #saveAsPDF {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id='calendar'></div>
+    <div id="noteModal">
+        <h3>Add Note</h3>
+        <textarea id="noteContent"></textarea>
+        <button onclick="saveNote()">Save Note</button>
+        <button onclick="closeNoteModal()">Cancel</button>
+    </div>
+    <div id="editNoteModal">
+        <h3>Edit Note</h3>
+        <textarea id="editNoteContent"></textarea>
+        <button onclick="updateNote()">Update Note</button>
+        <button onclick="deleteNote()">Delete Note</button>
+        <button onclick="closeEditNoteModal()">Cancel</button>
+    </div>
+
+    <button id="saveAsImage" onclick="savePageAsImage()">현재 페이지 저장하기(이미지)</button><br>
+    <button id="saveAsPDF" onclick="savePageAsPDF()">현재 페이지 저장하기(.pdf)</button>
+
+    <script>
+        // URL 파라미터에서 user_id를 가져옵니다.
+        const urlParams = new URLSearchParams(window.location.search);
+        let user_id = urlParams.get('user_id');
+
+        // URL 파라미터에 user_id가 없거나 null인 경우 로컬 스토리지에서 가져옵니다.
+        if (!user_id || user_id === 'null') {
+            user_id = localStorage.getItem('user_id');
+        }
+
+        // 로컬 스토리지에서도 user_id가 없거나 null인 경우 임의의 ID를 생성합니다.
+        if (!user_id || user_id === 'null') {
+            user_id = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('user_id', user_id);
+        }
+
+        let notes = {};
+        let calendar;
+        let selectedDate;
+        let selectedEvent;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                dateClick: function(info) {
+                    openNoteModal(info.dateStr);
+                },
+                eventClick: function(info) {
+                    selectedEvent = info.event;
+                    openEditNoteModal(selectedEvent);
+                },
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    fetch(`http://127.0.0.1:5000/get_notes?user_id=${user_id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            notes = data;
+                            const events = [];
+                            for (const date in notes) {
+                                if (notes.hasOwnProperty(date)) {
+                                    notes[date].forEach(note => {
+                                        events.push({
+                                            title: note,
+                                            start: date
+                                        });
+                                    });
+                                }
+                            }
+                            successCallback(events);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching notes:', error);
+                            failureCallback(error);
+                        });
+                }
+            });
+            calendar.render();
+        });
+
+        function openNoteModal(dateStr) {
+            selectedDate = dateStr;
+            document.getElementById('noteModal').style.display = 'block';
+        }
+
+        function closeNoteModal() {
+            document.getElementById('noteModal').style.display = 'none';
+        }
+
+        function saveNote() {
+            const content = document.getElementById('noteContent').value;
+            fetch('http://127.0.0.1:5000/save_note', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: user_id,
+                    date: selectedDate,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert('Note saved for ' + selectedDate);
+                    closeNoteModal();
+                    addNoteToCalendar(selectedDate, content);
+                } else {
+                    alert('Failed to save note: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save note due to an error.');
+            });
+        }
+
+        function addNoteToCalendar(dateStr, content) {
+            calendar.addEvent({
+                title: content,
+                start: dateStr
+            });
+        }
+
+        function openEditNoteModal(event) {
+            document.getElementById('editNoteContent').value = event.title;
+            document.getElementById('editNoteModal').style.display = 'block';
+        }
+
+        function closeEditNoteModal() {
+            document.getElementById('editNoteModal').style.display = 'none';
+        }
+
+        function updateNote() {
+            const newContent = document.getElementById('editNoteContent').value;
+            const eventDate = selectedEvent.startStr;
+            fetch('http://127.0.0.1:5000/save_note', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: user_id,
+                    date: eventDate,
+                    content: newContent
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert('Note updated for ' + eventDate);
+                    selectedEvent.setProp('title', newContent);
+                    closeEditNoteModal();
+                } else {
+                    alert('Failed to update note: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update note due to an error.');
+            });
+        }
+
+        function deleteNote() {
+            const eventDate = selectedEvent.startStr;
+            const eventTitle = selectedEvent.title;
+            fetch('http://127.0.0.1:5000/delete_note', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: user_id,
+                    date: eventDate,
+                    content: eventTitle
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert('Note deleted for ' + eventDate);
+                    selectedEvent.remove();
+                    closeEditNoteModal();
+                } else {
+                    alert('Failed to delete note: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete note due to an error.');
+            });
+        }
+
+        function savePageAsImage() {
+            html2canvas(document.body, {
+                backgroundColor: '#fff', // 배경색을 흰색으로 설정
+                scale: 6
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'calendar.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function savePageAsPDF() {
+            html2canvas(document.body, {
+                backgroundColor: '#fff', // 배경색을 흰색으로 설정
+                scale : 3
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('calendar.pdf');
+            });
+        }
+    </script>
+</body>
+</html>

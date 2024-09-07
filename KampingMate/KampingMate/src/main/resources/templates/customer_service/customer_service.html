@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/customer.css}">
+    <title>고객센터</title>
+    <script>
+        function openInPopup(url) {
+            window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        }
+    </script>
+</head>
+<body>
+<th:block th:insert="~{include/header.html}"></th:block>
+    <div class="service-container">
+        <h1>고객센터</h1>
+		<div class="service-content">
+			<!-- QnA 링크 -->
+	        <a class="link" href="/qna/all"><i class="fas fa-question-circle blue-icon"></i> Q&A</a>
+	
+	        <!-- 1:1 문의 링크 -->
+	        <a class="link" href="/inquiry/inquiryForm"><i class="fas fa-comments red-icon"></i> 1:1 문의 작성</a>
+	
+	        <!-- 1:1 문의 내역 링크 -->
+	        <a class="link" href="/inquiry/inquiryList"><i class="fas fa-list green-icon"></i> 1:1 문의 내역</a>
+		</div>
+    </div>
+<th:block th:insert="~{include/footer.html}"></th:block>
+</body>
+</html>

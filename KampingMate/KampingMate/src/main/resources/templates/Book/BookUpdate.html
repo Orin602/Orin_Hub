@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/Book.js}"></script>
+<link rel="stylesheet" th:href="@{/css/book.css}">
+<title>예약 수정</title>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+
+<div class="book-container">
+    <h1>예약 수정</h1>
+    <div class="book-content">
+        <form name="frm" id="frm">
+            <input type="hidden" name="bookseq" id="bookseq" th:value="${BookVO.bookseq}" />
+            <input type="hidden" name="campingid" id="campingid" th:value="${BookVO.campingid}" />
+            <h3>
+                예약일자 : [[${#dates.format(BookVO.bookdateS, 'yyyy-MM-dd')}]] ~ [[${#dates.format(BookVO.bookdateE, 'yyyy-MM-dd')}]]
+                <button type="button" id="toggleButton">수정</button> <br>
+                <div id="dateFields" style="display:none;">
+                    시작 : <input type="date" name="bookdateS" id="bookdateS" th:value="${#dates.format(BookVO.bookdateS, 'yyyy-MM-dd')}"><br>
+                    ~ 종료<input type="date" name="bookdateE" id="bookdateE" th:value="${#dates.format(BookVO.bookdateE, 'yyyy-MM-dd')}">
+                </div>
+                캠핑장명 : [[${BookVO.campingname}]]<br>
+                인원수 : <input type="text" name="headcount" id="headcount" th:value="${BookVO.headcount}" /> 명<br>
+                예약자 성함: <input type="text" name="bookname" id="bookname" th:value="${BookVO.member_data.name}" /><br>
+                연락처 : <input type="text" name="telephone" id="telephone" th:value="${BookVO.member_data.telephone}" /><br>
+                예약관련 상세 : <textarea name="message" id="message">[[${BookVO.message}]]</textarea> <br>
+                상태 : <span id="condition" th:data-condition="${BookVO.condition}" th:switch="${BookVO.condition}">
+                    <span th:case="0">대기중</span>
+                    <span th:case="1">예약완료</span>
+                    <span th:case="2">예약불가</span>
+                </span>
+                <button type="button" onclick="bookupdatesub(event)">수정 완료</button>
+                <button type="button" onclick="bookdelete()">예약 취소</button>
+            </h3>
+        </form>
+        <hr>
+        <p class="b-p">이미 확정된 예약은 수정 및 취소가 불가능합니다.<br> 해당 캠핑장으로 직접 연락주세요.</p>
+        <hr>
+    </div>
+</div>
+<!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

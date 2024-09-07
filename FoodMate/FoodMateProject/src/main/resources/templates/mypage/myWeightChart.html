@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>My Weight Chart</title>
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/mypage.js}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+//JavaScript를 사용하여 현재 날짜를 yyyy-mm-dd 형식으로 변환
+document.addEventListener("DOMContentLoaded", function() {
+	// 로컬 스토리지에서 테마 설정을 확인하고 적용합니다.
+    function setTheme() {
+        const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
+        const body = document.body;
+        if (isDarkTheme) {
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+        }
+    }
+    function setCurrentDate() {
+        const dateInput = document.getElementById('re_date');
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1; // 1월은 0부터 시작하므로 1을 더함
+        let dd = today.getDate();
+
+        // 월과 일이 한 자리 숫자인 경우 앞에 0을 붙임
+        if (mm < 10) mm = '0' + mm;
+        if (dd < 10) dd = '0' + dd;
+
+        const formattedToday = yyyy + '-' + mm + '-' + dd;
+        dateInput.value = formattedToday;
+    }
+
+ 	// 페이지가 로드될 때 현재 날짜를 설정하고 테마를 적용합니다.
+    window.onload = function() {
+        setCurrentDate();
+        setTheme();
+    };
+});
+</script>
+</head>
+<body>
+<!-- 챗봇 아이콘 -->
+        <div id="chatbot-icon" onclick="toggleChatbotPopup()">
+            <i class="fas fa-robot"></i>
+        </div>
+        
+        <!-- 칼로리 계산기 아이콘 -->
+        <div id="calorie-icon" onclick="toggleCaloriePopup()">
+            <i class="fas fa-calculator"></i>
+        </div>
+	<!-- 헤더 -->
+	<th:block th:insert="~{includes/header}"></th:block>
+
+	<!-- 메뉴 -->
+	<th:block th:insert="~{mypage/menu}"></th:block>
+
+	<div class="container1">
+		<!-- 내 체중 변화 그래프 -->
+		<section id="weightChart">
+			<div id="content">
+				<div class="record">
+					<section class="left-panel">
+						<form id="weight_chart" method="post" name="formm" action="weight_record" onsubmit="return false;">
+							<h3>체중 입력</h3>
+							<label for="re_date">날짜 : </label>
+							<input type="date" id="re_date" name="re_date" readonly required><br>
+							<label for="re_weight">체중 : </label>
+							<input type="number" id="re_weight" name="re_weight" step="0.01" required>
+							<span id="kg">kg</span><br>
+							<input type="button" value="입력" onclick="weight_record()" class="btn">
+						</form>
+					</section>
+					<section class="right-panel">
+						<div class="wr_chart">
+							<div class="chart-container">
+								<canvas id="weeklyChartCanvas"></canvas>
+								<ul class="chart-description">
+                                <li>내 목표 체중 : [[${goal}]]</li>
+                                <li>주간 변화 평균: <span th:text="${weekly}"></span></li>
+                            	</ul>
+                            </div>
+						</div>
+						<div class="wr_chart">
+							<div class="chart-container">
+								<canvas id="monthlyChartCanvas"></canvas>
+								<ul class="chart-description">
+                                <li>내 목표 체중 : [[${goal}]]</li>
+                                <li>월간 변화 평균 : <span th:text="${monthly}"></span></li>
+                            	</ul>
+                            </div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>관리자 페이지(Admin)</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
+	rel="stylesheet" />
+<link href="/css/admin_styles.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+function go_register() {
+    window.location.href = "foodRegister.do";
+}
+
+function go_del(button) {
+    // 사용자에게 삭제를 확인 요청
+    if (confirm("정말로 이 게시물을 삭제하시겠습니까?")) {
+        const dbidx = button.parentNode.querySelector(".dbidx").value;
+        fetch(`dbDelete.do?dbidx=${dbidx}`, {
+            method: 'post'
+        }).then(response => {
+            if (response.ok) {
+                // 성공적으로 삭제된 경우 페이지 새로고침
+                window.location.reload();
+            } else {
+                alert("삭제에 실패했습니다.");
+            }
+        });
+    } else {
+    	
+    }
+}
+
+function go_update(button) {
+    const dbidx = button.parentNode.querySelector(".dbidx").value;
+    const url = `dbEdit.do?dbidx=${dbidx}`;
+    
+    // 새 창을 열고, 참조를 변수에 저장
+    var newWindow = window.open(url, '_blank', 'width=600,height=400');
+    
+    // 새 창의 상태를 주기적으로 확인
+    var checkInterval = setInterval(function() {
+        if (newWindow.closed) {
+            clearInterval(checkInterval);  // 인터벌을 정지
+            window.location.reload();      // 메인 윈도우 새로고침
+        }
+    }, 200); // 매 초마다 체크
+}
+
+
+</script>
+<style>
+    .btn-custom {
+        margin-right: 5px;
+    }
+    .sb-sidenav-menu-heading {
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+    .navbar-brand {
+        font-size: 1.5em;
+    }
+    .card-header {
+        background-color: #343a40;
+        color: white;
+    }
+    .table th, .table td {
+        text-align: center;
+    }
+    .table th {
+        background-color: #343a40;
+        color: white;
+    }
+    .pagination .active {
+        font-weight: bold;
+        background-color: #007bff;
+        color: white;
+    }
+    .pagination a {
+        margin: 0 2px;
+        padding: 5px 10px;
+        border: 1px solid #007bff;
+        border-radius: 3px;
+        color: #007bff;
+    }
+    .pagination a:hover {
+        background-color: #007bff;
+        color: white;
+    }
+    .search-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+    }
+    .search-container select,
+    .search-container input[type="text"],
+    .search-container input[type="submit"] {
+        margin-right: 5px;
+    }
+    .search-container input[type="submit"] {
+        margin-left: 10px;
+    }
+    .search-container input[type="text"] {
+        width: 200px;
+    }
+    #surveyResults {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body class="sb-nav-fixed">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="main.do">관리자 메인</a>
+	</nav>
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_nav">
+			<nav class="sb-sidenav accordion sb-sidenav-dark"
+				id="sidenavAccordion">
+				<div class="sb-sidenav-menu">
+					<div class="nav">
+						<div class="sb-sidenav-menu-heading">회원정보</div>
+						<a class="nav-link" href="memberList.do">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-tachometer-alt"></i>
+							</div> 회원관리
+						</a>
+						<div class="sb-sidenav-menu-heading">게시판 관리</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							data-bs-target="#collapseLayouts" aria-expanded="false"
+							aria-controls="collapseLayouts">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div> 관리자 게시판
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="collapseLayouts"
+							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav">
+								<a class="nav-link" href="admin_food.do">음식레시피 게시판</a> <a
+									class="nav-link" href="admin_QnA.do">Q&A 게시판</a> <a
+									class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
+									<a class="nav-link" href="/admin/satisfactionResults">만족도 조사 결과</a>
+							</nav>
+						</div>
+							<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
+						<a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
+						<a class="sb-sidenav-menu-heading" href="/">사용자 페이지로 이동</a>
+					</div>
+				</div>
+				<div class="sb-sidenav-footer">
+					<div class="small">현재 로그인한 관리자 계정:</div>
+					[[${loginUser.id}]]
+					<!-- 이 부분에 로그인한 관리자 계정 표시되게 -->
+				</div>
+			</nav>
+		</div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">DB수정/삭제(관리자페이지)</h1>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> 게시글 목록
+						</div>
+						<div class="card-body">
+							<form method="post" id="edit_form" action="getSearch.do">
+								<table id="datatablesSimple" width="100%">
+									<thead>
+										<tr>
+											<td>[[${message}]]</td>
+										</tr>
+										<tr>
+											<td colspan="4"><select name="searchField">
+													<option value="name">이름</option>
+													<option value="index">ID번호</option>
+											</select> <input type="text" name="searchWord" placeholder="검색어 입력">
+												<input type="submit" value="검색하기" /></td>
+										</tr>
+										<th:block th:if="${#lists.size(dbList) > 0}">
+	
+											<tr>
+												<th>DB(ID)번호</th>
+												<th>이름</th>
+												<th>칼로리</th>
+												<th>삭제/수정</th>
+											</tr>
+										</th:block>
+									</thead>
+									<tbody>
+										<th:block th:if="${#lists.size(dbList) <= 0}">
+											<tr>
+												<td colspan="4"></td>
+											</tr>
+										</th:block>
+										<th:block th:if="${#lists.size(dbList) > 0}">
+											<th:block th:each="db, status : ${dbList}">
+												<tr>
+													<td>[[${db.idx}]]</td>
+													<td>[[${db.name}]]</td>
+													<td>[[${db.calories}]]</td>
+													<td><input type="hidden" class="dbidx"
+														th:value="${db.idx}"> <input type="button"
+														value="DB 삭제" onclick="go_del(this)"> <input
+														type="button" value="DB 수정" onclick="go_update(this)">
+													</td>
+												</tr>
+											</th:block>
+										</th:block>
+									</tbody>
+								</table>
+							</form>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div
+						class="d-flex align-items-center justify-content-between small">
+						<div class="text-muted">Copyright &copy; Your Website 2024</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	
+	<!-- 만족도 조사 결과를 보여주는 요소 -->
+    <div id="surveyResults" style="display: none;">
+        <h2>Satisfaction Survey Results</h2>
+        <!-- 여기에 만족도 조사 결과를 표시할 요소 추가 -->
+    </div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+</body>
+</html>

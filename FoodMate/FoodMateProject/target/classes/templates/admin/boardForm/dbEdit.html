@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<style>
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f5f5f5;
+}
+
+h2 {
+	text-align: center;
+	margin-top: 20px;
+}
+
+form {
+	width: 60%;
+	margin: 0 auto;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+table {
+	width: 100%;
+}
+
+td {
+	padding: 10px;
+}
+
+textarea {
+	height: 200px;
+}
+
+input[type="text"] {
+	width: 100%;
+	padding: 8px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	margin-top: 4px;
+	margin-bottom: 10px;
+}
+
+button[type="submit"], button[type="reset"], button[type="button"] {
+	padding: 10px 20px;
+	border: none;
+	background-color: #4CAF50;
+	color: white;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+button[type="submit"]:hover, button[type="reset"]:hover, button[type="button"]:hover
+	{
+	background-color: #45a049;
+}
+</style>
+<script type="text/javascript">
+function validateForm(form) {
+    try {
+        if (form.name.value == "") {
+            alert("이름을 입력하세요");
+            form.name.focus();
+            return false; // 함수 종료 및 폼 제출 방지
+        }
+
+        if (form.recipeinstructions.value == "") {
+            alert("레시피를 입력하세요");
+            form.recipeinstructions.focus();
+            return false; // 함수 종료 및 폼 제출 방지
+        }
+
+        if (form.recipecategory.value == "") {
+            alert("카테고리를 입력하세요");
+            form.recipecategory.focus();
+            return false; // 함수 종료 및 폼 제출 방지
+        }
+
+        if (form.keywords.value == "") {
+            alert("키워드를 입력하세요");
+            form.keywords.focus();
+            return false; // 함수 종료 및 폼 제출 방지
+        }
+
+        if (form.recipeingredientparts.value == "") {
+            alert("재료를 입력하세요");
+            form.recipeingredientparts.focus();
+            return false; // 함수 종료 및 폼 제출 방지
+        }
+
+        if (form.calories.value < 0 || form.fatcontent.value < 0
+                || form.saturatedfatcontent.value < 0
+                || form.cholesterolcontent.value < 0
+                || form.sodiumcontent.value < 0
+                || form.carbohydratecontent.value < 0
+                || form.fibercontent.value < 0 || form.sugarcontent.value < 0
+                || form.proteincontent.value < 0) {
+            alert("잘못된 입력입니다. 음수를 입력할 수 없습니다.");
+            return false;
+        }
+
+        alert("성공적으로 등록되었습니다.");
+        window.onunload = window.close; // 제출 후 창 닫기
+        return true;
+    } catch (e) {
+        alert("오류가 발생했습니다. 다시 시도해 주세요");
+        window.close();
+        return false;
+    }
+}
+
+</script>
+</head>
+<body>
+	<form name="updateFrm" method="post" action="updateDB.do"
+		onsubmit="return validateForm(this);">
+		<input type="hidden" name="idx" th:value="${recipe.idx}">
+		<table border="1" width="90%">
+			<tr>
+				<td align="center">레시피명</td>
+				<td><input type="text" name="name" th:value="${recipe.name}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">요리방법</td>
+				<td><textarea name="recipeinstructions" style="resize:none; text-align:left; width: 90%;">
+				[[${recipe.recipeinstructions}]]</textarea></td>
+			</tr>
+			<tr>
+				<td align="center">이미지</td>
+				<td><input type="text" name="images"
+					th:value="${recipe.images}" style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">카테고리</td>
+				<td><input type="text" name="recipecategory" th:value="${recipe.recipecategory}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">키워드</td>
+				<td><input type="text" name="keywords" th:value="${recipe.keywords}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">재료</td>
+				<td><input type="text" name="recipeingredientparts" th:value="${recipe.recipeingredientparts}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">칼로리</td>
+				<td><input type="number" name="calories" min="0" th:value="${recipe.calories}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">지방(g)함유량</td>
+				<td><input type="number" name="fatcontent" min="0" th:value="${recipe.fatcontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">포화지방(g)함유량</td>
+				<td><input type="number" name="saturatedfatcontent"  min="0" th:value="${recipe.saturatedfatcontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">콜레스테롤(g)함유량</td>
+				<td><input type="number" name="cholesterolcontent" min="0" th:value="${recipe.cholesterolcontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">나트륨(g)함유량</td>
+				<td><input type="number" name="sodiumcontent" value="0" th:value="${recipe.sodiumcontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">탄수화물(g)함유량</td>
+				<td><input type="number" name="carbohydratecontent" min="0" th:value="${recipe.carbohydratecontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">섬유질(g)함유량</td>
+				<td><input type="number" name="fibercontent" min="0" th:value="${recipe.fibercontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">당분(g)함유량</td>
+				<td><input type="number" name="sugarcontent" min="0" th:value="${recipe.sugarcontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td align="center">단백질(g)함유량</td>
+				<td><input type="number" name="proteincontent"  min="0" th:value="${recipe.proteincontent}"
+					style="width: 90%;" /></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<button type="submit">작성 완료</button>
+					<button type="reset">다시 입력</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

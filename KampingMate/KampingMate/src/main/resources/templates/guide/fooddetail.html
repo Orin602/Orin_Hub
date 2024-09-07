@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>도전 요리 상세</title>
+<link rel="stylesheet" th:href="@{/css/guide.css}">
+</head>
+<body>
+<div class="fd-container">
+    <h1 class="guide-h1">도전 요리 상세</h1>
+    <div th:if="${recipe != null}" class="fd-content">
+        <img th:src="${recipe['ATT_FILE_NO_MAIN']}" style="height:200px; width:200px;">
+        <h2 th:text="${recipe['RCP_NM']}"></h2>
+        <hr>
+        <p>재료: <span th:text="${recipe['RCP_PARTS_DTLS']}"></span></p>
+        <hr>
+        <h3>레시피:</h3>
+            <p th:if="${recipe['MANUAL01']} != null" th:text="${recipe['MANUAL01']}"></p>
+            <p th:if="${recipe['MANUAL02']} != null" th:text="${recipe['MANUAL02']}"></p>
+            <p th:if="${recipe['MANUAL03']} != null" th:text="${recipe['MANUAL03']}"></p>
+            <p th:if="${recipe['MANUAL04']} != null" th:text="${recipe['MANUAL04']}"></p>
+            <p th:if="${recipe['MANUAL05']} != null" th:text="${recipe['MANUAL05']}"></p>
+            <p th:if="${recipe['MANUAL06']} != null" th:text="${recipe['MANUAL06']}"></p>
+            <p th:if="${recipe['MANUAL07']} != null" th:text="${recipe['MANUAL07']}"></p>
+            <p th:if="${recipe['MANUAL08']} != null" th:text="${recipe['MANUAL08']}"></p>
+    </div>
+    <div th:if="${recipe == null}">
+        <p>레시피가 없습니다</p>
+    </div>
+</div>
+</body>
+</html>

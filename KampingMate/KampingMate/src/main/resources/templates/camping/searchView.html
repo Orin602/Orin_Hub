@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>검색 결과</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/campingSites.css}">
+<script>
+	function getRecommendList(){
+		 var form = document.createElement('form');
+         form.method = 'POST';
+         form.action = '/getRecommendList';
+      	// 폼을 body에 추가하고 제출
+         document.body.appendChild(form);
+         form.submit();
+	}
+</script>
+ <script>
+        let regionMapping = {};
+
+        $(document).ready(function() {
+            // Fetch region mapping from server
+            fetchRegionMapping().then(mapping => {
+                regionMapping = mapping;
+            });
+
+            $('#c_do').on('change', function() {
+                var selectedSiDo = $(this).val();
+                var mappedSiDo = regionMapping[selectedSiDo] || selectedSiDo;
+                if (mappedSiDo) {
+                    $.ajax({
+                        url: '/get_sigungu',
+                        type: 'GET',
+                        data: { siDo: mappedSiDo },
+                        success: function(data) {
+                            var $cSigngu = $('#c_signgu');
+                            $cSigngu.empty();
+                            $cSigngu.append('<option value="">전체/시/군</option>');
+                            
+                            // 오름차순 정렬
+                            data.sort((a, b) => a.localeCompare(b));
+                            
+                            $.each(data, function(index, value) {
+                                $cSigngu.append('<option value="' + value + '">' + value + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#c_signgu').empty();
+                    $('#c_signgu').append('<option value="">전체/시/군</option>');
+                }
+            });
+
+            $('#campSearchForm01').on('submit', function(event) {
+                event.preventDefault(); // 기본 폼 제출을 방지
+                submitForm();
+            });
+        });
+
+        async function fetchRegionMapping() {
+            const response = await fetch('/regionMapping');
+            return response.json();
+        }
+
+        async function submitForm() {
+            const formData = {
+                doNm: getCheckedValues('c_do'),
+                gungu: getCheckedValues('c_signgu'),
+                faclt: getCheckedValues('faclt_div'),
+                lct: getCheckedValues('searchLctCl'),
+                induty: getCheckedValues('induty'),
+                bottom: getCheckedValues('siteBottom'),
+                sbrs: getCheckedValues('sbrsCl'),
+                keyword: $('#keyword').val() || ''  // 빈 문자열로 설정
+            };
+
+            $.ajax({
+                url: '/processKeywords',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                	if (response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    }
+                    // 서버 응답 처리
+                    console.log(response);
+                    // 필요한 경우 응답을 UI에 표시
+                },
+                error: function(error) {
+                    // 에러 처리
+                    console.error(error);
+                }
+            });
+        }
+
+        function getCheckedValues(name) {
+            return $(`select[name="${name}"] option:selected, input[name="${name}"]:checked`).map(function() {
+                return this.value;
+            }).get();
+        }
+</script>
+<script>
+function go_review(){
+    var theForm = document.createElement('form');
+     theForm.method = "get";
+     theForm.action = "/gocamping_review_detail";
+
+     var hiddenField = document.createElement('input');
+     hiddenField.type = "hidden";
+     hiddenField.name = "campid";
+     hiddenField.value = campid;
+
+     theForm.appendChild(hiddenField);
+     document.body.appendChild(theForm);
+     theForm.submit();
+ }
+
+ function go_book(element) {
+     var campid = element.getAttribute("data-campid");
+     var campname = element.getAttribute("data-campname");
+     var theForm = document.createElement('form');
+     theForm.method = "get";
+     theForm.action = "/book";
+
+     var idField = document.createElement('input');
+     idField.type = "hidden";
+     idField.name = "campingid";
+     idField.value = campid;
+
+     var nameField = document.createElement('input');
+     nameField.type = "hidden";
+     nameField.name = "campingname";
+     nameField.value = campname;
+
+     theForm.appendChild(idField);
+     theForm.appendChild(nameField);
+     document.body.appendChild(theForm);
+     theForm.submit();
+ }
+
+</script>
+<script>
+        function detail_popup(){
+            const url = "/go_detail";
+            const width = 600;
+            const height = 800;
+            const left = (window.screen.width / 2) - (width / 2);
+            const top = (window.screen.height / 2) - (height / 2);
+            window.open(url, '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+        }
+    </script>
+
+<body>
+<th:block th:insert="~{include/header}"></th:block>
+<div class="reco-container">
+    <div class="search_box">
+        <form id="campSearchForm01" method="get">
+            <button type="button" class="btn" onclick="detail_popup()">상세검색</button>
+            <div class="search_box_form">
+                <div class="form1_2">
+                    <p class="tt">지역별</p>
+                    <label class="skip" for="c_do">지역별 검색</label>
+                    <select name="c_do" id="c_do" class="select_01" title="검색할 지역을 선택하세요.">
+                        <option value="">전체/도</option>
+                        <option value="서울특별시">서울특별시</option>
+                        <option value="부산광역시">부산광역시</option>
+                        <option value="대구광역시">대구광역시</option>
+                        <option value="인천광역시">인천광역시</option>
+                        <option value="광주광역시">광주광역시</option>
+                        <option value="대전광역시">대전광역시</option>
+                        <option value="울산광역시">울산광역시</option>
+                        <option value="세종특별자치시">세종특별자치시</option>
+                        <option value="경기도">경기도</option>
+                        <option value="강원도">강원도</option>
+                        <option value="충청북도">충청북도</option>
+                        <option value="충청남도">충청남도</option>
+                        <option value="전라북도">전라북도</option>
+                        <option value="전라남도">전라남도</option>
+                        <option value="경상북도">경상북도</option>
+                        <option value="경상남도">경상남도</option>
+                        <option value="제주특별자치도">제주특별자치도</option>
+                    </select>
+                    <label class="skip" for="c_signgu">시군별 검색</label>
+                    <select name="c_signgu" id="c_signgu" class="select_02" title="검색할 지역을 선택하세요.">
+                        <option value="">전체/시/군</option>
+                    </select>
+                </div>
+                <div class="form1_2">
+                    <p class="tt">테마별</p>
+                    <label class="skip" for="searchLctCl">테마별 검색</label>
+                    <select name="searchLctCl" id="searchLctCl" class="select_03" title="검색할 테마를 선택하세요.">
+                        <option value="">전체테마</option>
+                        <option value="해변">해변</option>
+                        <option value="섬">섬</option>
+                        <option value="산">산</option>
+                        <option value="숲">숲</option>
+                        <option value="계곡">계곡</option>
+                        <option value="강">강</option>
+                        <option value="호수">호수</option>
+                        <option value="도심">도심</option>
+                    </select>
+                    <br>
+                    <input type="text" value="" id="keyword" size="15" placeholder="검색어를 입력하세요." style="margin-bottom:5px;">
+                    <button type="submit" class="btnSearch_black01">검색</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+	<hr>
+<div class="search-list">
+    <h1>캠핑장 리스트</h1>
+    <th:block th:if="${recommendations != null and !recommendations.isEmpty() and recommendations[0] != 123456}">
+        <input type="button" class="recommend-button" value="추천 캠핑장 전체보기" onclick="getRecommendList()">
+
+        <div style="display: flex;">
+            <div th:each="recommend_list, iterStat : ${recommend_list}">
+                <th:block th:if="${iterStat.index < 3}">
+                    <a th:href="@{/detailView(contentId=${recommend_list.contentId})}" th:text="${recommend_list.facltNm}" style="margin-right: 10px;"></a>
+                </th:block>
+            </div>
+             <span>...</span>
+        </div>
+    </th:block>
+    <div th:if="${#lists.isEmpty(goCampingList)}" style="text-align: center;">검색 결과가 없습니다.</div>
+    <div th:if="${goCampingList != null and !goCampingList.isEmpty()}">
+    	<p style="text-align: center;">검색결과 : [[${totalItems}]]건의 검색결과가 있습니다</p>
+	</div>
+    
+        <ul style="list-style-type: none;">
+            <li th:each="camp : ${goCampingList}" class="li-list">
+            <input type="hidden" id="campid" name="campid" th:value="${camp.contentId}"/>
+            <input type="hidden" id="campname" name="campname" th:value="${camp.facltNm}"/>
+            <button type="button" onclick="go_review()">리뷰페이지</button>
+            <button type="button" class="book-button" th:data-campid="${camp.contentId}" th:data-campname="${camp.facltNm}" onclick="go_book(this)">예약하러가기</button>
+
+            <hr>
+                <h2>[[${camp.facltNm}]]</h2>
+                <hr>
+                <div class="c_list update">
+                	<div class="img_box">
+	                    <a th:href="@{/detailView(contentId=${camp.contentId})}" class="dc_none">
+	                    	<span class="skip"></span>
+	                        <img th:if="${camp.firstImageUrl != null}" th:src="@{${camp.firstImageUrl}}" alt="캠핑장 이미지" style="width: 360px; height: 250px;">
+	                    	<img th:if="${camp.firstImageUrl == null}" src="https://www.gocamping.or.kr/img/2018/layout/noimg.jpg" alt="캠핑장 이미지">
+	                    </a>
+                    </div>
+                    
+                    <div class="camp_cont">
+                    <!--  정보칸(삭제가능)
+                        <p class="item_group">
+                            <span class="item_t01">관광사업자 등록업체</span>
+                            <span class="item_t02">리뷰수 0</span>
+                            <span class="item_t03">조회수 257398</span>
+                            <span class="item_t04">추천수 17</span>
+                        </p>
+                    -->  
+                        <h2 class="camp_tt">
+                        <!-- 자세히 보기 위와같이 수정
+                            <a th:href="@{/bsite/camp/info/read.do(c_no=${camp.contentId}, viewType='read01', listOrdrTrget='c_rdcnt')}" th:text="[(${camp.doNm})] ${camp.facltNm}">캠핑장 이름</a>
+                        -->
+                        </h2>
+                        <hr>
+                        <span class="camp_stt" th:if="${camp.intro != null}" th:text="${#strings.length(camp.intro) > 80 ? camp.intro.substring(0, 80) + '...' : camp.intro}"></span>
+                        <span class="camp_stt" th:if="${camp.intro == null}">소개 정보가 없습니다.</span>
+                        <hr>
+                        <ul class="camp_info01" style="list-style-type: none;">
+                            <li class="addr" th:if="${camp.addr1 != null}" th:text="${camp.addr1}">주소 텍스트</li>
+                            <li class="addr" th:if="${camp.addr1 == null}">주소 정보가 없습니다.</li>
+                            <li class="call_num" th:if="${camp.tel != null}" th:text="${camp.tel}">전화번호</li>
+                            <li class="call_num" th:if="${camp.tel == null}">전화번호 정보가 없습니다.</li>
+                        </ul>
+                        <hr>
+                        <!--아이콘모음-->
+                        <div class="camp_item_box">
+                            <ul style="list-style-type: none;">
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('전기')}"><i class="ico_volt"><span>전기</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('와이파이')}"><i class="ico_wifi"><span>와이파이</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('장작판매')}"><i class="ico_wood"><span>장작판매</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('온수')}"><i class="ico_hotwater"><span>온수</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('물놀이장')}"><i class="ico_pool"><span>물놀이장</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('놀이터')}"><i class="ico_playzone"><span>놀이터</span></i></li>
+                                <li th:if="${camp.sbrsCl != null and camp.sbrsCl.contains('운동시설')}"><i class="ico_ico_sports"><span>운동시설</span></i></li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <!--//아이콘모음-->
+                    </div>
+                </div>
+            </li>
+        </ul>
+    	    <div th:if="${totalPages > 0}" id="pagination" class="pagination">
+        <span th:if="${currentPage > 1}">
+            <a th:href="@{/getSearchList(doNm=${param.doNm}, gungu=${param.gungu}, faclt=${param.faclt}, lct=${param.lct}, induty=${param.induty}, bottom=${param.bottom}, sbrs=${param.sbrs}, page=1)}">&laquo; 처음</a>
+            <a th:href="@{/getSearchList(doNm=${param.doNm}, gungu=${param.gungu}, faclt=${param.faclt}, lct=${param.lct}, induty=${param.induty}, bottom=${param.bottom}, sbrs=${param.sbrs}, page=${currentPage - 1})}">&lt; 이전</a>
+        </span>
+        <span th:each="i : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage < totalPages - 2 ? currentPage + 2 : totalPages)}">
+            <a th:href="@{/getSearchList(doNm=${param.doNm}, gungu=${param.gungu}, faclt=${param.faclt}, lct=${param.lct}, induty=${param.induty}, bottom=${param.bottom}, sbrs=${param.sbrs}, page=${i})}" th:text="${i}" th:class="${i == currentPage ? 'active' : ''}">1</a>
+        </span>
+        <span th:if="${currentPage < totalPages}">
+            <a th:href="@{/getSearchList(doNm=${param.doNm}, gungu=${param.gungu}, faclt=${param.faclt}, lct=${param.lct}, induty=${param.induty}, bottom=${param.bottom}, sbrs=${param.sbrs}, page=${currentPage + 1})}">다음 &gt;</a>
+            <a th:href="@{/getSearchList(doNm=${param.doNm}, gungu=${param.gungu}, faclt=${param.faclt}, lct=${param.lct}, induty=${param.induty}, bottom=${param.bottom}, sbrs=${param.sbrs}, page=${totalPages})}">마지막 &raquo;</a>
+        </span>
+    </div>
+    </div>
+    <!-- 푸터 -->
+<th:block th:insert="~{include/footer}"></th:block>
+</body>
+</html>

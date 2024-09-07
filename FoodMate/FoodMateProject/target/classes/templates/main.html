@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodMate - 다이어트 식단 추천</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-2eQexN8hzOqJdZlB14FygoIcPoQswi/e8em+lH/mCVK5gCuO8PHaCt5lJ4cbueaz" crossorigin="anonymous">
+<link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
+<script type="text/javascript">
+function openInPopup(url) {
+    window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+}
+
+</script>
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
+
+    <div class="m_container">
+        <section class="style1">
+            
+                <h2 th:text="${welcomeMessage}"></h2>
+                <h3>다이어트 식단 추천을 통해 건강한 삶을 시작하세요.</h3>
+                <a th:href="@{/UserChoice}" class="btn">시작하기</a>
+            
+
+        </section>
+    </div>
+    <div class="m_container">
+        <section class="style2">
+            <header class="major">
+                <h2>여기는 추천 메뉴 보여주는 곳</h2>
+            </header>
+            <div class="mrow">
+
+                <!-- Content -->
+                <div class="mu">
+                    <article>
+                        <ul class="style">
+                            <li><i class="fas fa-users"></i>
+                                <h3><a style="text-decoration: none; color: inherit;">회원 수 : <span th:text="${member}"></span>명</a></h3>
+                                <span><a href="contract">회원가입</a> 이동</span></li>
+                            <li><i class="fas fa-user-clock"></i>
+                                <h3>보유한 데이터 개수</h3>
+                                <i class="fas fa-user-plus"></i> : 
+                                <span th:text="${dbrecipe}"></span>개
+                            </li>             
+                        </ul>
+                    </article>
+                </div>
+                <div class="mu">
+                    <article>
+                        <ul class="style">
+                            <li><i class="fas fa-file-image"></i>
+                                <h3><a style="text-decoration: none; color: inherit;">공유한 레시피 : <span th:text="${recipe}"></span>개</a></h3>
+                                <span><a href="board_list">공유레시피</a> 이동</span></li>
+                            <li><span class="fa fa-leaf"></span>
+                                <h3>이용자 만족도</h3>
+                                 <span th:text="${satisfiedPercentage}"></span>%</li>
+                        </ul>
+                    </article>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

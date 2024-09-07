@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/camping.css}">
+    <title>캠핑장 상세 정보</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .icon {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        
+    </style>
+</head>
+<body class="campDetail">
+    <div class="campcontainer">
+        <h1 class="camph1" th:text="${campDetail.facltNm}">캠핑장 이름</h1>
+        <div>
+            <a th:href="${campDetail.firstImageUrl}">
+                <img class="campimg" th:if="${campDetail.firstImageUrl != null}" th:src="@{${campDetail.firstImageUrl}}" alt="캠핑장 이미지" style="width:400px;height:auto;">
+            </a>
+            <img class="campimg" th:if="${campDetail.firstImageUrl == null}" src="https://www.gocamping.or.kr/img/2018/layout/noimg.jpg" alt="캠핑장 이미지" style="width:400px;height:auto;">
+        </div>
+
+        <div>
+            <strong>캠핑장명:</strong> <span th:text="${campDetail.facltNm}"></span><br>
+            <strong>지역구분:</strong> <span th:text="${campDetail.doNm} + ' / ' + ${campDetail.sigunguNm}">도 이름</span><br>
+            <th:block th:if="${campDetail.addr1 != null}">
+                <strong>주소:</strong>
+                <span th:text="${campDetail.addr1}">소개 텍스트</span><br>
+            </th:block>
+            <th:block th:if="${campDetail.facltDivNm != null} and ${campDetail.lctCl != null}">
+                <strong>캠핑장 환경:</strong>
+                <span th:text="${campDetail.lctCl} + ' / ' + ${campDetail.facltDivNm}"></span><br>
+            </th:block>
+            <th:block th:if="${campDetail.induty != null}">
+                <strong>캠핑장 유형:</strong>
+                <span th:text="${campDetail.induty}"></span><br>
+            </th:block>
+            <th:block th:if="${campDetail.themaEnvrnCl != null}">
+                <strong>주요 테마(특징):</strong>
+                <span th:text="${campDetail.themaEnvrnCl}"></span><br>
+            </th:block>
+            <th:block th:if="${campDetail.operPdCl != null}">
+                <strong>운영시기:</strong>
+                <span th:text="${campDetail.operPdCl}"></span><br>
+            </th:block>
+            <th:block th:if="${campDetail.homepage != null}">
+                <strong>홈페이지:</strong>
+                <a th:href="${campDetail.homepage}">홈페이지 바로가기</a><br>
+            </th:block>
+            <th:block th:if="${campDetail.resveCl != null}">
+                <strong>예약방법:</strong>
+                <span th:text="${campDetail.resveCl}"></span><br>
+            </th:block>
+            <th:block th:if="${campDetail.resveUrl != null}">
+                <strong>예약사이트:</strong>
+                <a th:href="${campDetail.resveUrl}">예약사이트 이동</a><br>
+            </th:block>
+            <th:block th:if="${campDetail.tel != null}">
+                <strong>문의/연락:</strong>
+                <span th:text="${campDetail.tel}"></span><br>
+            </th:block>
+            <th:block th:if="${campDetail.tel == null}">
+                <strong>문의/연락:</strong>
+                <span>등록된 번호가 없습니다.</span><br>
+            </th:block>
+        </div>
+
+        <hr>
+
+        <th:block th:if="${campDetail.intro != null}">
+            <div>
+                <span th:text="${campDetail.intro}"></span><br>
+            </div>
+            <hr>
+        </th:block>
+
+        <div>
+            <div th:if="${facilities != null}">
+                <h3>캠핑장 시설정보</h3>
+                <th:block th:each="facility : ${facilities}">
+                    <th:block th:switch="${facility.trim()}">
+                        <div th:case="'놀이터'" class="facility-item"><i class="fas fa-child icon" title="놀이터"></i>놀이터</div>
+                        <div th:case="'운동장'" class="facility-item"><i class="fas fa-futbol icon" title="운동장"></i>운동장</div>
+                        <div th:case="'전기'" class="facility-item"><i class="fas fa-bolt icon" title="전기"></i>전기</div>
+                        <div th:case="'온수'" class="facility-item"><i class="fas fa-hot-tub icon" title="온수"></i>온수</div>
+                        <div th:case="'운동시설'" class="facility-item"><i class="fas fa-dumbbell icon" title="운동시설"></i>운동시설</div>
+                        <div th:case="'장작판매'" class="facility-item"><i class="fas fa-fire icon" title="장작판매"></i>장작판매</div>
+                        <div th:case="'덤프스테이션'" class="facility-item"><i class="fas fa-dumpster icon" title="덤프스테이션"></i>덤프스테이션</div>
+                        <div th:case="'마트.편의점'" class="facility-item"><i class="fas fa-shopping-cart icon" title="마트.편의점"></i>마트/편의점</div>
+                        <div th:case="'산책로'" class="facility-item"><i class="fas fa-tree icon" title="산책로"></i>산책로</div>
+                        <div th:case="'무선인터넷'" class="facility-item"><i class="fas fa-wifi icon" title="무선인터넷"></i>무선인터넷(WIFI)</div>
+                        <div th:case="'트렘폴린'" class="facility-item"><i class="fas fa-volleyball-ball icon" title="트렘폴린"></i>트렘폴린</div>
+                        <div th:case="'물놀이장'" class="facility-item"><i class="fas fa-swimmer icon" title="물놀이장"></i>물놀이장</div>
+                    </th:block>
+                </th:block>
+            </div>
+            <div th:if="${facilities == null}">
+                <span>등록된 시설정보가 없습니다.</span>
+            </div>
+
+            <div th:if="${rentList != null}">
+                <h3>대여가능 품목</h3>
+                <th:block th:each="rent : ${rentList}">
+                    <th:block th:switch="${rent.trim()}">
+                        <div th:case="'텐트'" class="facility-item"><i class="fas fa-campground icon" title="텐트"></i>텐트</div>
+                        <div th:case="'식기'" class="facility-item"><i class="fas fa-utensils icon" title="식기"></i>식기</div>
+                        <div th:case="'화로대'" class="facility-item"><i class="fas fa-fire-alt icon" title="화로대"></i>화로대</div>
+                        <div th:case="'릴선'" class="facility-item"><i class="fas fa-plug icon" title="릴선"></i>릴선</div>
+                        <div th:case="'침낭'" class="facility-item"><i class="fas fa-bed icon" title="침낭"></i>침낭</div>
+                        <div th:case="'난방기구'" class="facility-item"><i class="fas fa-thermometer-three-quarters icon" title="난방기구"></i>난방기구</div>
+                    </th:block>
+                </th:block>
+            </div>
+        </div>
+
+        <div>
+            <th:block th:if="${imageList != null}">
+                <hr class="camphr">
+                <div class="image-gallery">
+                    <th:block th:each="image : ${imageList}">
+                        <a th:href="${image}"><img th:src="${image}" alt="캠핑장 이미지"></a>
+                    </th:block>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</body>
+</html>

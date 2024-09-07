@@ -1,0 +1,667 @@
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon, #calorie-icon {
+	position: fixed;
+	bottom: 30px;
+	background-color: #28a745;
+	color: #fff;
+	border-radius: 50%;
+	padding: 15px;
+	font-size: 30px;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+}
+
+#chatbot-icon {
+	left: 10px;
+}
+
+#calorie-icon {
+	left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+	width: 40px;
+	text-align: center;
+}
+
+.fa-comment-alt {
+    animation: moveIcon 2s ease infinite; /* 아이콘에 애니메이션 적용 */
+}
+@keyframes moveIcon {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes moveTitle {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+#h1_1 {
+    text-align: center;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 36px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    animation: moveTitle 2s ease infinite; /* 애니메이션 적용 */
+}
+
+/* introduce.html */
+/* 헤더 */
+.header1 {
+    text-align: center; /* 텍스트를 가운데 정렬 */
+}
+
+/* 이미지와 텍스트가 있는 Flex Container */
+.flex-container {
+    display: flex;
+    justify-content: center; /* 요소들을 가운데 정렬 */
+    align-items: center;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 30px;
+    width: 100%; /* 가로 전체 너비 설정 */
+}
+/* 텍스트 */
+.flex-container h2 {
+    margin-left: 20px; /* 이미지와 텍스트 사이의 간격 설정 */
+    text-align: center; /* 텍스트를 왼쪽 정렬 */
+}
+/* 이미지 */
+#img2 {
+    width: 300px; /* 이미지의 너비 설정 */
+    height:auto;
+    border-radius: 50%; /* 이미지의 모서리를 둥글게 만듦 */
+    text-align: center; /* 이미지를 가운데 정렬 */
+}
+.img {
+    border-radius: 100px;
+}
+.highlight-text {
+	color: #28a745; /* 강조 색상 */
+	font-weight: bold;
+}
+/* 상자들을 감싸는 Container */
+.container1 {
+    width: 100%;
+    display: flex; /* Flex Container 설정 */
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center; /* 요소들을 가운데 정렬 */
+    gap: 20px;
+    margin-top: 30px; /* 위쪽 여백 설정 */
+}
+
+/* 각 상자 */
+.box {
+    width: 300px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    background-color: #f2f2f2; /* 배경색 설정 */
+    padding: 20px; /* 내부 여백 설정 */
+    border-radius: 10px; /* 모서리를 둥글게 만듦 */
+    margin-bottom: 30px; /* 좌우 여백 설정 및 아래쪽 여백 설정 */
+    text-align: center;
+    align-items: center;
+    animation: slide-up 1s ease;
+}
+
+.box img {
+	max-width: 100%;
+	border-radius: 10px; /* 모서리 둥글게 */
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.box .caption {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: rgba(255, 255, 255, 0.7); /* 반투명 배경색 */
+	padding: 10px;
+	border-radius: 10px;
+	font-weight: bold;
+	font-size: 16px;
+}
+/* 다양한 크기의 상자를 위한 스타일 */
+.box:nth-child(odd) {
+	width: 250px;
+}
+
+.box:nth-child(3) {
+	width: 350px;
+}
+
+/* 각 상자에 대한 애니메이션 효과 */
+.box:hover {
+	transform: scale(1.05);
+	transition: transform 0.3s ease;
+}
+/* 각 상자의 제목 */
+.box h2 {
+    color: #333; /* 제목의 글자색 설정 */
+}
+
+/* 각 상자의 내용 */
+.box p {
+    color: #666; /* 내용의 글자색 설정 */
+}
+
+/* 두 번째 상자 내부의 목록 */
+.box ul {
+    list-style-type: none; /* 목록의 기호를 제거 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 목록 항목 */
+.box li {
+    margin-bottom: 10px; /* 아래쪽 여백 설정 */
+}
+
+
+/* all.html */
+.q_container {
+    display: flex; /* 플렉스박스 사용 */
+    flex-direction: column; /* 세로 방향 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    margin: 0 auto; /* 좌우 여백 자동 */
+    padding: 20px; /* 내부 여백 20px */
+    width: 80%; /* 너비 80% 설정 */
+    margin: 20px auto; /* 중앙 배치 및 위아래 마진 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 8px; /* 테두리 둥글게 */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* 그림자 */
+}
+
+/* 검색 컨테이너를 중앙에 배치 */
+.search-container {
+    display: flex; /* 플렉스박스 사용 */
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    margin-bottom: 20px; /* 아래쪽 여백 20px */
+    width: 100%; /* 너비 100% 설정 */
+}
+
+#searchInput {
+    width: 50%; /* 너비 50% 설정 */
+    padding: 10px; /* 내부 여백 10px */
+    border: 2px solid #ccc; /* 테두리 설정 */
+    border-radius: 4px; /* 테두리 둥글게 */
+    margin-right: 10px; /* 오른쪽 여백 10px */
+    box-sizing: border-box;
+}
+
+.search-icon {
+    cursor: pointer; /* 커서 포인터 모양 */
+    font-size: 1.2em; /* 폰트 크기 설정 */
+}
+
+/* 총 QnA 문구 스타일링 */
+.total-qna {
+    margin-bottom: 20px; /* 아래쪽 여백 20px */
+}
+
+/* table */
+.qna-container table {
+    width: 100%;
+    background: linear-gradient(to bottom, #8FBC8F, #a0d8a0);
+    border-collapse: collapse;
+}
+
+.qna-container th, 
+.qna-container td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.qna-container th {
+    background-color: #f2f2f2; /* 배경색 설정 */
+    font-weight: bold; /* 폰트 굵게 */
+}
+
+.qna-container tr:nth-child(even) {
+    background-color: #f2f2f2; /* 짝수 행 배경색 */
+}
+/* 수평 스크롤이 보이지 않도록 테이블 헤더와 셀의 박스 모델을 조정 */
+.qna-container table {
+    table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
+}
+
+.qna-container th,
+.qna-container td {
+    white-space: nowrap; /* 넘치는 텍스트를 감추고 줄바꿈을 방지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트가 있을 경우 ...으로 표시 */
+}
+
+.qna-container {
+    max-height: 300px; /* 내용이 너무 길 경우 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+
+/* 스크롤바 스타일 */
+.qna-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.qna-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 스크롤바 트랙 배경색 */
+}
+
+.qna-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 색상 */
+}
+
+.qna-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 스크롤바 호버시 색상 */
+}
+
+
+.odd {
+    background-color: #f9f9f9; /* 홀수 행 배경색 */
+}
+
+.even {
+    background-color: #ffffff; /* 짝수 행 배경색 */
+}
+
+/* 페이지네이션 컨테이너 스타일링 */
+.pagination {
+    display: flex; /* 플렉스박스 사용 */
+    justify-content: center; /* 중앙 정렬 */
+    margin-top: 20px; /* 위쪽 여백 20px */
+}
+
+/* 만족도 조사 폼을 중앙에 배치 */
+.satisfaction-form {
+    display: flex; /* 플렉스박스 사용 */
+    flex-direction: column; /* 가로 방향 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* 아이콘 중앙 정렬 */
+    margin-top: 20px; /* 위쪽 여백 20px */
+}
+.icon-container {
+    display: flex; /* 플렉스박스 사용 */
+    flex-direction: row; /* 가로 방향 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    margin-bottom: 10px; /* 위쪽 여백 10px */
+}
+.satisfaction-form input[type="radio"] {
+    display: none;
+}
+.satisfaction-form p {
+    margin-bottom: 10px; /* 아래쪽 여백 10px */
+}
+.satisfaction-form label {
+    margin: 0 5px; /* 좌우 여백 5px */
+    cursor: pointer; /* 커서 포인터 모양 */
+}
+.satisfaction-form label i {
+    font-size: 24px;
+    color: #28a745;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.satisfaction-form input[type="radio"]:checked + label i {
+    color: #ff0000;
+}
+
+/* 만족도 메시지 스타일링 */
+.satisfaction-message {
+    margin-top: 20px; /* 위쪽 여백 20px */
+    font-size: 18px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 굵게 */
+    text-align: center;
+}
+
+/* 전체 감싸는 테두리 */
+.saveinquiry {
+    border: 2px solid #ccc; /* 테두리 */
+    border-radius: 10px; /* 테두리 둥글게 */
+    box-shadow: 0px 0px 10px #888; /* 그림자 */
+    padding: 20px; /* 내부 여백 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    max-width: 600px; /* 최대 너비 */
+    margin: 0 auto; /* 가운데 정렬 */
+    margin-bottom: 20px;
+}
+
+/* 제목 */
+.saveinquiry h2 {
+    color: #333; /* 글자색 */
+}
+
+/* inquiryForm.html */
+/* inquiry1 */
+.inquiry1 {
+    border: 2px solid red; /* 빨간 테두리 */
+    padding: 10px; /* 내부 여백 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+.inquiry1 ul {
+    list-style: none; /* 리스트 표시 없앰 */
+    padding: 0; /* 내부 여백 제거 */
+}
+
+.inquiry1 li {
+    margin-bottom: 5px; /* 항목간 간격 */
+}
+
+/* inquiry2 */
+.inquiry2 {
+    position: relative; /* 상대 위치 지정*/
+    border: 2px solid #333; /* 어두운색 테두리 */
+    padding: 20px; /* 내부 여백 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+.inquiry2 label {
+    flex: 0 0 20%; /* 아이템의 너비를 20%로 설정 (레이블 너비) */
+    text-align: right; /* 텍스트를 오른쪽 정렬 */
+    margin-right: 10px; /* 오른쪽 여백 */
+    margin-bottom: 6px; /* 아래쪽 여백 */
+}
+.inquiry2 input[type="text"] {
+    width: 40%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box; /* 테두리를 포함한 너비 계산 */
+}
+.inquiry2 textarea {
+	width:80%;
+	padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box; /* 테두리를 포함한 너비 계산 */
+}
+
+/* inquiry3 */
+.inquiry3 {
+    border: 2px solid #333; /* 어두운색 테두리 */
+    padding: 20px; /* 내부 여백 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+.inquiry3 h3 {
+    margin-bottom: 15px; /* 제목 아래 여백 */
+}
+
+.inquiry3 input[type="tel"],
+.inquiry3 input[type="email"],
+.inquiry3 input[type="password"] {
+    width: 40%;
+    padding: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box; /* 테두리를 포함한 너비 계산 */
+}
+
+.password-info {
+    display: block; /* 텍스트를 블록 레벨로 설정하여 위아래 배치 */
+    margin-top: 10px; /* 텍스트 위 여백 */
+}
+
+/* inquiry4 */
+.inquiry4 {
+    border: 2px solid #333; /* 어두운색 테두리 */
+    padding: 20px; /* 내부 여백 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+.inquiry4 input[type="radio"] {
+    margin-right: 10px; /* 라디오 버튼 간격 조절 */
+}
+
+.inquiry4 button {
+    display: block; /* 버튼을 블록 레벨로 설정하여 중앙 정렬 */
+    margin: 0 auto; /* 가운데 정렬 */
+    margin-top:4px;
+    background-color: white; /* 기본 배경 색상을 흰색으로 설정 */
+    color: black; /* 기본 글자색을 검은색으로 설정 */
+    padding: 10px 20px;
+    border: 1px solid #4CAF50; /* 테두리 추가 및 색상 지정 */
+    border-radius: 4px;
+    cursor: pointer;
+}
+.inquiry4 button:hover {
+	background-color: #4CAF50; /* 호버 시 배경색 변경 */
+    color: white; /* 호버 시 글자색 변경 */
+}
+
+
+/* inquirylist.html */
+.inquirylist {
+	display: flex; /* 플렉스박스 사용 */
+    flex-direction: column; /* 세로 방향 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    margin: 0 auto; /* 좌우 여백 자동 */
+    padding: 20px; /* 내부 여백 20px */
+    width: 80%; /* 너비 80% 설정 */
+    margin: 20px auto; /* 중앙 배치 및 위아래 마진 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 8px; /* 테두리 둥글게 */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* 그림자 */
+}
+
+/* contact-info */
+.contact-info {
+    text-align: center; /* 텍스트 중앙 정렬 */
+    margin-bottom: 20px; /* 하단 여백 */
+    border-bottom: 1px solid #ccc; /* 아래쪽 테두리 추가 */
+    padding-bottom: 20px; /* 아래쪽 여백 추가 */
+    overflow-x: auto; /* 가로 스크롤 추가 */
+    position: relative; /* 상대적 위치 설정 */
+}
+
+/* list-container */
+.list-container {
+    text-align: center; /* 텍스트 중앙 정렬 */
+    flex: 1; /* 나머지 공간을 모두 차지하도록 설정 */
+    border-top: 1px solid #ccc; /* 위쪽 테두리 추가 */
+    padding-top: 20px; /* 위쪽 여백 추가 */
+}
+
+ul {
+    list-style: none; /* 리스트 표시 없앰 */
+    padding: 0; /* 내부 여백 제거 */
+}
+
+/* table */
+.list-container table {
+    width: 100%;
+    background: linear-gradient(to bottom, #8FBC8F, #a0d8a0);
+    border-collapse: collapse;
+}
+
+.list-container th, 
+.list-container td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.list-container th {
+    background-color: #f2f2f2; /* 배경색 설정 */
+    font-weight: bold; /* 폰트 굵게 */
+}
+
+.list-container tr:nth-child(even) {
+    background-color: #f2f2f2; /* 짝수 행 배경색 */
+}
+/* 수평 스크롤이 보이지 않도록 테이블 헤더와 셀의 박스 모델을 조정 */
+.list-container table {
+    table-layout: fixed; /* 테이블 레이아웃을 고정으로 설정 */
+}
+
+.list-container th,
+.list-container td {
+    white-space: nowrap; /* 넘치는 텍스트를 감추고 줄바꿈을 방지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트가 있을 경우 ...으로 표시 */
+}
+
+.list-container {
+    max-height: 300px; /* 내용이 너무 길 경우 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+
+/* 스크롤바 스타일 */
+.list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.list-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 스크롤바 트랙 배경색 */
+}
+
+.list-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 색상 */
+}
+
+.list-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 스크롤바 호버시 색상 */
+}
+
+/* Empty message */
+.empty-message {
+    font-style: italic; /* 기울임꼴 텍스트 */
+    color: #666; /* 회색 텍스트 색상 */
+}
+.text-red {
+	color:red;
+}
+
+
+
+/* 다크 테마 */
+.dark-theme .box {
+	background: #333; /* 검은색 배경 */
+    border: 1px solid #c0c0c0; /* 은색 테두리 */
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* 흰색 그림자 */
+}
+.dark-theme .box h2 {
+	color:gold;
+}
+.dark-theme .box p {
+    color: #ffff99; /* 내용의 글자색 설정 */
+}
+.dark-theme img {
+	box-shadow: 0 0 10px rgba(255, 215, 0, 0.7); /* 골드색 그림자 */
+}
+.dark-theme #h1_1 {
+	color: gold;
+}
+.dark-theme .q_container {
+	background-color: #1e1e1e;
+}
+.dark-theme .q_container h1,
+.dark-theme .q_container table,
+.dark-theme .q_container .satisfaction-message,
+.dark-theme .satisfaction-form h3,
+.dark-theme .total-qna {
+    color: gold; /* 글씨를 골드색으로 설정 */
+}
+.dark-theme #searchInput {
+    border: 2px solid gold; /* 골드색 테두리 */
+}
+.dark-theme .search-icon {
+    color: gold;
+}
+/* 테이블 스타일 */
+.dark-theme .qna-container {
+    border: 2px solid gold; /* 골드색 테두리 */
+}
+
+.dark-theme .qna-container th,
+.dark-theme .qna-container td {
+    border: 1px solid gold; /* 어두운 테두리 */
+    color: gold; /* 텍스트 골드색 */
+}
+
+.dark-theme .qna-container th {
+    background-color: #444444; /* 헤더 배경 어둡게 */
+    color: gold; /* 헤더 텍스트 골드색 */
+}
+
+
+.dark-theme .qna-container td:nth-child(even) {
+    background-color: #1e1e1e; /* 짝수 행 배경 어둡게 */
+}
+
+.dark-theme .qna-container td:nth-child(odd) {
+    background-color: #2a2a2a; /* 홀수 행 배경 더 어둡게 */
+}
+.dark-theme .saveinquiry h2,
+.dark-theme .inquiry3 h3,
+.dark-theme .inquiry4 h3 {
+	color: gold;
+}
+.dark-theme .saveinquiry {
+	background-color: #1e1e1e;
+}
+.dark-theme .inquiry1,
+.dark-theme .inquiry2,
+.dark-theme .inquiry3,
+.dark-theme .inquiry4 {
+	background-color: silver;
+	border: 2px solid gold; /* 테두리를 2px 두께의 금색으로 설정 */
+    box-shadow: 0 0 10px gold; /* 테두리에 빛나는 효과 추가 */
+}
+
+.dark-theme .inquiry2 label,
+.dark-theme .inquiry3 label,
+.dark-theme .inquiry4 span {
+	color: black;
+}
+.dark-theme .inquiry1 ul,
+.dark-theme .inquiry3 span {
+	color: #ffff99;
+}
+
+.dark-theme .inquiry4 button {
+    background-color: black;
+    color: gold;
+    border: 1px solid gold;
+}
+
+.dark-theme .inquiry4 button:hover {
+    background-color: gold;
+    color: black;
+}
+
+.dark-theme .inquirylist h1,
+.dark-theme .list-container thead>tr>th {
+	color: gold;
+}
+.dark-theme .inquirylist {
+	background-color: #1e1e1e;
+}
+.dark-theme .list-container th {
+	background-color: #444;
+}
+.dark-theme .list-container td,
+.dark-theme .list-container .subject {
+	background-color: silver;
+}
+.dark-theme .list-container tbody>tr>td {
+	color: black;
+}

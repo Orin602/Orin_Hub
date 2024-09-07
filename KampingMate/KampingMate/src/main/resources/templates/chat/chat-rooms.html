@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Chat Rooms</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F7F7F7;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background-color: #FFFFFF;
+    width: 80%;
+    height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.header {
+    background-color: #FFEB3B;
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #CCCCCC;
+}
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #CCCCCC;
+}
+.navbar button {
+    background-color: #FFEB3B;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.navbar button.active {
+    background-color: #FFC107;
+}
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: url("images/chatroom3.jpg");
+    background-size: cover;
+    background-position: center;
+}
+.room-list {
+    display: none;
+}
+.room-list.active {
+    display: block;
+}
+.room-list ul {
+    list-style: none;
+    padding: 0;
+}
+.room-list li {
+    background-color: #FFFFFF;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.room-list span {
+    font-size: 16px;
+    font-weight: bold;
+}
+.room-list button {
+    background-color: #FFC107;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.create-room {
+    text-align: center;
+    margin: 20px 0;
+}
+.create-room button {
+    background-color: #FFEB3B;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.overlay-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+.overlay-content input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+}
+.overlay-content button {
+    background-color: #FFEB3B;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">채팅방</div>
+        <div class="navbar">
+            <button id="showChatRoomsButton" class="active">채팅방</button>
+            <button id="showJoinedRoomsButton">입장한 채팅방</button>
+        </div>
+
+        <div class="content">
+            <div id="chatRoomsDiv" class="room-list active">
+                <ul>
+                    <li th:each="room : ${chatRooms}">
+                        <span th:text="${room.title}">Room Title</span>
+                        <div>
+                            <button th:attr="onclick=|enterRoom('${room.room_seq}')|">Enter</button>
+                            <span th:if="${usercode == 1}">
+                                <button th:attr="onclick=|deleteRoom('${room.room_seq}')|">삭제</button>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="joinedRoomsDiv" class="room-list">
+                <ul>
+                    <li th:each="room : ${joinedRooms}">
+                        <span th:text="${room.title}">Title</span>
+                        <div>
+                            <button th:attr="onclick=|enterRoom('${room.room_seq}', null)|">Re-enter</button>
+                            <button th:attr="onclick=|leaveRoom('${room.room_seq}')|">Out</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="create-room">
+            <button id="createRoomButton">Create Room</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('showChatRoomsButton').addEventListener('click', function() {
+            var chatRoomsDiv = document.getElementById('chatRoomsDiv');
+            var joinedRoomsDiv = document.getElementById('joinedRoomsDiv');
+            var chatButton = document.getElementById('showChatRoomsButton');
+            var joinedButton = document.getElementById('showJoinedRoomsButton');
+            chatRoomsDiv.classList.add('active');
+            joinedRoomsDiv.classList.remove('active');
+            chatButton.classList.add('active');
+            joinedButton.classList.remove('active');
+        });
+
+        document.getElementById('showJoinedRoomsButton').addEventListener('click', function() {
+            var chatRoomsDiv = document.getElementById('chatRoomsDiv');
+            var joinedRoomsDiv = document.getElementById('joinedRoomsDiv');
+            var chatButton = document.getElementById('showChatRoomsButton');
+            var joinedButton = document.getElementById('showJoinedRoomsButton');
+            joinedRoomsDiv.classList.add('active');
+            chatRoomsDiv.classList.remove('active');
+            joinedButton.classList.add('active');
+            chatButton.classList.remove('active');
+        });
+
+        document.getElementById('createRoomButton').addEventListener('click', function() {
+            createOverlay();
+        });
+
+        function createOverlay() {
+            var overlay = document.createElement('div');
+            overlay.id = 'overlay';
+            overlay.classList.add('overlay');
+            overlay.innerHTML = `
+                <div class="overlay-content">
+                    <h3>방 제목을 입력해주세요</h3>
+                    <input type="text" id="newRoomTitle" placeholder="Room Title" onkeyup="checkEnter(event)" required>
+                    <button class="toggle-button" onclick="createRoom()">Create</button>
+                    <button class="toggle-button" onclick="closeOverlay()">Cancel</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function closeOverlay() {
+            var overlay = document.getElementById('overlay');
+            if (overlay) {
+                document.body.removeChild(overlay);
+            }
+        }
+
+        function createRoom() {
+            var title = document.getElementById('newRoomTitle').value;
+            if (!title.trim()) {
+                alert("방 제목을 입력해주세요.");
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append("title", title);
+
+            fetch('/createRoom', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("채팅방이 생성되었습니다.");
+                    window.location.reload();
+                } else {
+                    alert("오류가 발생하였습니다.");
+                }
+            });
+        }
+
+        function enterRoom(roomId, nickname) {
+            if (nickname === null) {
+                window.location.href = "/chat/" + roomId + "?nickname=";
+                return;
+            }
+            if (!nickname) {
+                nickname = prompt("닉네임을 입력해주세요:");
+            }
+            if (!nickname || nickname.trim() === "") {
+                alert("닉네임이 입력되지 않았습니다.");
+                return;
+            }
+            window.location.href = "/chat/" + roomId + "?nickname=" + encodeURIComponent(nickname);
+        }
+
+        function leaveRoom(roomId) {
+            if (confirm("정말로 채팅방을 나가시겠습니까?")) {
+                fetch(`/leaveRoom`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ roomId: roomId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("채팅방을 나갔습니다.");
+                        window.location.reload();
+                    } else {
+                        alert("오류가 발생했습니다.");
+                    }
+                });
+            }
+        }
+
+        function deleteRoom(roomId) {
+            if (confirm("정말로 채팅방을 삭제하시겠습니까?(관리자)")) {
+                fetch(`/deleteRoom`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ roomId: roomId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("채팅방이 삭제되었습니다.");
+                        window.location.reload();
+                    } else {
+                        alert("오류가 발생하였습니다.");
+                    }
+                });
+            }
+        }
+        
+        function checkEnter(event) {
+            if (event.key === 'Enter') {
+            	createRoom();
+            }
+        }
+    </script>
+</body>
+</html>

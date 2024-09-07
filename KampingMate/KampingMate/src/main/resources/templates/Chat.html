@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<head>
+    <title>KampingMate 질문도우미입니다</title>
+    <script type="text/javascript">
+    async function sendMessage(message) {
+        if (!message) {
+            message = document.getElementById("message").value;
+        }
+        if (message.trim() === "") return;
+
+        const messagesDiv = document.getElementById("messages");
+        const userMessageElement = document.createElement("div");
+        userMessageElement.textContent = message;
+        userMessageElement.className = "message user-message";
+        messagesDiv.appendChild(userMessageElement);
+        document.getElementById("message").value = "";
+
+        const response = await fetch('/api/chat/send?message=' + encodeURIComponent(message), {
+            method: 'POST',
+        });
+        const chatbotResponse = await response.text();
+
+        const botMessageElement = document.createElement("div");
+        botMessageElement.textContent = "KampingMate 헬퍼: " + chatbotResponse;
+        botMessageElement.className = "message bot-message";
+        messagesDiv.appendChild(botMessageElement);
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+
+    function sendKeywordMessage(keyword) {
+        sendMessage(keyword);
+    }
+    
+    </script>
+<link rel="stylesheet" th:href="@{/css/chat.css}">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>궁금한점을 질문하세요!</h1>
+        <div class="keyword-buttons">
+            <button onclick="sendKeywordMessage('Kampingmate란 ?')">Kampingmate란 ?</button>
+            <button onclick="sendKeywordMessage('캠핑이 처음이야')">캠핑이 처음이야</button><br>
+            <button onclick="sendKeywordMessage('캠핑장 추천')">캠핑장 추천</button>
+            <button onclick="sendKeywordMessage('불만이 있어')">불만이 있어</button><br>
+            <button onclick="sendKeywordMessage('이전에 추천받았던 내용이 궁금해')">이전에 추천받았던 내용이 궁금해</button>
+        </div>
+        <div class="chat-box" id="messages"></div>
+        <div class="input-box">
+            <input type="text" id="message" placeholder="Type a message" onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</body>
+</html>

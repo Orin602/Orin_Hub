@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <th:block th:insert="~{includes/header.html}"></th:block>
+    <title>QnA</title>
+
+    <link rel="stylesheet" th:href="@{/css/customer.css}">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<body>
+        <a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+
+
+    <div class="q_container">
+        <h1><i class="fas fa-comment-alt"></i> QnA</h1>
+
+        <!-- 검색 입력란 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchQuestion()"
+                placeholder="검색어를 입력하세요...">
+                <!-- 검색 아이콘 -->
+            <i class="fas fa-search search-icon" onclick="searchQuestion()"></i>
+        </div>
+        
+        <!-- 총 QnA 수 문구 -->
+        <h3 class="total-qna">
+            총 <span th:text="${qnaList.size()}"></span>건의 QnA가 있습니다.
+        </h3>
+        <!-- QnA 테이블 -->
+        <div class="qna-container">
+            <table id="qnaTable">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>질문</th>
+                        <th>게시일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="qna, row : ${qnaList}" th:class="${row.odd} ? 'odd' : 'even'">
+                        <td th:text="${row.index + 1}"></td>
+                        <td id="question" th:onclick="location.href='/qna/qna_detail/' + [[${qna.qna_boardnum}]]" th:text="${qna.question}" class="question-text"></td>
+                        <td class="date"><span th:text="${#dates.format(qna.regdate, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="pagination" class="pagination"></div>
+    <!-- 만족도 조사 폼 -->
+        <form class="satisfaction-form">
+            <h3>이 페이지에서 제공하는 정보에 대하여 어느 정도 만족하셨습니까?</h3>
+            <div class="icon-container">
+                <label for="very-satisfied">
+                    <input type="radio" id="very-satisfied" name="satisfaction" value="very-satisfied" onchange="incrementCount('very-satisfied')">
+                    <i class="fas fa-grin"></i>
+                </label>
+                <label for="satisfied">
+                    <input type="radio" id="satisfied" name="satisfaction" value="satisfied" onchange="incrementCount('satisfied')">
+                    <i class="fas fa-smile"></i>
+                </label>
+                <label for="neutral">
+                    <input type="radio" id="neutral" name="satisfaction" value="neutral" onchange="incrementCount('neutral')">
+                    <i class="fas fa-meh"></i>
+                </label>
+                <label for="dissatisfied">
+                    <input type="radio" id="dissatisfied" name="satisfaction" value="dissatisfied" onchange="incrementCount('dissatisfied')">
+                    <i class="fas fa-frown"></i>
+                </label>
+                <label for="very-dissatisfied">
+                    <input type="radio" id="very-dissatisfied" name="satisfaction" value="very-dissatisfied" onchange="incrementCount('very-dissatisfied')">
+                    <i class="fas fa-sad-tear"></i>
+                </label>
+            </div>
+        </form>
+    
+    <!-- 만족도 문구 -->
+    <div class="satisfaction-message" id="satisfactionMessage" style="display: none;"></div>
+    
+    
+    
+    <!-- JavaScript -->
+    <script>
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+    
+        function searchQuestion() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("qnaTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // 질문 내용이 있는 열
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        
+     // 만족도 라디오 버튼 클릭 시 해당하는 문구 표시
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.addEventListener('change', () => {
+                const satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+                const messageDiv = document.getElementById('satisfactionMessage');
+                switch (satisfaction) {
+                    case 'very-satisfied':
+                        messageDiv.innerText = '매우 만족하셨습니다.';
+                        break;
+                    case 'satisfied':
+                        messageDiv.innerText = '만족하셨습니다.';
+                        break;
+                    case 'neutral':
+                        messageDiv.innerText = '보통입니다.';
+                        break;
+                    case 'dissatisfied':
+                        messageDiv.innerText = '불만족하셨습니다.';
+                        break;
+                    case 'very-dissatisfied':
+                        messageDiv.innerText = '매우 불만족하셨습니다.';
+                        break;
+                    default:
+                        messageDiv.innerText = '';
+                }
+                messageDiv.style.display = 'block'; // 문구 표시
+            });
+        });
+     
+     // 만족도 카운트 변수 초기화
+        let verySatisfiedCount = 0;
+        let satisfiedCount = 0;
+        let neutralCount = 0;
+        let dissatisfiedCount = 0;
+        let veryDissatisfiedCount = 0;
+
+        // 만족도 라디오 버튼 클릭 시 해당하는 카운트 증가 함수
+        function incrementCount(satisfaction) {
+            switch (satisfaction) {
+                case 'very-satisfied':
+                    verySatisfiedCount++;
+                    break;
+                case 'satisfied':
+                    satisfiedCount++;
+                    break;
+                case 'neutral':
+                    neutralCount++;
+                    break;
+                case 'dissatisfied':
+                    dissatisfiedCount++;
+                    break;
+                case 'very-dissatisfied':
+                    veryDissatisfiedCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+     
+
+     // 만족도 버튼 클릭 시 서버로 전송
+        document.querySelectorAll('input[name="satisfaction"]').forEach((radio) => {
+            radio.addEventListener('change', () => {
+                const satisfaction = document.querySelector('input[name="satisfaction"]:checked').value;
+
+                // 서버로 만족도 전송
+                fetch('/submitSatisfaction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ satisfaction: satisfaction })
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to submit satisfaction');
+                    }
+                }).then(data => {
+                    console.log('만족도 조사 결과 전송 완료', data);
+                }).catch(error => {
+                    console.error('만족도 조사 결과 전송 중 오류 발생', error);
+                });
+            });
+        });
+
+        
+
+        
+
+// 페이지네이션 설정
+        const rowsPerPage = 10;
+        let currentPage = 1;
+        const qnaList = Array.from(document.querySelectorAll("#qnaTable tbody tr"));
+
+        function displayRows(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            qnaList.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? "" : "none";
+            });
+        }
+
+        function setupPagination() {
+            const totalRows = qnaList.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            const paginationContainer = document.getElementById('pagination');
+
+            paginationContainer.innerHTML = "";
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.innerText = i;
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    displayRows(currentPage);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+// 페이지네이션 설정 및 초기 데이터 표시
+        setupPagination();
+        displayRows(currentPage);
+    </script>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

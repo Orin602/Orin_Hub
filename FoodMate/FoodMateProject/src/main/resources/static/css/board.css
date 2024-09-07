@@ -1,0 +1,26 @@
+@charset "EUC-KR";
+
+.pagination {
+    list-style-type: none; /* 리스트 아이템 앞의 점 제거 */
+    padding: 0;
+}
+
+.pagination li {
+    display: inline-block; /* 리스트 아이템을 가로로 나열 */
+    margin-right: 4px; /* 각 아이템 간 간격 조정 */
+}
+
+.pagination li a {
+    text-decoration: none; /* 링크 밑줄 제거 */
+    padding: 5px 10px; /* 링크 내부 패딩 조정 */
+    border: 1px solid #ddd; /* 테두리 스타일 설정 */
+}
+
+.pagination li.active a {
+    background-color: #007bff; /* 활성 페이지 배경색 */
+    color: white; /* 활성 페이지 텍스트 색상 */
+}
+
+.pagination li.disabled a {
+    color: #ccc; /* 비활성화 링크 색상 */
+}

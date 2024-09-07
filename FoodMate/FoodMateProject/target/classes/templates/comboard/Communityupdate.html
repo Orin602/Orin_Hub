@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/nanum-barun-gothic.css">
+<link rel="stylesheet" href="css/skel.css">
+<link rel="stylesheet" href="css/style.css">
+<th:block th:insert="~{includes/header.html}"></th:block>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/Community.js}"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.dropotron.min.js"></script>
+<script src="js/skel.min.js"></script>
+<script src="js/skel-layers.min.js"></script>
+<script src="js/init.js"></script>
+<article>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<h1>자유게시판 글 수정</h1>
+	<form name="frm" id="update_form" method="post">
+		<input type="hidden" name="community_seq" th:value="${communityboardVO.community_seq}">
+		<input type="hidden" name="community_d_regdate"
+			th:value="${communityboardVO.community_d_regdate}">
+		<table id="list">
+			<tr>
+				<th>제목</th>
+				<td colspan="5"><input type="text" name="title" id="title"
+					th:value="${communityboardVO.community_title}"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td colspan="5"><textarea name="content"
+					id="content">[[${communityboardVO.community_content}]]</textarea>
+				</td>
+			</tr>
+		</table>
+		<button id="newColorBtn" class="newBtn" type="button" value="수정" onClick="go_mod_save()">수정</button>
+		<button id="newColorBtn" class="newBtn" type="button" value="취소" onClick="go_mov()">취소</button>
+	</form>
+</article>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+</html>

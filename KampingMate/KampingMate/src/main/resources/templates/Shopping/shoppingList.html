@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" name="viewport"
+	content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<link rel="stylesheet" th:href="@{/css/guide.css}">
+<title>캠핑용품 구입</title>
+</head>
+<body>
+<div class="shop-container">
+    <h2>캠핑용품 구입하기</h2>
+	<!-- 검색란 -->
+	<form class="search-form" id="searchForm" name="searchForm" method="get" onsubmit="return submitSearch()">
+		<input class="searchKeyword" type="text" name="searchKeyword" id="searchKeyword" placeholder="물품명을 입력해주세요"> 
+		&nbsp;&nbsp;<a href="#" onclick="submitSearch()"><i class="fas fa-search" style="font-size: 20px;"></i></a>
+	</form>
+	<div id="shopping_list"></div>
+</div>
+
+
+</body>
+<script>
+function submitSearch() {
+    var keyword = $('#searchKeyword').val();
+    if (keyword.trim() === '') {
+        alert('검색어를 입력해주세요.');
+        return false;
+    }
+
+    $.ajax({
+        url: '/shoppingsearch',
+        type: 'GET',
+        data: {
+            searchKeyword: keyword
+        },
+        success: function(response) {
+            $('#shopping_list').html(response);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+    return false;
+}
+</script>
+</html>

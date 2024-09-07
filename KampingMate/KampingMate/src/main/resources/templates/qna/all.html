@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>QnA</title>
+<link rel="stylesheet" th:href="@{/css/customer.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<body>
+<!-- 헤더 파일 삽입 -->
+<th:block th:insert="~{include/header.html}"></th:block>
+
+    <div class="q_container">
+    <!-- QnA 제목 -->
+        <h1><i class="fas fa-comment-alt"></i> QnA</h1>
+
+        <!-- 검색 입력란 -->
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchQuestion()"
+                placeholder="검색어를 입력하세요...">
+                <!-- 검색 아이콘 -->
+            <i class="fas fa-search search-icon" onclick="searchQuestion()"></i>
+        </div>
+        
+        <!-- 총 QnA 수 문구 -->
+        <h3 class="total-qna">
+            총 <span th:text="${qnaList.size()}"></span>건의 QnA가 있습니다.
+        </h3>
+        <!-- QnA 테이블 -->
+        <div class="qna-container">
+            <table id="qnaTable">
+                <thead>
+                <!-- 테이블 헤더 -->
+                    <tr>
+                        <th>No.</th>
+                        <th>질문</th>
+                        <th>게시일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!-- Thymeleaf 반복문을 통한 데이터 출력 -->
+                    <tr th:each="qna, row : ${qnaList}" th:class="${row.odd} ? 'odd' : 'even'">
+                        <td th:text="${row.index + 1}"></td>
+                        <!-- 질문 클릭 시 상세 페이지로 이동 -->
+                        <td id="question" th:onclick="location.href='/qna/qna_detail/' + [[${qna.qna_boardnum}]]" th:text="${qna.question}" class="question-text"></td>
+                        <!-- 날짜 형식 변환 -->
+                        <td class="date"><span th:text="${#dates.format(qna.regdate, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    <!-- 페이지네이션 -->
+    <div id="pagination" class="pagination"></div>
+    </div>
+    
+    
+    <!-- JavaScript -->
+    <script>
+ // 팝업 창 열기 함수
+    function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+    
+ // QnA 검색 함수
+        function searchQuestion() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("qnaTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1]; // 질문 내용이 있는 열
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        
+
+        
+
+// 페이지네이션 설정
+        const rowsPerPage = 10; // 페이지당 표시할 행 수
+        let currentPage = 1; // 현재 페이지
+        const qnaList = Array.from(document.querySelectorAll("#qnaTable tbody tr"));
+
+        // 현재 페이지에 해당하는 행들을 표시하는 함수
+        function displayRows(page) {
+            const start = (page - 1) * rowsPerPage; // 시작 인덱스
+            const end = start + rowsPerPage; // 끝 인덱스
+            qnaList.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? "" : "none";
+            });
+        }
+
+        // 페이지네이션 설정 함수
+        function setupPagination() {
+            const totalRows = qnaList.length; // 전체 행 수
+            const totalPages = Math.ceil(totalRows / rowsPerPage); // 전체 페이지 수
+            const paginationContainer = document.getElementById('pagination'); // 페이지네이션 컨테이너
+
+            paginationContainer.innerHTML = ""; // 초기화
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.innerText = i;
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    displayRows(currentPage);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+// 페이지네이션 설정 및 초기 데이터 표시
+        setupPagination();
+        displayRows(currentPage);
+    </script>
+<!-- 푸터 파일 삽입 -->
+<th:block th:insert="~{include/footer.html}"></th:block>
+</body>
+</html>

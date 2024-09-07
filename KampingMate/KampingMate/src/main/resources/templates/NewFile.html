@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket 채팅 테스트</title>
+    <script th:src="@{/js/websocket.js}"></script>
+</head>
+<body>
+    <h2>WebSocket 채팅 테스트</h2>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="메시지 입력">
+    <button onclick="sendMessage()">전송</button>
+</body>
+</html>

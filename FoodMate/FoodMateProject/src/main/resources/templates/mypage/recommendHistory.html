@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Food Recommend History</title>
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<script th:src="@{/js/mypage.js}" defer></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+	integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+	crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function() {
+		$(".date-header").click(function() {
+			$(this).next(".date-group").toggle();
+		});
+	});
+
+</script>
+</head>
+<body>
+	<!-- 챗봇 아이콘 -->
+	<div id="chatbot-icon" onclick="toggleChatbotPopup()">
+		<i class="fas fa-robot"></i>
+	</div>
+
+	<!-- 칼로리 계산기 아이콘 -->
+	<div id="calorie-icon" onclick="toggleCaloriePopup()">
+		<i class="fas fa-calculator"></i>
+	</div>
+	<!-- 헤더 -->
+	<th:block th:insert="~{/includes/header}"></th:block>
+
+	<!-- 메뉴 -->
+	<th:block th:insert="~{mypage/menu}"></th:block>
+
+	<!-- 내가 추천받은 음식기록 내용 -->
+	<div class="r_container">
+		<article id="recommend">
+			<div style="display: flex; justify-content: space-between; align-items: center;">
+				<h3>내가 추천받은 음식기록</h3>
+				<input type="button" value="추천받기" class="btn" onclick="location.href='/UserChoice'">
+			</div>
+			<form name="formm" id="theform" method="post">
+
+				<div class="tbl-content">
+					<table cellpadding="0" cellspacing="0" border="0" width="100%">
+						<tbody>
+							<th:block th:each="entry : ${groupedByDate}">
+								<tr class="date-header">
+									<td colspan="5" th:text="${entry.key}"></td>
+								</tr>
+								<tr class="date-group" style="display: none;">
+									<td>
+										<div class="tbi-content">
+											<div class="tbl-header">
+												<table cellpadding="0" cellspacing="0" border="0" width="100%">
+													<thead>
+														<tr>
+															<th>음식 이름</th>
+															<th>이미지</th>
+															<th>칼로리</th>
+															<th>추천받은 날짜</th>
+															<th>삭제</th>
+														</tr>
+													</thead>
+												</table>
+											</div>
+											<th:block th:each="history : ${entry.value}">
+												<div id="group-container">
+													<span th:text="${history.recommendFood.name}"></span>
+													<span>
+														<a href="javascript:void(0);" th:onclick="'openChart(' + ${history.recommendFood.idx} + ')'">
+        													<img th:src="${#strings.substringBefore(history.recommendFood.images, '.jpg') + '.jpg'}" />
+   														 </a>
+   													</span>
+													<span th:text="${history.recommendFood.calories}"></span>
+													<span th:text="${#dates.format(history.recommendDate, 'yyyy-MM-dd HH:mm')}"></span>
+													<span><input type="checkbox" name="delete" id="recommend-box"
+														th:value="${history.historyId}" /><br>
+														<button type="button" id="del-button" onclick="delHistory()">삭제</button>
+													</span>
+														
+												</div>
+											</th:block>
+        										
+										</div>
+									</td>
+									
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+				
+			</form>
+			
+		</article>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{/includes/footer}"></th:block>
+
+</body>
+</html>

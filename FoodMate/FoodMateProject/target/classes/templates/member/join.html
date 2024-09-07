@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" th:href="@{/css/member.css}">
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<style>
+/* 챗봇 아이콘 스타일 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 챗봇 아이콘 오른쪽에 위치 */
+    width: 40px;
+    text-align:center;
+    
+}</style>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/member.js}" defer></script>
+<script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+</script>  
+<title>Join</title>
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<!-- 헤더 -->
+	<th:block th:insert="~{includes/header}"></th:block>
+
+	<div id="join-container">
+		<form method="post" action="join" id="join" name="formm">
+			<h2>회원가입</h2>
+			<input type="text" id="id" class="text id_input" name="id" th:value="${id}" placeholder="ID">
+			<input type="hidden" name="reid" id="reid" th:value="${reid}">
+			<input type="button" class="id_check" onclick="idcheck()" value="id 중복확인">
+			<input type="password" id="password" class="text" name="password" placeholder="비밀번호를 입력하세요">
+			<input type="password" name="password_confirm" id="password_confirm" class="text" placeholder="Password">
+			<input type="text" name="name" id="name" class="text" placeholder="Name">
+			<input type="text" id="email" class="email" name="email" th:value="${email}" placeholder="Email">
+			<input type="hidden" name="reemail" id="reemail" th:value="${reemail}">
+			<input type="button" class="email_check" onclick="emailcheck()" value="중복확인">
+			<input type="button" value="가입하기" onclick="go_save()">
+		</form>
+	</div>
+
+	<!-- 푸터 -->
+	<th:block th:insert="~{includes/footer}"></th:block>
+</body>

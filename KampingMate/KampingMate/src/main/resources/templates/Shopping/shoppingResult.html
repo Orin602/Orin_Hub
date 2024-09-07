@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>네이버 오픈 API를 활용한 쇼핑결과</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<h3>네이버 쇼핑 검색결과</h3>
+		 <div id="shopping_list">
+		<table border="1">
+			<tr>
+			<td>제품명 (클릭시 해당페이지로 이동합니다!)</td>
+			<td>제품 이미지</td>
+			<td>최저가(원)</td>
+			<td>제조사</td>
+			<td>브랜드</td>
+			<td>대분류</td>
+			<td>소분류</td>
+			</tr>
+			<tr th:each="shs:${shoppings}">
+				<td><a th:href="${shs.link}" th:utext="${shs.title}" style="font-weight:bold;"></a></td>
+				<td><a th:href="${shs.link}"><img th:src="${shs.image}" style="height:300px; width:300px;" /></a></td>
+				<td  th:utext="${shs.lprice}"></td>
+				<td th:utext="${shs.maker}"></td>
+				<td th:utext="${shs.brand}"></td>
+				<td th:utext="${shs.category3}"></td>
+				<td th:utext="${shs.category4}"></td>
+			</tr> 
+		</table>
+		</div>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>캠핑장 찾기</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 20px;
+            padding: 0;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form#searchForm {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            width: 300px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination ul {
+            list-style-type: none;
+            padding: 0;
+            display: inline-block;
+        }
+
+        .pagination ul li {
+            display: inline;
+            margin-right: 5px;
+        }
+
+        .pagination ul li a {
+            display: inline-block;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #3498db;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .pagination ul li a:hover {
+            background-color: #f2f2f2;
+        }
+
+        .pagination ul li.active a {
+            background-color: #3498db;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <h3>캠핑장 검색</h3>
+    <form id="searchForm" name="searchForm" method="get" onsubmit="return submitSearch()">
+        <input type="text" name="searchKeyword" id="searchKeyword" placeholder="캠핑장 이름을 입력하세요">
+        <input type="hidden" name="page" id="page" value="1">
+        <button type="submit">검색버튼</button>
+    </form>
+    <div th:if="${not #lists.isEmpty(reviewList)}">
+        <table>
+            <tr th:each="camp : ${reviewList}">
+                <td><a href="#" th:data-camping-name="${camp.facltNm}" th:data-camping-id="${camp.contentId}"
+                    onclick="setCampingName(this)" th:text="${camp.facltNm}"> </a></td>
+                <td th:text="${camp.addr1}"></td>
+            </tr>
+        </table>
+        <!-- 페이징처리 -->
+        <div class="pagination">
+            <ul>
+                <li th:if="${pageNumber > 1}"><a href="javascript:void(0);" th:onclick="'go_page(' + (${pageNumber} - 1) + ');'">&laquo; 이전</a></li>
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == pageNumber} ? ' active'"><a href="javascript:void(0);" th:onclick="'go_page(' + ${i} + ');'" th:text="${i}">1</a></li>
+                <li th:if="${pageNumber < totalPages}"><a href="javascript:void(0);" th:onclick="'go_page(' + (${pageNumber} + 1) + ');'">다음 &raquo;</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script>
+    function submitSearch() {
+        if ($("#searchKeyword").val() == "") {
+            alert("검색어를 입력하세요");
+            $("#searchKeyword").focus();
+            return false;
+        } else {
+            var theform = $("#searchForm");
+            theform.attr("method", "get");
+            theform.attr("action", "/campingname_search");
+            theform.submit();
+        }
+    }
+
+    function go_page(page) {
+        var form = document.searchForm;
+        var pageInput = form.querySelector('input[name="page"]');
+        pageInput.value = page;
+        form.submit();
+    }
+
+    function setCampingName(element) {
+        var campingName = element.getAttribute("data-camping-name");
+        var contentId = element.getAttribute("data-camping-id");
+        window.opener.postMessage({
+            type: 'selectedCampsite',
+            name: campingName,
+            id: contentId
+        }, '*');
+        window.close();
+    }
+</script>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>관리자 페이지(Admin)</title>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
+	rel="stylesheet" />
+<link href="/css/admin_styles.css" rel="stylesheet" />
+<link rel="stylesheet" href="/css/style_write.css">
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+	crossorigin="anonymous"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+	function resetForm() {
+		const form = document.forms['BoardForm'];
+		form['title'].value = ''; // 제목 초기화
+		form['content'].value = ''; // 본문 초기화
+		form['image'].value = ''; // 이미지 초기화
+		form['tag'].value = ''; // 태그 초기화
+	}
+</script>
+
+</head>
+<body class="sb-nav-fixed">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="main.do">관리자 메인</a>
+	</nav>
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_nav">
+			<nav class="sb-sidenav accordion sb-sidenav-dark"
+				id="sidenavAccordion">
+				<div class="sb-sidenav-menu">
+					<div class="nav">
+						<div class="sb-sidenav-menu-heading">회원정보</div>
+						<a class="nav-link" href="memberList.do">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-tachometer-alt"></i>
+							</div> 회원관리
+						</a>
+						<div class="sb-sidenav-menu-heading">게시판 관리</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+							data-bs-target="#collapseLayouts" aria-expanded="false"
+							aria-controls="collapseLayouts">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div> 관리자 게시판
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="collapseLayouts"
+							aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav">
+								<a class="nav-link" href="admin_food.do">음식레시피 게시판</a> <a
+									class="nav-link" href="admin_QnA.do">Q&A 게시판</a> <a
+									class="nav-link" href="admin_ask.do">1:1 문의 게시판</a>
+							</nav>
+						</div>
+						<a class="sb-sidenav-menu-heading" href="dataManager.do">DB관리</a>
+						<a class="sb-sidenav-menu-heading" href="logout">로그아웃</a>
+						<a class="sb-sidenav-menu-heading" href="/">사용자 페이지로 이동</a>
+					</div>
+				</div>
+				<div class="sb-sidenav-footer">
+					<div class="small">현재 로그인한 관리자 계정:</div>
+					[[${loginUser.id}]]
+					<!-- 이 부분에 로그인한 관리자 계정 표시되게 -->
+				</div>
+			</nav>
+		</div>
+		<div id="layoutSidenav_content">
+			<main>
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">Q&A 게시판(관리자페이지)</h1>
+					<div class='form-0'>
+
+						<form class='form-1' name="BoardForm" action="qnaUpdate.do"
+							method="post" enctype="multipart/form-data">
+							<input type="hidden" name="qnaNum" th:value="${qna.qna_boardnum}">
+							<input class='write-1' type="text" name="question" maxlength="44"
+								placeholder="제목 입력, 최대 44자까지 가능합니다" th:value="${qna.question}"
+								required>
+							<hr>
+							<textarea class='write-2' name="answer" rows="20" cols="20"
+								maxlength="254" placeholder="내용 작성,최대 254자 가능합니다" required>[[${qna.answer}]]</textarea>
+
+							<hr>
+
+							<button type="submit">수정 완료</button>
+							<button type="button" onclick="resetForm()">다시 입력</button>
+							<button type="button"
+								onclick="window.location.href='/admin_QnA.do'">목록보기</button>
+
+						</form>
+
+					</div>
+			</main>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div
+						class="d-flex align-items-center justify-content-between small">
+						<div class="text-muted">Copyright &copy; Your Website 2024</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+</body>
+</html>

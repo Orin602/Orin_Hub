@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<th:block th:insert="~{includes/header.html}"></th:block>
+<link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" th:src="@{js/BoardDetail.js}"></script>
+</head>
+<body id="replyjs">
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+	<div id="main">
+    <article>
+        <h3>유저 레시피 상세페이지</h3>
+        <form name="frm" method="post">
+            <input type="hidden" name="seq" id="seq" th:value="${Com_Board_DetailVO.seq}">
+            <table id="Board_deatail_List">
+                <tr>
+                    <td>
+                        <img th:src="${Com_Board_DetailVO.com_recipe.att_file_no_mk}" style="width: 400px; height: 300px;" />
+                    </td>
+                    <td>
+                        <a class="icon-text" onclick="copyboard()">
+                            <i class="fa fa-share"></i> 공유하기
+                        </a>
+                        <th:block th:if="${session.goodPointStatusMap != null and session.goodPointStatusMap[Com_Board_DetailVO.seq] == 'on'}">
+                            <a style="color: red;" th:attr="data-seq=${Com_Board_DetailVO.seq}" onclick="goodpoint_plus(this)" class="icon-text red">
+                                <i class="fa fa-thumbs-up"></i> 추천해제
+                            </a>
+                        </th:block>
+                        <th:block th:if="${session.goodPointStatusMap == null or session.goodPointStatusMap[Com_Board_DetailVO.seq] != 'on'}">
+                            <a th:attr="data-seq=${Com_Board_DetailVO.seq}" onclick="goodpoint_plus(this)" class="icon-text">
+                                <i class="fa fa-thumbs-up"></i> 추천하기
+                            </a>
+						</th:block>
+				</tr>
+				<tr>
+					<th width="20%">요리명</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.rcp_nm}]]</td>
+				</tr>
+				<tr>
+					<th>등록일</th>
+					<td>[[${#dates.format(Com_Board_DetailVO.d_regdate,
+						"yyyy-MM-dd") }]]</td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td th:if="${Com_Board_DetailVO.member_data.id.length() > 15}">
+						[[${#strings.substringBefore(Com_Board_DetailVO.member_data.email, '@')}]]
+					</td>
+					<td th:if="${Com_Board_DetailVO.member_data.id.length() < 15}">
+						[[${Com_Board_DetailVO.member_data.id}]]
+					</td>
+				</tr>
+				<tr>
+					<th>조회수</th>
+					<td>[[${Com_Board_DetailVO.cnt}]]</td>
+				</tr>
+				<tr>
+					<th>추천수</th>
+					<td>[[${Com_Board_DetailVO.goodpoint}]]</td>
+				</tr>
+				<tr>
+					<th>분류</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.rcp_pat2}]]</td>
+				</tr>
+				<tr>
+					<th>주재료</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.hash_tag}]]</td>
+				</tr>
+				<tr>
+					<th>재료</th>
+					<td>[[${Com_Board_DetailVO.com_recipe.rcp_parts_dtls}]]</td>
+				</tr>
+			</table>
+			<h3>조리법</h3>
+			<table id="Board_deatail_List">
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img01 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img01}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual01}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img02 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img02}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual02}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img03 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img03}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual03}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img04 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img04}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual04}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img05 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img05}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual05}]]</td>
+					</th:block>
+				</tr>
+				<tr>
+					<th:block
+						th:if="${Com_Board_DetailVO.com_recipe.manual_img06 != null }">
+						<td><img
+							th:src="${Com_Board_DetailVO.com_recipe.manual_img06}"
+							style="width: 200px; height: 180px;" /></td>
+						<td>[[${Com_Board_DetailVO.com_recipe.manual06}]]</td>
+					</th:block>
+				</tr>
+			</table>
+		</form>
+		<h3> 해당요리의 이런저런 이야기(네이버 Blog Api 이용) </h3>
+			<div id="similar-recipes"></div>
+		<h3>Comment</h3>
+		<form name="replyfrm" method="get">
+			<input type="hidden" name="seq" id="seq"
+				th:value="${Com_Board_DetailVO.seq}">
+			<table id="Board_deatail_List">
+				<tr>
+					<td colspan="2"><textarea name="reply_content"
+							id="reply_content" rows="3" cols="50"></textarea> <input id="colorbtn" 
+						type="button" class="btn" value="저장" onClick="reply_save()"></td>
+				</tr>
+			</table>
+			<table id="reply_list">
+				<tr>
+					<th></th>
+				</tr>
+				<th:block th:each="replyVO : ${ReplyList}">
+					<tr th:attr="data-replynum=${replyVO.replynum}">
+						<td th:if="${replyVO.member_data.id.length() > 15}">
+							[[${#strings.substringBefore(replyVO.member_data.email, '@')}]]
+						</td>
+						<td th:if="${replyVO.member_data.id.length() < 15}">
+							[[${replyVO.member_data.id}]]
+						</td>
+						<td><span th:text="${replyVO.content}"
+							th:attr="data-content-view=${replyVO.replynum}">Reply
+								Content</span> <textarea
+								th:attr="data-content-edit=${replyVO.replynum}"
+								style="display: none;" th:text="${replyVO.content}"></textarea>
+						</td>
+						<td
+							th:if="${session.loginUser != null and replyVO.member_data.id.equals(session.loginUser.id)}">
+							<button id="colorbtn" th:attr="data-replynum=${replyVO.replynum}"
+								onclick="toggleEditMode(this, event);">수정</button>
+							<button id="colorbtn" 
+								th:attr="data-replynum=${replyVO.replynum},data-save-button=${replyVO.replynum}"
+								onclick="saveChanges(this, event);" style="display: none;">저장</button>
+							<button id="colorbtn"
+								th:attr="onclick='deleteReply(' + ${replyVO.replynum} + ', event)'">삭제</button>
+						</td>
+					</tr>
+				</th:block>
+			</table>
+		</form>
+		<form name="buttonfrm" method="get">
+			<input type="hidden" name="seq" id="seq"
+				value="[[${Com_Board_DetailVO.seq}]]"> <input type="button"
+				class="btn" value="목록" onClick="go_list()">
+			<th:block
+				th:if="${session.loginUser != null and (Com_Board_DetailVO.member_data.id).equals(session.loginUser.id)}">
+				<input type="button" id="colorbtn" class="btn" value="수정" onClick="board_update()">
+				<input type="button" id="colorbtn" class="btn" value="삭제" onClick="board_delete()">
+			</th:block>
+		</form>
+	</article>
+	</div>
+</body>
+<th:block th:insert="~{includes/footer.html}"></th:block>
+<script>
+$(document).ready(function() {
+    console.log('Document is ready');
+
+    var recipeName = "[[${Com_Board_DetailVO.com_recipe.rcp_nm}]]";
+
+    $.ajax({
+        url: '/blogsearch',
+        method: 'GET',
+        data: { text: recipeName },
+        success: function(data) {
+            console.log("Received data:", data);
+            $('#similar-recipes').html(data);
+        },
+        error: function(error) {
+            console.log('Error:', error);
+        }
+    });
+});
+</script>
+</html>

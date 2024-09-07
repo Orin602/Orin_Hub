@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info Update</title>
+    <link rel="stylesheet" th:href="@{/css/mypage.css}">
+    <link rel="icon" href="/images/favicon (1).ico" type="image/x-icon">
+	<link rel="shortcut icon" href="/images/favicon (1).ico" type="image/x-icon">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script th:src="@{/js/mypage.js}" defer></script>
+<script type="text/javascript">
+function openInPopup(url) {
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    }
+//닉네임 입력 필드의 값이 변경될 때 중복 체크 상태를 초기화합니다.
+$("#nickname").on('input', function() {
+    isNicknameChecked = false;
+    $("#renickname").val('');
+});
+
+function setNicknameChecked() {
+	isNicknameChecked = true;
+	$("#renickname").val($("#nickname").val());
+}
+</script>  
+</head>
+<body>
+<a id="chatbot-icon" href="javascript:void(0);" onclick="openInPopup('/chat')"><i class="fas fa-robot"></i></a><br>
+<a id="calorie-icon" href="javascript:void(0);" onclick="openInPopup('/cal')"><i class="fas fa-calculator"></i></a>
+    <!-- 헤더 -->
+    <th:block th:insert="~{includes/header}"></th:block>
+
+	<!-- 메뉴 -->
+    <th:block th:insert="~{mypage/menu}"></th:block>
+    
+    <div class="container1">
+        
+        <!-- 개인정보 수정 내용 -->
+        <section id="infoUpdate">
+            <div id="content">
+                <h3>개인정보 수정하기</h3>
+                <form action="update_info" id="update_info" method="post" name="formm">
+                    <fieldset>
+                        <label>아이디 : </label>
+                        <input type="text" name="id2" id="id2" th:value="${loginUser.id.length() > 15 ? '네이버 계정' : loginUser.id}" readonly placeholder="수정 불가"><br>
+                        <input type="hidden" name="id" id="id" th:value="${loginUser.id}" readonly placeholder="수정 불가">
+                        <th:block th:if="${loginUser.id.length() < 15}">
+                        <label>비밀번호 : </label>
+                        <input type="password" name="password" id="password"><br>
+                        <label>비밀번호 확인 : </label>
+                        <input type="password" name="pwdcheck" id="pwdcheck"><br>
+                        </th:block>
+                        <th:block th:if="${loginUser.id.length() > 15}">
+                        <input type="hidden" name="password" id="password" th:value="${loginUser.password}">
+                        <input type="hidden" name="pwdcheck" id="pwdcheck" th:value="${loginUser.password}">
+                        </th:block>
+                        <label>이름 : </label>
+                        <input type="text" name="name" id="name" th:value="${loginUser.name}" readonly placeholder="수정 불가"><br>
+                        <label>닉네임 : </label>
+                        <th:block th:if="${loginUser.nickname} != null">
+                        <input type="text" name="nickname" id="nickname" th:value="${loginUser.nickname}">
+                        </th:block>
+                        <th:block th:if="${loginUser.nickname} == null">
+                        <input type="text" name="nickname" id="nickname" value=" ">
+                        </th:block>
+		               
+		                <input type="hidden" name="renickname" id="renickname" th:value="${renickname}">
+		                <th:block th:if="${loginUser.nickname == null}">
+		                <input type="button" value="중복 체크" class="dup btn" onclick="nickcheck()"><br>
+		                </th:block>
+		                <th:block th:if="${loginUser.nickname != null}">
+		                <input type="button" value="닉네임 수정" class="dup btn" onclick="window.open('nickname_check_form', '_blank', 'toolbar=no, menubar=no, scrollbars=no, resizable=yes, width=600, height=400');"><br>
+		                </th:block>
+                        <label>이메일 : </label>
+                        <input type="email" name="email" id="email" th:value="${loginUser.email}" readonly><br>
+                        <div>
+                            <input type="button" value="수정하기" onclick="change_info()" class="btn">
+                            <input type="button" value="취소" onclick="location.href='/mypage';" class="btn">
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- 푸터 -->
+    <th:block th:insert="~{includes/footer}"></th:block>
+</body>
+</html>

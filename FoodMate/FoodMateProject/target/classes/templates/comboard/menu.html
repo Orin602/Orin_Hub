@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" th:src="@{js/BoardList.js}"></script>
+</head>
+<body>
+<nav id="menu">
+    <ul>
+        <li>분류별 보기</li>
+        <li><a href="#" data-category="반찬" onclick="keyClick(event)">반찬</a></li>
+        <li><a href="#" data-category="국&찌개" onclick="keyClick(event)">국 & 찌개</a></li>
+        <li><a href="#" data-category="후식" onclick="keyClick(event)">후식</a></li>
+        <li><a href="#" data-category="일품" onclick="keyClick(event)">일품</a></li>
+    </ul>
+    <ul>
+        <li>인기순 정렬</li>
+        <li><a href="#" data-category="goodpoint_sort" onclick="keyClick(event)">추천수</a></li>
+        <li><a href="#" data-category="cnt_sort" onclick="keyClick(event)">조회수</a></li>
+        <li><a href="#" data-category="date_sort" onclick="keyClick(event)">최신순</a></li>
+    </ul>
+</nav>
+</body>
+</html>

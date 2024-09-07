@@ -1,0 +1,203 @@
+/* 梨쀫큸 �븘�씠肄� �뒪���씪 */
+#chatbot-icon,
+#calorie-icon {
+    position: fixed;
+    bottom: 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#chatbot-icon {
+    left: 10px;
+}
+
+#calorie-icon {
+    left: 90px; /* 梨쀫큸 �븘�씠肄� �삤瑜몄そ�뿉 �쐞移� */
+    width: 40px;
+    text-align:center;
+    
+}
+
+/* 濡쒓렇�씤 �럹�씠吏� CSS */
+#login-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px; /* �뤌 而⑦뀒�씠�꼫 �꼫鍮� */
+  margin: auto; /* 媛��슫�뜲 �젙�젹�쓣 �쐞�븳 �옄�룞 留덉쭊 */
+}
+
+#login-container h2 {
+  text-align: center;
+}
+
+#login-form {
+  width: 100%; /* �뤌 �꼫鍮� */
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"],
+#login-form input[type="submit"] {
+  width: 100%;
+  height: 32px;
+  font-size: 15px;
+  border: 0;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 10px;
+  margin-bottom: 10px; /* �엯�젰 �븘�뱶 媛꾧꺽 */
+}
+
+#login-form input[type="submit"] {
+  background-color: rgb(164, 199, 255);
+  cursor: pointer;
+}
+
+#login-form input[type="submit"]:active {
+  background-color: rgb(61, 135, 255);
+}
+
+#login-form a {
+  font-size: 12px;
+  color: darkgray;
+  text-decoration-line: none;
+  text-align: center;
+  display: inline-block; /* 留곹겕瑜� 釉붾줉 �슂�냼濡� 蹂��솚�븯�뿬 媛꾧꺽 �쟻�슜 */
+  margin-top: 10px; /* 留곹겕 �긽�떒 媛꾧꺽 */
+}
+
+#login-form a:hover{
+	background-color: #3c3c3c;
+}
+
+/* �쉶�썝媛��엯 �럹�씠吏� */
+#join-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px; /* �뤌 而⑦뀒�씠�꼫 �꼫鍮� */
+    margin: auto; /* 媛��슫�뜲 �젙�젹�쓣 �쐞�븳 �옄�룞 留덉쭊 */
+}
+
+#join-container h2 {
+    text-align: center;
+}
+
+#join-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#join-container input[type="text"],
+#join-container input[type="password"],
+#join-container input[type="button"],
+#join-container input[type="submit"] {
+    width: 250px; /* 紐⑤뱺 �엯�젰 �븘�뱶�� 踰꾪듉�쓽 媛�濡� 湲몄씠瑜� �씪�젙�븯寃� �쑀吏� */
+    height: 32px;
+    font-size: 15px;
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    padding-left: 10px;
+    margin-bottom: 10px; /* 媛� �슂�냼 �궗�씠 媛꾧꺽 */
+    background-color: rgb(233, 233, 233);
+}
+
+#join-container .id_check,
+#join-container .email_check {
+    background-color: rgba(170, 172, 219, 0.33); /* 以묐났�솗�씤 踰꾪듉 �깋�긽 蹂�寃� */
+}
+
+#join-container input[type="submit"] {
+    background-color: rgb(164, 199, 255);
+    text-align: center;
+}
+
+#join-container input[type="submit"]:active {
+    background-color: rgb(61, 135, 255);
+}
+
+#join-container .btn:hover,
+#join-container .id_check:hover,
+#join-container .email_check:hover {
+    background-color: rgb(209, 228, 255); /* �샇踰� �떆 諛앷퀬 �떆�썝�븳 �뒓�굦�쓽 �깋�긽�쑝濡� 蹂�寃� */
+}
+
+#join-container .btn:active,
+#join-container .id_check:active,
+#join-container .email_check:active {
+    background-color: rgb(61, 135, 255);
+}
+
+/* �빟愿��룞�쓽 �럹�씠吏� */
+#contract {
+	text-align: center;
+}
+/* �빟愿� �뀓�뒪�듃 �뒪���씪 */
+#contract article textarea {
+    width: 90%; /* �뀓�뒪�듃 �쁺�뿭�쓽 �꼫鍮꾨�� 議곗젙�븷 �닔 �엳�뒿�땲�떎. */
+    height: 300px; /* �뀓�뒪�듃 �쁺�뿭�쓽 �넂�씠瑜� 議곗젙�븷 �닔 �엳�뒿�땲�떎. */
+    padding: 10px;
+    margin: 0 auto 20px auto; /* 媛��슫�뜲 �젙�젹 諛� �븘�옒履� �뿬諛� 異붽� */
+    display: block; /* �뀓�뒪�듃 �쁺�뿭�쓣 釉붾줉 �슂�냼濡� 吏��젙�븯�뿬 媛�濡� �쁺�뿭�쓣 李⑥��븯�룄濡� �꽕�젙 */
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+/* �룞�쓽 �씪�뵒�삤 踰꾪듉 �뒪���씪 */
+#contract article .form-group {
+    text-align: center; /* �궡�슜�쓣 媛��슫�뜲濡� �젙�젹 */
+    margin-bottom: 20px; /* �븘�옒履� �뿬諛� 異붽� */
+}
+
+#contract article .form-group input[type="radio"] {
+    display: inline-block; /* �씤�씪�씤 釉붾줉 �슂�냼濡� �꽕�젙�븯�뿬 媛숈� 以꾩뿉 �몴�떆 */
+    margin-right: 10px;
+}
+
+/* �젣異� 踰꾪듉 �뒪���씪 */
+#contract article .form-group input[type="button"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#contract article .form-group input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
