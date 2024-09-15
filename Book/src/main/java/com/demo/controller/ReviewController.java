@@ -2,8 +2,8 @@ package com.demo.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +33,8 @@ import com.demo.service.ReviewService;
 import com.demo.service.SearchService;
 
 import jakarta.servlet.http.HttpSession;
+
+
 
 @Controller
 public class ReviewController {
@@ -147,12 +147,22 @@ public class ReviewController {
 	
 	// 리뷰 상세 화면
 	@GetMapping("/review_detail")
-	public String reviewDetailView(HttpSession session, Model model, @RequestParam("review_seq") int review_seq) {
+	public String reviewDetailView(HttpSession session, Model model, @RequestParam("review_seq") int review_seq) throws Exception {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		Review review = reviewService.getReviewBySeq(review_seq);
-		
+		 // 사용자가 이 리뷰를 이미 조회했는지 확인 (세션에 저장된 리스트로 확인)
+	    List<Integer> viewedReviews = (List<Integer>) session.getAttribute("viewedReviews");
+	    if (viewedReviews == null) {
+	        viewedReviews = new ArrayList<>();
+	    }
 		if(loginUser != null) {
         	model.addAttribute("loginUser", loginUser);
+        	// 세션에 해당 리뷰가 없으면 조회수 증가
+            if (!viewedReviews.contains(review_seq)) {
+                reviewService.incrementViewCount(review_seq);
+                viewedReviews.add(review_seq);
+                session.setAttribute("viewedReviews", viewedReviews); // 세션에 추가
+            }
         }
 		// 어보드한 이미지 파일 URL 리스트 추가
 		List<String> uploadImages = review.getUploadedImages();
@@ -266,6 +276,42 @@ public class ReviewController {
         return "redirect:/review";
 	}
 
+	// 리뷰 추천 처리
+	@PostMapping("/review/{review_seq}/recommend")
+	@ResponseBody
+	public ResponseEntity<String> recommendReview(@PathVariable int review_seq, HttpSession session) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		if(loginUser == null) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용할 수 있습니다.");
+			
+		}
+		try {
+	        // 추천 처리
+			reviewService.incrementRecoCount(review_seq);
+	        return ResponseEntity.ok("리뷰 추천이 성공적으로 처리되었습니다.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 추천 처리 중 오류가 발생했습니다.");
+	    }
+	}
+	
+	// 리뷰 즐겨찾기 처리
+	@PostMapping("/review/{review_seq}/bookmark")
+	@ResponseBody
+	public ResponseEntity<String> bookmarkReview(@PathVariable int review_seq, HttpSession session) {
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser == null) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용할 수 있습니다.");
+	    }
+
+	    try {
+	        // 즐겨찾기 처리
+	        reviewService.incrementCheckCount(review_seq);
+
+	        return ResponseEntity.ok("리뷰 즐겨찾기가 성공적으로 처리되었습니다.");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 즐겨찾기 처리 중 오류가 발생했습니다.");
+	    }
+	}
 	
 	// 댓글 작성
 	@PostMapping("/write-reply")
@@ -330,10 +376,17 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용할 수 있습니다.");
         }
 
+        String userId = loginUser.getId();
+        
         try {
-            // 좋아요 증가
-            replyService.incrementLike(replySeq);
-            return ResponseEntity.ok("좋아요가 성공적으로 추가되었습니다.");
+            // 좋아요가 추가되었는지 취소되었는지 확인
+            boolean liked = replyService.toggleLike(userId, replySeq);
+
+            if (liked) {
+                return ResponseEntity.ok("좋아요가 성공적으로 추가되었습니다.");
+            } else {
+                return ResponseEntity.ok("좋아요가 취소되었습니다.");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("좋아요 처리 중 오류가 발생했습니다.");
         }
@@ -341,48 +394,34 @@ public class ReviewController {
 	
 	// 댓글 삭제 처리
 	@PostMapping("/replies/{replySeq}/delete")
-    public String deleteReply(@PathVariable int replySeq, HttpSession session, Model model) {
-        // 로그인한 사용자 확인
-        Member loginUser = (Member) session.getAttribute("loginUser");
+	public ResponseEntity<Map<String, String>> deleteReply(@PathVariable int replySeq, HttpSession session) {
+	    // 로그인한 사용자 확인
+	    Member loginUser = (Member) session.getAttribute("loginUser");
 
-        if (loginUser == null) {
-            model.addAttribute("message", "로그인 페이지로 이동");
-            model.addAttribute("text", "로그인 후 이용할 수 있습니다.");
-            model.addAttribute("messageType", "info");
-            return "login/login"; // 로그인 페이지로 이동
-        }
+	    if (loginUser == null) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "로그인 후 이용할 수 있습니다."));
+	    }
 
-        // 댓글 정보 가져오기
-        Reply replyUser = replyService.getReplyBySeq(replySeq);
-        if (replyUser == null) {
-            model.addAttribute("message", "댓글 없음");
-            model.addAttribute("text", "해당 댓글을 찾을 수 없습니다.");
-            model.addAttribute("messageType", "error");
-            return "error"; // 에러 페이지
-        }
+	    // 댓글 정보 가져오기
+	    Reply replyUser = replyService.getReplyBySeq(replySeq);
+	    if (replyUser == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "해당 댓글을 찾을 수 없습니다."));
+	    }
 
-        // 댓글 작성자와 로그인한 사용자 확인
-        if (!replyUser.getMember().getId().equals(loginUser.getId())) {
-            model.addAttribute("message", "삭제 불가");
-            model.addAttribute("text", "작성자만 댓글을 삭제할 수 있습니다.");
-            model.addAttribute("messageType", "error");
-            return "review/reviewDetail"; // 현재 페이지로 이동
-        }
+	    // 댓글 작성자와 로그인한 사용자 확인
+	    if (!replyUser.getMember().getId().equals(loginUser.getId())) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "작성자만 댓글을 삭제할 수 있습니다."));
+	    }
 
-        // 댓글 삭제 처리
-        try {
-            replyService.deleteReply(replySeq);
-            model.addAttribute("message", "삭제 성공");
-            model.addAttribute("text", "댓글이 성공적으로 삭제되었습니다.");
-            model.addAttribute("messageType", "success");
-        } catch (Exception e) {
-            model.addAttribute("message", "삭제 실패");
-            model.addAttribute("text", "댓글 삭제 중 오류가 발생했습니다.");
-            model.addAttribute("messageType", "error");
-        }
+	    // 댓글 삭제 처리
+	    try {
+	        replyService.deleteReply(replySeq);
+	        return ResponseEntity.ok(Collections.singletonMap("message", "댓글이 성공적으로 삭제되었습니다."));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "댓글 삭제 중 오류가 발생했습니다."));
+	    }
+	}
 
-        return "redirect:/review_detail?review_seq=" + replyUser.getReview().getReview_seq(); // 상세 페이지로 리다이렉트
-    }
 }
 
 

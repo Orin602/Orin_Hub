@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.demo.domain.Member;
 import com.demo.domain.Reply;
+import com.demo.domain.ReplyLike;
+import com.demo.persistence.ReplyLikeRepository;
 import com.demo.persistence.ReplyRepository;
 
 @Service
@@ -15,6 +18,8 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Autowired
 	private ReplyRepository replyRepo;
+	@Autowired
+	private ReplyLikeRepository replyLikeRepo;
 	
 	// 특정 게시글 댓글
 	@Override
@@ -33,9 +38,27 @@ public class ReplyServiceImpl implements ReplyService {
 	// 댓글 좋아요 수 증가
 	@Override
 	@Transactional
-	public void incrementLike(int replySeq) {
-		replyRepo.incrementLikes(replySeq);
-
+	public boolean toggleLike(String userId, int replySeq) throws Exception {
+		boolean alreadyLiked = replyLikeRepo.existsByMemberIdAndReplyReplySeq(userId, replySeq);
+		
+		if (alreadyLiked) {
+            // 좋아요 취소
+            replyLikeRepo.deleteByMemberIdAndReplyReplySeq(userId, replySeq);
+            replyRepo.decrementLikes(replySeq);
+            return false; // 좋아요가 취소됨
+        } else {
+            // 좋아요 추가
+            Reply reply = replyRepo.findById(replySeq)
+                    .orElseThrow(() -> new Exception("댓글을 찾을 수 없습니다."));
+            Member member = Member.builder().id(userId).build();
+            ReplyLike replyLike = ReplyLike.builder()
+                    .member(member)
+                    .reply(reply)
+                    .build();
+            replyLikeRepo.save(replyLike);
+            replyRepo.incrementLikes(replySeq);
+            return true; // 좋아요가 추가됨
+        }
 	}
 
 	// 댓글 저장

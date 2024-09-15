@@ -133,4 +133,34 @@ public class ReviewServiceImpl implements ReviewService {
 	    }
 	}
 
+	@Override
+    @Transactional
+    public void incrementViewCount(int reviewSeq) throws Exception {
+        reviewRepo.incrementViewCount(reviewSeq);
+    }
+
+    @Override
+    @Transactional
+    public void incrementRecoCount(int reviewSeq) throws Exception {
+        reviewRepo.incrementRecoCount(reviewSeq);
+    }
+
+    @Override
+    @Transactional
+    public void incrementCheckCount(int reviewSeq) throws Exception {
+        reviewRepo.incrementCheckCount(reviewSeq);
+    }
+
+    @Override
+    @Transactional
+    public void decrementRecoCount(int reviewSeq) throws Exception {
+        reviewRepo.decrementRecoCount(reviewSeq);
+    }
+
+    @Override
+    @Transactional
+    public void decrementCheckCount(int reviewSeq) throws Exception {
+        reviewRepo.decrementCheckCount(reviewSeq);
+    }
+
 }

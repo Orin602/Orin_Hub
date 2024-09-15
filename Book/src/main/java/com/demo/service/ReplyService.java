@@ -13,7 +13,7 @@ public interface ReplyService {
 	List<Reply> getReplyByMember(String id);
 	
 	// 댓글 좋아요
-	void incrementLike(int replySeq);
+	boolean toggleLike(String userId, int replySeq) throws Exception;
 	
 	// 댓글 저장
 	void saveReply(Reply vo);

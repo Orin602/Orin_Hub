@@ -37,6 +37,12 @@ public interface ReviewService {
     // 조회순 정렬
 	List<Review> getReviewsSortedByViewCount();
     
+	void incrementViewCount(int reviewSeq) throws Exception;	// 조회수 +
+    void incrementRecoCount(int reviewSeq) throws Exception;	// 추천수 +
+    void incrementCheckCount(int reviewSeq) throws Exception;	// 즐겨찾기수 +
+    void decrementRecoCount(int reviewSeq) throws Exception;	// 추천수 -
+    void decrementCheckCount(int reviewSeq) throws Exception;	// 즐겨찾기수 -
+    
     // 마이페이지용
     // 내가 작성한 글 조회
     List<Review> getMyReview(String id);

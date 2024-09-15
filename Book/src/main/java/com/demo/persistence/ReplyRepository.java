@@ -27,6 +27,11 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
     @Query("UPDATE Reply r SET r.likes = r.likes + 1 WHERE r.replySeq = :replySeq")
     void incrementLikes(int replySeq);
     
+    // 댓글 좋아요 수 감소
+    @Modifying
+    @Query("UPDATE Reply r SET r.likes = r.likes - 1 WHERE r.replySeq = :replySeq")
+    void decrementLikes(int replySeq);
+    
     // 댓글 삭제
     @Modifying
     @Transactional

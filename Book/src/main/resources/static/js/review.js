@@ -110,7 +110,60 @@ function update_review() {
 	
 }
 
+// 리뷰 추천
+function reviewReco(buttonElement) {
+	var review_seq = $(buttonElement).data('review-seq');
+	$.ajax({
+		url: `/review/${review_seq}/recommend`,
+		method: 'POST',
+		success: function(response) {
+			swal.fire({
+				title: '리뷰 추천!',
+				text: '리뷰를 성공적으로 추천했습니다.',
+				icon: 'success',
+				confirmButtonText: '확인'
+			}).then(()=> {
+				location.reload();
+			});
+		},
+		error: function(xhr, status, error) {
+			swal.fire({
+				title: '리뷰 추천 실패!',
+				text: '추천 처리 중 오류가 발생했습니다.',
+				icon: 'error',
+				confirmButtonText: '확인'
+			});
+		}
+	});
+}
 
+// 리뷰 즐겨찾기
+function reviewCheck(buttonElement) {
+	var review_seq = $(buttonElement).data('review-seq');
+	$.ajax({
+        url: `/review/${review_seq}/bookmark`, // 서버의 즐겨찾기 처리 URL
+        method: 'POST',
+        success: function(response) {
+            swal.fire({
+                title: '즐겨찾기 성공',
+                text: '리뷰가 성공적으로 즐겨찾기에 추가되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then(() => {
+                // 성공 후 페이지 새로고침 (또는 다른 동작)
+                location.reload();
+            });
+        },
+        error: function(xhr, status, error) {
+            swal.fire({
+                title: '즐겨찾기 실패',
+                text: '즐겨찾기 처리 중 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        }
+    });
+}
 
 // 댓글 작성
 function reply_write() {
@@ -163,15 +216,25 @@ function reply_write() {
 }
 
 // 댓글 좋아요 처리
-function replyLike(replySeq) {
-	console.log("replySeq:", replySeq); // 확인용 로그
+function replyLike(buttonElement) {
+    var replySeq = $(buttonElement).data('reply-seq');
+    console.log("replySeq:", replySeq); // 확인용 로그
     $.ajax({
         url: `/replies/${replySeq}/like`,
         method: 'POST',
         success: function(response) {
+            // 서버 응답에 따라 메시지 설정
+            var title = '좋아요 성공';
+            var text = '좋아요가 성공적으로 추가되었습니다.';
+
+            if (response.includes("취소되었습니다")) {
+                title = '좋아요 취소';
+                text = '좋아요가 취소되었습니다.';
+            }
+
             swal.fire({
-                title: '좋아요 성공',
-                text: '좋아요가 성공적으로 추가되었습니다.',
+                title: title,
+                text: text,
                 icon: 'success',
                 confirmButtonText: '확인'
             }).then(() => {
@@ -190,8 +253,9 @@ function replyLike(replySeq) {
 }
 
 // 댓글 삭제 처리
-function replyDelete(replySeq) {
-	console.log("replySeq:", replySeq); // 확인용 로그
+function replyDelete(buttonElement) {
+    var replySeq = $(buttonElement).data('reply-seq');
+    
     swal.fire({
         title: '댓글 삭제 확인',
         text: '정말로 이 댓글을 삭제하시겠습니까?',
@@ -203,12 +267,13 @@ function replyDelete(replySeq) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: `/replies/${replySeq}`,
-                method: 'DELETE',
+                url: `/replies/${replySeq}/delete`,
+                method: 'POST',
                 success: function(response) {
+                    // 성공 메시지 표시
                     swal.fire({
-                        title: '댓글 삭제 성공',
-                        text: '정상적으로 댓글을 삭제했습니다.',
+                        title: '삭제 성공',
+                        text: '댓글이 성공적으로 삭제되었습니다.',
                         icon: 'success',
                         confirmButtonText: '확인'
                     }).then(() => {
@@ -216,9 +281,17 @@ function replyDelete(replySeq) {
                     });
                 },
                 error: function(xhr, status, error) {
+                    // 서버 오류 처리
+                    let errorMessage = '댓글 삭제에 실패했습니다.';
+                    
+                    // 서버에서 반환한 에러 메시지에 따라 다르게 처리
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    
                     swal.fire({
-                        title: '댓글 삭제 실패',
-                        text: '댓글 삭제에 실패했습니다.',
+                        title: '삭제 실패',
+                        text: errorMessage,
                         icon: 'error',
                         confirmButtonText: '확인'
                     });
@@ -227,6 +300,7 @@ function replyDelete(replySeq) {
         }
     });
 }
+
 
 
 

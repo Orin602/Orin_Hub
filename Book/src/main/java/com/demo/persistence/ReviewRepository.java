@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.domain.Review;
 
@@ -40,6 +42,37 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query(value = "SELECT * FROM review ORDER BY viewCount DESC", nativeQuery = true)
     List<Review> getReviewsSortedByViewCount();
     
+    
+    // 조회수 증가
+    @Modifying
+    @Transactional
+    @Query("UPDATE Review r SET r.viewCount = r.viewCount + 1 WHERE r.review_seq = :reviewSeq")
+    void incrementViewCount(@Param("reviewSeq") int reviewSeq);
+    
+    // 추천수 증가
+    @Modifying
+    @Transactional
+    @Query("UPDATE Review r SET r.recoCount = r.recoCount + 1 WHERE r.review_seq = :reviewSeq")
+    void incrementRecoCount(@Param("reviewSeq") int reviewSeq);
+    
+    // 즐겨찾기수 증가
+    @Modifying
+    @Transactional
+    @Query("UPDATE Review r SET r.checkCount = r.checkCount + 1 WHERE r.review_seq = :reviewSeq")
+    void incrementCheckCount(@Param("reviewSeq") int reviewSeq);
+
+    // 추천수 감소
+    @Modifying
+    @Transactional
+    @Query("UPDATE Review r SET r.recoCount = r.recoCount - 1 WHERE r.review_seq = :reviewSeq")
+    void decrementRecoCount(@Param("reviewSeq") int reviewSeq);
+
+    // 즐겨찾기수 감소
+    @Modifying
+    @Transactional
+    @Query("UPDATE Review r SET r.checkCount = r.checkCount - 1 WHERE r.review_seq = :reviewSeq")
+    void decrementCheckCount(@Param("reviewSeq") int reviewSeq);
+    
     // 마이페이지용
     // 내가 작성한 글 조회
     @Query("SELECT r FROM Review r WHERE r.member.id =:id ORDER BY r.review_seq DESC")
@@ -47,4 +80,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     // 내가 즐겨찾기한 게시글
     @Query("SELECT f.review FROM Favorite f WHERE f.member.id = :memberId")
     List<Review> findFavoriteReviewsByMemberId(@Param("memberId") String id);
+    
 }

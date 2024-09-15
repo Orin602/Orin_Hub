@@ -32,9 +32,15 @@
 <div class="review-detail-container">
 	<h1>리뷰 상세 보기</h1>
 	<div class="review-btn">
-		조회수 카운트 <br>
-		추천수 카운트 + 버튼 <br>
-		즐겨찾기 카운트 버튼 <br>
+		<span id="count">조회수 : [[${review.viewCount}]]</span> |
+		<span id="count">추천수 : [[${review.recoCount}]]</span> |
+		<span id="count">즐겨찾기수 : [[${review.checkCount}]]</span>
+		<div class="count-btn">
+			<button type="button" id="recommend-button" th:attr="data-review-seq=${review.review_seq}"
+				onclick="reviewReco(this)">추천하기</button>
+			<button type="button" id="bookmark-button" th:attr="data-review-seq=${review.review_seq}"
+				onclick="reviewCheck(this)">즐겨찾기</button>
+	    </div>
 	</div>
 	<div class="review-detail-content">
 		<th:block th:if="${#lists.isEmpty(uploadImages)}">
@@ -57,10 +63,13 @@
 				<h5><span th:text="${reply.member.name}"></span>
 				<span th:text="${reply.content}"></span>
 				<span th:text="${#dates.format(reply.reply_date, 'yyyy-MM-dd HH:mm')}"></span></h5>
-				<button type="button" onclick="replyLike([[${reply.replySeq}]])">좋아요</button>
+				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
+						onclick="replyLike(this)">좋아요</button>
+				<span>[[${reply.replySeq}]]</span>
 				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>
-				<button type="button" onclick="replyDelete([[${reply.replySeq}]])">댓글삭제</button>
-
+				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
+						onclick="replyDelete(this)">댓글삭제</button>
+				<!-- th:attr은 속성 이름과 값을 동적으로 설정할 수 있게 한다. (JavaScript와 상호작용할 때 유용) -->
 			</div>
 		</div>
 		<div class="reply-content" th:if="${loginUser != null}">
