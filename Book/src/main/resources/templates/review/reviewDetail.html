@@ -65,7 +65,6 @@
 				<span th:text="${#dates.format(reply.reply_date, 'yyyy-MM-dd HH:mm')}"></span></h5>
 				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
 						onclick="replyLike(this)">좋아요</button>
-				<span>[[${reply.replySeq}]]</span>
 				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>
 				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
 						onclick="replyDelete(this)">댓글삭제</button>

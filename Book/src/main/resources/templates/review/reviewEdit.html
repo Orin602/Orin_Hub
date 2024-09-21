@@ -26,9 +26,11 @@
                 <th:block th:each="image, iterStat : ${review.uploadedImages}">
                     <div class="uploaded-image">
                         <img th:src="@{${image}}" alt="이미지 없음" style="width:200px; height:200px;">
-                        <button type="button" onclick="deleteImage(${review.review_seq}, ${iterStat.index})">
-						    삭제
+                        <button type="button" th:data-review-seq="${review.review_seq}" 
+						    th:data-index="${iterStat.index}" onclick="deleteImage(this)">삭제
 						</button>
+
+
                     </div>
                 </th:block>
             </th:block>

@@ -77,8 +77,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     // 내가 작성한 글 조회
     @Query("SELECT r FROM Review r WHERE r.member.id =:id ORDER BY r.review_seq DESC")
     public List<Review> getMyReview(@Param("id") String id);
-    // 내가 즐겨찾기한 게시글
-    @Query("SELECT f.review FROM Favorite f WHERE f.member.id = :memberId")
-    List<Review> findFavoriteReviewsByMemberId(@Param("memberId") String id);
     
 }

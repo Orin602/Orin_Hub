@@ -46,9 +46,6 @@ public interface ReviewService {
     // 마이페이지용
     // 내가 작성한 글 조회
     List<Review> getMyReview(String id);
-
-    // 내가 즐겨찾기한 게시글 조회
-    List<Review> findFavoriteReviewsByMemberId(String id);
     
     // 이미지 삭제
 	void deleteImage(int review_seq, int imageIndex);

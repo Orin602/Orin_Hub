@@ -50,7 +50,7 @@
         </th:block>
         <th:block th:unless="${session.loginUser == null}">
             <a th:href="@{/logout}">로그아웃</a>
-            <a th:href="@{/mypage}" th:text="${session.loginUser.name}">님</a>
+            <a th:href="@{/mypage}" th:text="${session.loginUser.name}"></a>
             <a th:href="@{/csutomer}">고객센터</a>
         </th:block>
     </div>

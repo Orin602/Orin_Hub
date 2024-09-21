@@ -26,9 +26,12 @@ import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Member;
 import com.demo.domain.Reply;
 import com.demo.domain.Review;
+import com.demo.domain.ReviewInteraction;
+import com.demo.domain.ReviewInteraction.InteractionType;
 import com.demo.dto.ItemDTO;
 import com.demo.service.MemberService;
 import com.demo.service.ReplyService;
+import com.demo.service.ReviewInteractionService;
 import com.demo.service.ReviewService;
 import com.demo.service.SearchService;
 
@@ -47,6 +50,8 @@ public class ReviewController {
 	private MemberService memberService;
 	@Autowired
 	private SearchService searchService;
+	@Autowired
+	private ReviewInteractionService reviewInteractionService;
 	
 	@Value("${com.demo.upload.path}")
 	private String uploadPath;
@@ -205,7 +210,7 @@ public class ReviewController {
 	// 리뷰 이미지 삭제
 	@GetMapping("/delete-image")
 	@ResponseBody
-	public ResponseEntity<String> deleteImage(@RequestParam("review_seq") int review_seq,
+	public ResponseEntity<String> deleteImage(@RequestParam("reviewSeq") int review_seq,
 	        @RequestParam("imageIndex") int imageIndex) {
 	    try {
 	        reviewService.deleteImage(review_seq, imageIndex); // 이미지 삭제 서비스 메서드 호출
@@ -240,10 +245,27 @@ public class ReviewController {
 		// 제목, 내용 수정
 		review.setTitle(vo.getTitle());
 		review.setContent(vo.getContent());
-		review.setUploadedImages(vo.getUploadedImages());
+		// 기존 이미지 리스트 유지
+		List<String> existingImages = review.getUploadedImages();
+		if (existingImages == null) {
+		    existingImages = new ArrayList<>();
+		}
+
+		// 새로운 업로드된 이미지 추가
+		if (vo.getUploadedImages() != null) {
+		    existingImages.addAll(vo.getUploadedImages());
+		}
+
+		// 수정된 이미지 리스트를 Review 객체에 설정
+		review.setUploadedImages(existingImages);
 		// 파일 업로드 처리
-        if (uploadFile.length > 0) {
+        if (uploadFile.length > 0 || !review.getUploadedImages().isEmpty()) {
         	List<String> fileUrls = new ArrayList<>();
+        	
+        	if (!review.getUploadedImages().isEmpty()) {
+                fileUrls.addAll(review.getUploadedImages());
+            }
+        	
             for (MultipartFile file : uploadFile) {
             	if (!file.isEmpty()) {
     				// 파일 경로
@@ -269,10 +291,10 @@ public class ReviewController {
     				}
     			}
             }
-            vo.setUploadedImages(fileUrls); // 저장된 파일 경로를 Review 객체에 설정
+            review.setUploadedImages(fileUrls); // 저장된 파일 경로를 Review 객체에 설정
         }
         
-        reviewService.updateReview(vo);
+        reviewService.updateReview(review);
         return "redirect:/review";
 	}
 
@@ -280,20 +302,37 @@ public class ReviewController {
 	@PostMapping("/review/{review_seq}/recommend")
 	@ResponseBody
 	public ResponseEntity<String> recommendReview(@PathVariable int review_seq, HttpSession session) {
-		Member loginUser = (Member)session.getAttribute("loginUser");
-		if(loginUser == null) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용할 수 있습니다.");
-			
-		}
-		try {
-	        // 추천 처리
-			reviewService.incrementRecoCount(review_seq);
-	        return ResponseEntity.ok("리뷰 추천이 성공적으로 처리되었습니다.");
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser == null) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용할 수 있습니다.");
+	    }
+
+	    // 리뷰 객체 가져오기
+	    Review review = reviewService.getReviewBySeq(review_seq);
+	    if (review == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("리뷰를 찾을 수 없습니다.");
+	    }
+
+	    // 사용자가 이미 추천한 내역 확인
+	    ReviewInteraction interaction = reviewInteractionService.findByMemberAndReviewAndInteractionType(loginUser, review, InteractionType.RECOMMENDATION);
+	    
+	    try {
+	        if (interaction != null) {
+	            // 추천이 이미 존재하므로 삭제
+	            reviewInteractionService.delete(interaction);
+	            reviewService.decrementRecoCount(review_seq);
+	            return ResponseEntity.ok("추천이 취소되었습니다.");
+	        } else {
+	            // 새로운 추천 추가
+	            reviewInteractionService.addInteraction(loginUser, review, InteractionType.RECOMMENDATION);
+	            reviewService.incrementRecoCount(review_seq);
+	            return ResponseEntity.ok("리뷰 추천이 성공적으로 처리되었습니다.");
+	        }
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 추천 처리 중 오류가 발생했습니다.");
 	    }
 	}
-	
+
 	// 리뷰 즐겨찾기 처리
 	@PostMapping("/review/{review_seq}/bookmark")
 	@ResponseBody
@@ -303,15 +342,32 @@ public class ReviewController {
 	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 후 이용할 수 있습니다.");
 	    }
 
-	    try {
-	        // 즐겨찾기 처리
-	        reviewService.incrementCheckCount(review_seq);
+	    // 리뷰 객체 가져오기
+	    Review review = reviewService.getReviewBySeq(review_seq);
+	    if (review == null) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("리뷰를 찾을 수 없습니다.");
+	    }
 
-	        return ResponseEntity.ok("리뷰 즐겨찾기가 성공적으로 처리되었습니다.");
+	    // 사용자가 이미 즐겨찾기한 내역 확인
+	    ReviewInteraction interaction = reviewInteractionService.findByMemberAndReviewAndInteractionType(loginUser, review, InteractionType.BOOKMARK);
+	    
+	    try {
+	        if (interaction != null) {
+	            // 즐겨찾기가 이미 존재하므로 삭제
+	            reviewInteractionService.delete(interaction);
+	            reviewService.decrementCheckCount(review_seq);
+	            return ResponseEntity.ok("즐겨찾기가 취소되었습니다.");
+	        } else {
+	            // 새로운 즐겨찾기 추가
+	            reviewInteractionService.addInteraction(loginUser, review, InteractionType.BOOKMARK);
+	            reviewService.incrementCheckCount(review_seq);
+	            return ResponseEntity.ok("리뷰가 성공적으로 즐겨찾기에 추가되었습니다.");
+	        }
 	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 즐겨찾기 처리 중 오류가 발생했습니다.");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 처리 중 오류가 발생했습니다.");
 	    }
 	}
+
 	
 	// 댓글 작성
 	@PostMapping("/write-reply")

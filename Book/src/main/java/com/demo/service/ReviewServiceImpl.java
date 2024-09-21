@@ -99,12 +99,6 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewRepo.getMyReview(id);
 	}
 
-	// 내가 즐겨찾기한 게시글 조회
-	@Override
-	public List<Review> findFavoriteReviewsByMemberId(String id) {
-		
-		return reviewRepo.findFavoriteReviewsByMemberId(id);
-	}
 
 	// 이미지 삭제
 	@Override

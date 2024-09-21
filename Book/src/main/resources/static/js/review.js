@@ -48,12 +48,30 @@ function review_write() {
 }
 
 // 이미지 삭제
-function deleteImage(review_seq, imageIndex) {
+function deleteImage(buttonElement) {
+	// html에서 버튼을 data- 속성을 이용해서 전달된 값을 가져옴
+	const reviewSeq = buttonElement.getAttribute('data-review-seq');
+	const imageIndex = buttonElement.getAttribute('data-index');
+	const remainingImages = [];
+    $(".uploaded-image").each(function(index, element) {
+        if (index !== imageIndex) {
+            remainingImages.push($(element).find("img").attr("src"));
+        }
+    });
+    
+    // 삭제된 이미지를 제외한 나머지 이미지를 서버로 전송
+    $("#review-edit-form").append(
+        $("<input>", {
+            type: "hidden",
+            name: "uploadedImages",
+            value: remainingImages.join(",")
+        })
+    );
 	$.ajax({
 		url: '/delete-image',
 		type: 'GET',
 		data: { 
-            review_seq: review_seq,
+            reviewSeq: reviewSeq,
             imageIndex: imageIndex 
         },
 		success: function(response) {
@@ -117,14 +135,25 @@ function reviewReco(buttonElement) {
 		url: `/review/${review_seq}/recommend`,
 		method: 'POST',
 		success: function(response) {
-			swal.fire({
-				title: '리뷰 추천!',
-				text: '리뷰를 성공적으로 추천했습니다.',
-				icon: 'success',
-				confirmButtonText: '확인'
-			}).then(()=> {
-				location.reload();
-			});
+			if (response.includes("성공적으로 처리되었습니다.")) {
+                swal.fire({
+                    title: '리뷰 추천!',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                swal.fire({
+                    title: '추천 삭제!',
+                    text: response,
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    location.reload();
+                });
+            }
 		},
 		error: function(xhr, status, error) {
 			swal.fire({
@@ -144,15 +173,25 @@ function reviewCheck(buttonElement) {
         url: `/review/${review_seq}/bookmark`, // 서버의 즐겨찾기 처리 URL
         method: 'POST',
         success: function(response) {
-            swal.fire({
-                title: '즐겨찾기 성공',
-                text: '리뷰가 성공적으로 즐겨찾기에 추가되었습니다.',
-                icon: 'success',
-                confirmButtonText: '확인'
-            }).then(() => {
-                // 성공 후 페이지 새로고침 (또는 다른 동작)
-                location.reload();
-            });
+            if (response.includes("성공적으로 추가되었습니다.")) {
+                swal.fire({
+                    title: '즐겨찾기 성공',
+                    text: response,
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                swal.fire({
+                    title: '즐겨찾기 삭제!',
+                    text: response,
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    location.reload();
+                });
+            }
         },
         error: function(xhr, status, error) {
             swal.fire({
