@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Admin Main Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<div class="admin-main-container">
+	<h2>관리자
+		페이지
+	</h2>
+	<h3>로그아웃 == 메인페이지로 이동</h3>
+	<p>공지사항</p>
+	<p>회원관리 (회원가입 날짜 + 총 리뷰갯수)</p>
+	<p>질문관리 (고정할 질의응답 + 일반 질의응답)</p>
+	<p>리뷰관리 (관리자는 바로 삭제 가능하도록)</p>
+	<p>댓글관리 (관리자는 바로 삭제 가능하도록)</p>
+</div>
+</body>
+</html>

@@ -41,6 +41,27 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return result;
 	}
+	@Override
+	public int adminId(Member vo) {
+		int result = -1;
+		// 회원 조회
+		Member member = memberRepo.findByLoginId(vo.getId());
+		
+		if(member != null) { // 아이디 존재
+			if(member.getPwd().equals(vo.getPwd())) { // pwd 일치
+				if(member.getMembercode() == 1) { // 관리자 코드 1
+					result = 1;
+				} else {
+					result = 2;
+				}
+			} else { // pwd 불일치
+				result =-1;
+			}
+		} else { // id 없음
+			result = 0;
+		}
+		return result;
+	}
 
 	@Override
 	public Member findId(String name, String email) {

@@ -1,6 +1,7 @@
 package com.demo.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,17 @@ public class ReviewInteractionServiceImpl implements ReviewInteractionService {
     @Override
     public void delete(ReviewInteraction interaction) {
         reviewInteractionRepo.delete(interaction);
+    }
+
+    @Override
+    public List<ReviewInteraction> getRecommendationsByMemberId(String memberId) {
+        // Repository 메서드를 호출하여 데이터베이스에서 추천 리뷰를 가져옴
+        return reviewInteractionRepo.findRecommendationsByMemberId(memberId);
+    }
+
+    @Override
+    public List<ReviewInteraction> getBookmarksByMemberId(String memberId) {
+        // Repository 메서드를 호출하여 데이터베이스에서 즐겨찾기 리뷰를 가져옴
+        return reviewInteractionRepo.findBookmarksByMemberId(memberId);
     }
 }

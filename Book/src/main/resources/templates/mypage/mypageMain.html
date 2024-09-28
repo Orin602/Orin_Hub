@@ -11,24 +11,66 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
-<div class="mypage-main-container">
-	<h1>마이페이지</h1>
-	<p th:text="${loginUser.name}"></p>
-	<p>내가 작성한 리뷰</p>
-	<div th:if="${myReview.isEmpty()}">
-		<h3>작성한 리뷰가 없습니다.</h3>
-	</div>
-	<div th:unless="${myReview.isEmpty()}">
-		<div th:each=" review : ${myReview}">
+	<div class="mypage-main-container">
+		<h1>마이페이지</h1>
+		<p th:text="${loginUser.name}"></p>
+		님
+
+		<p>내가 작성한 리뷰</p>
+		<div th:if="${myReview.isEmpty()}">
+			<h3>작성한 리뷰가 없습니다.</h3>
+		</div>
+		<div th:unless="${myReview.isEmpty()}">
 			<ul>
-				<li th:text="${review.title}"></li>
+				<div th:each="review : ${myReview}">
+					<li th:text="${review.title}"></li>
+				</div>
+			</ul>
+		</div>
+
+		<p>내가 추천한 리뷰</p>
+		<div th:if="${myRecoment.isEmpty()}">
+			<h3>추천한 리뷰가 없습니다.</h3>
+		</div>
+		<div th:unless="${myRecoment.isEmpty()}">
+			<ul>
+				<div th:each="myreco : ${myRecoment}">
+					<li><a
+						th:href="@{/review_detail(review_seq=${myreco.review.review_seq})}">
+							<span th:text="${myreco.review.title}"></span>
+					</a></li>
+				</div>
+			</ul>
+		</div>
+
+		<p>내가 즐겨찾기한 리뷰</p>
+		<div th:if="${myBookMark.isEmpty()}">
+			<h3>추천한 리뷰가 없습니다.</h3>
+		</div>
+		<div th:unless="${myBookMark.isEmpty()}">
+			<ul>
+				<div th:each="mybook : ${myBookMark}">
+					<li>
+						<p th:text="${mybook.review.review_seq}"></p> <a
+						th:href="@{/review_detail(review_seq=${mybook.review.review_seq})}">
+							<span th:text="${mybook.review.title}"></span>
+					</a>
+					</li>
+				</div>
+			</ul>
+		</div>
+
+		<p>내가 작성한 댓글</p>
+		<div th:if="${myReply.isEmpty()}">
+			<h3>작성한 댓글이 없습니다.</h3>
+		</div>
+		<div th:unless="${myReply.isEmpty()}">
+			<ul>
+				<div th:each="myreply : ${myReply}">
+					<li><span th:text="${myreply.content}"></span></li>
+				</div>
 			</ul>
 		</div>
 	</div>
-	<p>내가 추천한 리뷰</p>
-	<p>내가 즐겨찾기한 리뷰</p>
-	<p>내가 작성한 댓글</p>
-	<p>내 질문</p>
-</div>
 </body>
 </html>

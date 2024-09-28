@@ -12,6 +12,8 @@ public interface MemberService {
 	
 	// 로그인
 	public int loginId(Member vo);
+	// 관리자 로그인 
+	public int adminId(Member vo);
 	
 	// 아이디찾기 (이름, 이메리)
 	public Member findId(String name, String email);

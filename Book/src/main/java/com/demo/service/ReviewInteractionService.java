@@ -1,5 +1,7 @@
 package com.demo.service;
 
+import java.util.List;
+
 import com.demo.domain.Member;
 import com.demo.domain.Review;
 import com.demo.domain.ReviewInteraction;
@@ -15,4 +17,10 @@ public interface ReviewInteractionService {
     
     // 추천 또는 즐겨찾기 삭제
     void delete(ReviewInteraction interaction);
+    
+    // 내 추천 리뷰 조회
+    List<ReviewInteraction> getRecommendationsByMemberId(String memberId);
+
+    // 내 즐겨찾기 리뷰 조회
+    List<ReviewInteraction> getBookmarksByMemberId(String memberId);
 }
