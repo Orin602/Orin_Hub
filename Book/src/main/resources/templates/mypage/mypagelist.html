@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>my-page main</title>
+<title>my-page list</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 <link rel="stylesheet" th:href="@{/css/mypage.css}">
@@ -11,9 +11,11 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
-<div class="mypage-main-container">
-	<h1>마이페이지</h1>
-	<th:block th:insert="~{mypage/mypagelist}"></th:block>
+<div class="mypagelist">
+	<a th:href="@{/myreview}">내가 작성한 리뷰</a>
+	<a th:href="@{/myrecoment}">내가 추천한 리뷰</a>
+	<a th:href="@{/mybookmark}">내가 즐겨찾기한 리뷰</a>
+	<a th:href="@{/myreply}">내가 작성한 댓글</a>
 </div>
 </body>
 </html>

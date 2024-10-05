@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>my-page main</title>
+<title>my review</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 <link rel="stylesheet" th:href="@{/css/mypage.css}">
@@ -11,9 +11,24 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
-<div class="mypage-main-container">
-	<h1>마이페이지</h1>
-	<th:block th:insert="~{mypage/mypagelist}"></th:block>
+<div class="mybookmark">
+<th:block th:insert="~{mypage/mypagelist}"></th:block>
+	<h1>내가 즐겨찾기한 리뷰</h1>
+	<div th:if="${myBookMark.isEmpty()}">
+		<h3>즐겨찾기한 리뷰가 없습니다.</h3>
+	</div>
+	<div th:unless="${myBookMark.isEmpty()}">
+		<ul>
+			<div th:each="mybook : ${myBookMark}">
+				<li>
+					<p th:text="${mybook.review.review_seq}"></p> <a
+					th:href="@{/review_detail(review_seq=${mybook.review.review_seq})}">
+						<span th:text="${mybook.review.title}"></span>
+				</a>
+				</li>
+			</div>
+		</ul>
+	</div>
 </div>
 </body>
 </html>

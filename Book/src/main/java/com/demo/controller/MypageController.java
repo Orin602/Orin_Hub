@@ -32,20 +32,52 @@ public class MypageController {
 	@GetMapping("/mypage")
 	public String mypageView(HttpSession session, Model model) {
 		Member loginUser = (Member)session.getAttribute("loginUser");
-		List<Review> myReview = reviewService.getByIdReview(loginUser.getId());
-		// 내 추천
-		List<ReviewInteraction> myRecoment = riService.getRecommendationsByMemberId(loginUser.getId());
-		// 내 즐겨찾기
-		List<ReviewInteraction> myBookMark = riService.getBookmarksByMemberId(loginUser.getId());
-		// 내 댓글
-		List<Reply> myReply = replyService.getReplyByMember(loginUser.getId());
 		
-		model.addAttribute("myReview", myReview);
 		model.addAttribute("loginUser", loginUser);
-		model.addAttribute("myRecoment", myRecoment);
-		model.addAttribute("myBookMark", myBookMark);
-		model.addAttribute("myReply", myReply);
 		
 		return "mypage/mypageMain";
+	}
+	
+	// 내가 작성한 리뷰
+	@GetMapping("/myreview")
+	public String myReviewView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		List<Review> myReview = reviewService.getByIdReview(loginUser.getId());
+		
+		model.addAttribute("myReview", myReview);
+		
+		return "mypage/myReview";
+	}
+	
+	// 내가 추천한 리뷰
+	@GetMapping("/myrecoment")
+	public String myRecomentView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		List<ReviewInteraction> myRecoment = riService.getRecommendationsByMemberId(loginUser.getId());
+		
+		model.addAttribute("myRecoment", myRecoment);
+		
+		return "mypage/myRecoment";
+	}
+	
+	// 내가 즐겨찾기한 리뷰
+	@GetMapping("/mybookmark")
+	public String myBookMarkView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		List<ReviewInteraction> myBookMark = riService.getBookmarksByMemberId(loginUser.getId());
+		
+		model.addAttribute("myBookMark", myBookMark);
+		
+		return "mypage/myBookMark";
+	}
+	// 내가 작성한 댓글
+	@GetMapping("/myreply")
+	public String myReplyView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		List<Reply> myReply = replyService.getReplyByMember(loginUser.getId());
+		
+		model.addAttribute("myReply", myReply);
+		
+		return "mypage/myReply";
 	}
 }

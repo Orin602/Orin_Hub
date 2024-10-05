@@ -168,23 +168,24 @@ function reviewReco(buttonElement) {
 
 // 리뷰 즐겨찾기
 function reviewCheck(buttonElement) {
-	var review_seq = $(buttonElement).data('review-seq');
-	$.ajax({
+    var review_seq = $(buttonElement).data('review-seq');
+    $.ajax({
         url: `/review/${review_seq}/bookmark`, // 서버의 즐겨찾기 처리 URL
         method: 'POST',
-        success: function(response) {
-            if (response.includes("성공적으로 추가되었습니다.")) {
+        success: function(response, status, xhr) {
+            // 상태 코드가 200(성공)일 때
+            if (xhr.status === 200 && response.includes("추가")) { // 즐겨찾기 추가 성공
                 swal.fire({
-                    title: '즐겨찾기 성공',
+                    title: '즐겨찾기 성공', // 즐겨찾기 추가 성공 시
                     text: response,
                     icon: 'success',
                     confirmButtonText: '확인'
                 }).then(() => {
                     location.reload();
                 });
-            } else {
+            } else if (xhr.status === 200 && response.includes("취소")) { // 즐겨찾기 삭제 성공
                 swal.fire({
-                    title: '즐겨찾기 삭제!',
+                    title: '즐겨찾기 삭제!', // 즐겨찾기 삭제 시
                     text: response,
                     icon: 'warning',
                     confirmButtonText: '확인'
@@ -194,6 +195,7 @@ function reviewCheck(buttonElement) {
             }
         },
         error: function(xhr, status, error) {
+            // 에러가 발생했을 때
             swal.fire({
                 title: '즐겨찾기 실패',
                 text: '즐겨찾기 처리 중 오류가 발생했습니다.',
@@ -203,6 +205,7 @@ function reviewCheck(buttonElement) {
         }
     });
 }
+
 
 // 댓글 작성
 function reply_write() {
