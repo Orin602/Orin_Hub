@@ -11,6 +11,7 @@
 <script th:src="@{/js/review.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="review-write-container">
 	<h1>리뷰 작성</h1>
 	<div class="review-write-content">
@@ -18,11 +19,11 @@
 			 <input type="text" id="title" name="title" placeholder="제목을 입력해주세요." />
             <textarea rows="10" cols="20" name="content" id="content" placeholder="내용을 입력해주세요."></textarea>
             <label for="uploadFile">이미지 업로드 (선택 사항):</label>
-            <input type="file" name="uploadFile" id="uploadFile" multiple>
+            <input class="uploadFile" type="file" name="uploadFile" id="uploadFile" multiple>
 		</form>
 	</div>
-	<button type="button" onclick="window.location.href='/review'">목록으로</button>
-	<button type="button" onclick="review_write()">리뷰 작성</button>
+	<button class="write-btn" type="button" onclick="window.location.href='/review'">목록으로</button>
+	<button class="write-btn" type="button" onclick="review_write()">리뷰 작성</button>
 </div>
 </body>
 </html>

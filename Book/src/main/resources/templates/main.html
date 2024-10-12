@@ -56,8 +56,12 @@
                         });
                     } else {
                         var recommendations = data.recommendations || []; // 기본값으로 빈 배열 설정
-                        if (Array.isArray(recommendations)) {
-                            var listHtml = '';
+                        var totalCount = data.totalCount || 0; // totalCount 값 설정
+                     
+                        // totalCount를 사용하여 목록 상단에 추가
+                        var listHtml = '<h1>추천 책 : ' + totalCount + '권</h1>'; // 총 추천 책 수
+
+                        if (Array.isArray(recommendations) && recommendations.length > 0) {
                             recommendations.forEach(function(recommendation) {
                                 listHtml += '<li class="recommendations-item">' +
                                     '<h2>' + recommendation.recomtitle + '</h2>' +
@@ -84,28 +88,31 @@
 <body>
 <!-- 헤더 -->
 <th:block th:insert="~{include/header}"></th:block>
-<h1>사서 도서 추천</h1>
-<div th:if="${error}">
-    <p th:text="${error}"></p>
+<div class="main-container">
+	<h1>사서 도서 추천</h1>
+	<div th:if="${error}">
+	    <p th:text="${error}"></p>
+	</div>
+	<div class="recommendations-btns">
+	    <button class="month-btn" data-start-date="20240101" data-end-date="20240131">January</button>
+	    <button class="month-btn" data-start-date="20240201" data-end-date="20240229">February</button>
+	    <button class="month-btn" data-start-date="20240301" data-end-date="20240331">March</button>
+	    <button class="month-btn" data-start-date="20240401" data-end-date="20240430">April</button>
+	    <button class="month-btn" data-start-date="20240501" data-end-date="20240531">May</button>
+	    <button class="month-btn" data-start-date="20240601" data-end-date="20240630">June</button>
+	    <button class="month-btn" data-start-date="20240701" data-end-date="20240731">July</button>
+	    <button class="month-btn" data-start-date="20240801" data-end-date="20240831">August</button>
+	    <button class="month-btn" data-start-date="20240901" data-end-date="20240930">September</button>
+	    <button class="month-btn" data-start-date="20241001" data-end-date="20241031">October</button>
+	    <button class="month-btn" data-start-date="20241101" data-end-date="20241130">November</button>
+	    <button class="month-btn" data-start-date="20241201" data-end-date="20241231">December</button>
+	</div>
+	<div id="recommendations-container" class="recommendations-container">
+	    <ul id="recommendations-list" class="recommendateions-list">
+	        <!-- 추천 목록이 여기에 동적으로 추가됩니다. -->
+	    </ul>
+	</div>
 </div>
-<div>
-    <button class="month-btn" data-start-date="20240101" data-end-date="20240131">January</button>
-    <button class="month-btn" data-start-date="20240201" data-end-date="20240229">February</button>
-    <button class="month-btn" data-start-date="20240301" data-end-date="20240331">March</button>
-    <button class="month-btn" data-start-date="20240401" data-end-date="20240430">April</button>
-    <button class="month-btn" data-start-date="20240501" data-end-date="20240531">May</button>
-    <button class="month-btn" data-start-date="20240601" data-end-date="20240630">June</button>
-    <button class="month-btn" data-start-date="20240701" data-end-date="20240731">July</button>
-    <button class="month-btn" data-start-date="20240801" data-end-date="20240831">August</button>
-    <button class="month-btn" data-start-date="20240901" data-end-date="20240930">September</button>
-    <button class="month-btn" data-start-date="20241001" data-end-date="20241031">October</button>
-    <button class="month-btn" data-start-date="20241101" data-end-date="20241130">November</button>
-    <button class="month-btn" data-start-date="20241201" data-end-date="20241231">December</button>
-</div>
-<div id="recommendations-container">
-    <ul id="recommendations-list" class="recommendateions-list">
-        <!-- 추천 목록이 여기에 동적으로 추가됩니다. -->
-    </ul>
-</div>
+
 </body>
 </html>

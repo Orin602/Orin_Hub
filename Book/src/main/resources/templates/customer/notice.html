@@ -11,7 +11,9 @@
 <script th:src="@{/js/customer.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="customer-main-container">
+	<th:block th:insert="~{customer/customerMain}"></th:block>
 	<h2>공지사항</h2>
 	<p>아직 미완성
 </div>

@@ -11,6 +11,7 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="myreview">
 <th:block th:insert="~{mypage/mypagelist}"></th:block>
 	<h1>내가 작성한 리뷰</h1>
@@ -32,7 +33,7 @@
 	            </a>
 	            <h4>제목 : <span th:text="${review.title}"></span></h4>
 	            <h4>
-	                조회수 : <span th:text="${review.viewCount}"></span> / 
+	                조회수 : <span th:text="${review.viewCount}"></span> | 
 	                추천수 : <span th:text="${review.recoCount}"></span>
 	            </h4>
 	            <h4>작성한 날짜 : <span class="review-date" th:text="${#dates.format(review.review_date, 'yyyy-MM-dd')}"></span></h4>

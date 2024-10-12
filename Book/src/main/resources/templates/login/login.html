@@ -13,18 +13,14 @@
 <body>
 <div class="login-container">
 	<h1>로그인</h1>
-	<div class="social-login">
-	나중에 소셜 로그인
-	</div>
-	<span>또는 사이트 계정 로그인</span>
 	<form id="login-form" method="post">
 		<input type="text" name="id" id="id" placeholder="ID">
 		<input type="password" name="pwd" id="pwd" placeholder="Password">
-		<button type="button" onclick="login()">로그인</button>
+		<button class="login-btn" type="button" onclick="login()">로그인</button>
 	</form>
 	<div class="find-form">
-		<button type="button" onclick="findId()">아이디찾기</button>
-		<button type="button" onclick="findPwd()">비밀번호찾기</button>
+		<button class="findid-btn" type="button" onclick="findId()">아이디찾기</button>
+		<button class="findpwd-btn" type="button" onclick="findPwd()">비밀번호찾기</button>
 	</div>
 </div>
 <script th:inline="javascript">

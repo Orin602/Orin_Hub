@@ -9,28 +9,21 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" th:href="@{/css/login.css}">
 <script th:src="@{js/login.js}"></script>
-<style>
-	
-</style>
 </head>
 <body>
 <div class="join-container">
 	<h1>회원가입</h1>
-	<div class="social-login">
-	나중에 소셜 가입
-	</div>
-	<span>또는 사이트 계정 가입</span>
 	<form id="join-form" method="post">
 		<span>ID는 영문자와 숫자로만 구성되어야 하고, 3자 이상 15자 이하여야 합니다.</span>
 		<input type="text" name="id" id="id" placeholder="ID">
-		<button type="button" id="id-check-button">중복체크</button>
+		<button class="check-btn" type="button" id="id-check-button">중복체크</button>
 		<input type="email" name="email" id="email" placeholder="Email">
-		<button type="button" id="email-check-button">중복체크</button>
+		<button class="check-btn" type="button" id="email-check-button">중복체크</button>
 		<span>비밀번호는 최소 8자 이상이며, 대문자, 소문자, 숫자, 특수문자를 모두 포함해야 합니다.</span>
 		<input type="password" name="pwd" id="pwd" placeholder="Password">
 		<input type="password" name="pwdcheck" id="pwdcheck" placeholder="PasswordCheck">
 		<input type="text" name="name" id="name" placeholder="Name">
-		<button type="button" id="join-button">회원가입</button>
+		<button class="join-btn" type="button" id="join-button">회원가입</button>
 	</form>
 </div>
 </body>

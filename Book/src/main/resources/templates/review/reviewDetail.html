@@ -29,17 +29,19 @@
 </script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="review-detail-container">
 	<h1>리뷰 상세 보기</h1>
 	<div class="review-btn">
-		<span id="count">조회수 : [[${review.viewCount}]]</span> |
-		<span id="count">추천수 : [[${review.recoCount}]]</span> |
-		<span id="count">즐겨찾기수 : [[${review.checkCount}]]</span>
+		<h4>
+			조회수 : [[${review.viewCount}]] &nbsp;&nbsp;&nbsp;
+			추천수 : [[${review.recoCount}]] &nbsp;&nbsp;&nbsp;
+			즐겨찾기수 : [[${review.checkCount}]]</h4>
 		<div class="count-btn">
 			<button type="button" id="recommend-button" th:attr="data-review-seq=${review.review_seq}"
-				onclick="reviewReco(this)">추천하기</button>
+				class="detail-recoment-btn" onclick="reviewReco(this)">추천하기</button>&nbsp;
 			<button type="button" id="bookmark-button" th:attr="data-review-seq=${review.review_seq}"
-				onclick="reviewCheck(this)">즐겨찾기</button>
+				class="detail-bookmark-btn" onclick="reviewCheck(this)">즐겨찾기</button>
 	    </div>
 	</div>
 	<div class="review-detail-content">
@@ -64,10 +66,10 @@
 				<span th:text="${reply.content}"></span>
 				<span th:text="${#dates.format(reply.reply_date, 'yyyy-MM-dd HH:mm')}"></span></h5>
 				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
-						onclick="replyLike(this)">좋아요</button>
-				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>
+						class="detail-replylike-btn" onclick="replyLike(this)">좋아요</button>&nbsp;
+				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>&nbsp;
 				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
-						onclick="replyDelete(this)">댓글삭제</button>
+						class="detail-replydelete-btn" onclick="replyDelete(this)">댓글삭제</button>
 				<!-- th:attr은 속성 이름과 값을 동적으로 설정할 수 있게 한다. (JavaScript와 상호작용할 때 유용) -->
 			</div>
 		</div>
@@ -77,13 +79,13 @@
 				<input type="hidden" name="member_id" th:value="${loginUser.id}">
 				<input type="text" id="content" name="content" placeholder="댓글을 작성하세요">
 			</form>
-			<button type="button" onclick="reply_write()">댓글 작성</button>
+			<button class="detail-reply-btn"type="button" onclick="reply_write()">댓글 작성</button>
 		</div>
 	</div>
 	<div class="review_btn">
-		<button type="button" onclick="window.location.href='/review'">목록으로</button>
-		<th:block th:if="${loginUser != null}">
-        <button type="button" onclick="checkAndEdit()">수정하기</button>
+		<button class="detail-list-btn" type="button" onclick="window.location.href='/review'">목록으로</button>
+		<th:block th:if="${loginUser != null}">&nbsp;&nbsp;
+        <button class="detail-edit-btn" type="button" onclick="checkAndEdit()">수정하기</button>
         </th:block>
 	</div>
 </div>

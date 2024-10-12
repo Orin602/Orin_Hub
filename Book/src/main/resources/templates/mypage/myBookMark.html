@@ -11,6 +11,7 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="mybookmark">
 <th:block th:insert="~{mypage/mypagelist}"></th:block>
 	<h1>내가 즐겨찾기한 리뷰</h1>
@@ -18,16 +19,23 @@
 		<h3>즐겨찾기한 리뷰가 없습니다.</h3>
 	</div>
 	<div th:unless="${myBookMark.isEmpty()}">
-		<ul>
-			<div th:each="mybook : ${myBookMark}">
-				<li>
-					<p th:text="${mybook.review.review_seq}"></p> <a
-					th:href="@{/review_detail(review_seq=${mybook.review.review_seq})}">
-						<span th:text="${mybook.review.title}"></span>
+		<div class="bookmark-list">
+			<div class="bookmark-box" th:each="mybook : ${myBookMark}">
+				<a th:href="@{/review_detail(review_seq=${mybook.review.review_seq})}">
+					<th:block th:if="${#lists.isEmpty(mybook.review.uploadedImages)}">
+	                    <img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:800px; height:200px;">
+	                </th:block>
+	                <th:block th:unless="${#lists.isEmpty(mybook.review.uploadedImages)}">
+	                    <div th:with="firstImage=${review.uploadedImages[0]}">
+	                        <img th:src="@{${firstImage}}" th:alt="${mybook.review.title}" style="width:800px; height:200px;">
+	                    </div>
+	                </th:block>
 				</a>
-				</li>
+				<h4>제목 : <span th:text="${mybook.review.title}"></span></h4>
+				<h4>작성자 : <span th:text="${mybook.review.member.name}"></span></h4>
+				<h4>즐겨찾기 날짜 : <span class="bookmark-date" th:text="${#dates.format(mybook.interactionDate, 'yyyy-MM-dd')}"></span></h4>
 			</div>
-		</ul>
+		</div>
 	</div>
 </div>
 </body>

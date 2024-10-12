@@ -74,6 +74,10 @@ public class MainController {
         Map<String, Object> response = new HashMap<>();
         try {
             List<BookRecommendation> recommendations = bookRecoService.getBookRecommendations(start_date, end_date);
+         
+            // 총 개수를 response에 추가
+            response.put("totalCount", recommendations.size());
+            
             if (recommendations.isEmpty() || (recommendations.size() == 1 && recommendations.get(0).getRecomtitle() == null)) {
                 response.put("message", "아직 이달의 사서 도서 추천이 없습니다.");
             } else {

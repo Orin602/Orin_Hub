@@ -14,11 +14,11 @@
 <div class="find-pwd-container">
 	<h1>비밀번호 찾기 결과</h1>
 	<th:block th:if="${message == 1}">
-		가입한 계정의 ID는 [[${id}]]입니다.<br>
-		가입한 계정의 Password는 [[${pwd}]]입니다.		
+		<h3>가입한 계정의 ID는 '[[${id}]]'입니다.</h3>
+		<h3>가입한 계정의 Password는 '[[${pwd}]]'입니다.</h3>
 	</th:block>
 	<th:block th:if="${message == -1}">
-		입력하신 내용과 일치하는 계정을 찾을 수 없습니다.
+		<h3>입력하신 내용과 일치하는 계정을 찾을 수 없습니다.</h3>
 	</th:block>
 	<button type="button" onclick="ok()">확인</button>
 </div>

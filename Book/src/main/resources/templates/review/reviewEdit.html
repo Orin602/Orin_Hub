@@ -11,6 +11,7 @@
 <script th:src="@{/js/review.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="review-edit-container">
 	<h1>리뷰 수정</h1>
 	<form class="review-edit-form" id="review-edit-form" method="post" enctype="multipart/form-data">
@@ -27,7 +28,8 @@
                     <div class="uploaded-image">
                         <img th:src="@{${image}}" alt="이미지 없음" style="width:200px; height:200px;">
                         <button type="button" th:data-review-seq="${review.review_seq}" 
-						    th:data-index="${iterStat.index}" onclick="deleteImage(this)">삭제
+						    th:data-index="${iterStat.index}" class="edit-imgdelete-btn"
+						    onclick="deleteImage(this)">삭제
 						</button>
 
 
@@ -41,8 +43,10 @@
 		<textarea name="content" id="content" th:text="${review.content}"></textarea>
 		<input type="file" name="uploadFile" id="uploadFile" multiple>
 	</form>
-	<button type="button" onclick="window.location.href='/review'">목록으로</button>
-	<button type="button" onclick="update_review()">리뷰 수정</button>
+	<div class="edit-bottom">
+		<button class="edit-btn" type="button" onclick="window.location.href='/review'">목록으로</button>&nbsp;&nbsp;&nbsp;
+		<button class="edit-btn" type="button" onclick="update_review()">리뷰 수정</button>
+	</div>
 </div>
 </body>
 </html>

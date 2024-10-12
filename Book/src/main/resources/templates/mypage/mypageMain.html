@@ -11,6 +11,7 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 <div class="mypage-main-container">
 	<h1>마이페이지</h1>
 	<th:block th:insert="~{mypage/mypagelist}"></th:block>
