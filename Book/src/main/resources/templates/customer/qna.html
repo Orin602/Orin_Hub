@@ -11,11 +11,15 @@
 <script th:src="@{/js/customer.js}"></script>
 </head>
 <body>
-<th:block th:insert="~{include/header}"></th:block>
-<div class="customer-main-container">
+<div class="qna-container">
 	<th:block th:insert="~{customer/customerMain}"></th:block>
 	<h2>자주 묻는 질문</h2>
-	<p>아직 미완성 
+	<!-- 관리자가 지정한 qna목록만 나열해서 고정(테이블) -->
+	<div class="qna_table">
+	
+	</div>
+	<a th:href="@{/qna_write}">질문 작성</a>
+	
 </div>
 </body>
 </html>
