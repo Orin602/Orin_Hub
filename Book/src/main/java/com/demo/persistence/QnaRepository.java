@@ -16,5 +16,9 @@ public interface QnaRepository extends JpaRepository<Qna, Integer> {
     
     // Q&A 특정 조회 (회원용)
     @Query("SELECT q FROM Qna q WHERE q.member.id = :id")
-    List<Qna> findByMemberId(@Param("id") String id);
+    public List<Qna> getMyQna(@Param("id") String id);
+    
+    // qna_seq로 QnA 조회
+    @Query("SELECT q FROM Qna q WHERE q.qna_seq =:qna_seq")
+    Qna findQnaBySeq(@Param("qna_seq") int qna_seq);
 }

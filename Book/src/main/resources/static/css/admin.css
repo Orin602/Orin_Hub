@@ -1,1 +1,13 @@
 @charset "utf-8";
+
+/* admin : h3 cursor */
+.clickable {
+	cursor: pointer; /* 커서를 포인터로 변경 */
+	color: #007bff; /* 링크 색상 (필요에 따라 조정) */
+	text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+}
+
+.clickable:hover {
+	text-decoration: none; /* 호버 시 밑줄 제거 (선택 사항) */
+	color: #0056b3; /* 호버 시 색상 변경 (필요에 따라 조정) */
+}

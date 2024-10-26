@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.domain.Member;
 import com.demo.domain.Qna;
@@ -58,8 +59,16 @@ public class CustomerController {
 		return "customer/qna_write";
 	}
 	@PostMapping("/qna-write-action")
-	public String qnaWriteAction(HttpSession session, Qna qna) {
+	public String qnaWriteAction(HttpSession session, Model model, Qna qna) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+			model.addAttribute("text", "질문 작성은 로그인 후 이용 가능합니다.");
+			model.addAttribute("messageType", "info");
+			
+			return "login/login";
+		}
 		
 		qna.setMember(loginUser);
 		qnaService.createQna(qna);
@@ -67,9 +76,72 @@ public class CustomerController {
 		return "customer/qna";
 	}
 	
-	//qna delete
-	
 	//qna update
+	@GetMapping("/qnaEdit")
+	public String qnaEditView(@RequestParam("qna_seq") int qna_seq, Model model,
+								HttpSession session) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		Qna qna = qnaService.findQnaBySeq(qna_seq);
+
+		if(loginUser == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+			model.addAttribute("text", "질문 수정은 로그인 후 이용 가능합니다.");
+			model.addAttribute("messageType", "info");
+			
+			return "login/login";
+		}
+		model.addAttribute("qna", qna);
+		
+		return "customer/qna_edit";
+	}
+	@PostMapping("/qna-edit-action")
+	public String qnaUpdateAction(HttpSession session, Model model, Qna qna,
+			@RequestParam("qna_seq") int qna_seq) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		Qna updateQna = qnaService.findQnaBySeq(qna_seq);
+		
+		if(loginUser == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+			model.addAttribute("text", "질문 수정은 로그인 후 이용 가능합니다.");
+			model.addAttribute("messageType", "info");
+			
+			return "login/login";
+		}
+		updateQna.setTitle(qna.getTitle());
+		updateQna.setContent(qna.getContent());
+		qnaService.updateQna(updateQna);
+		
+		return "redirect:/myqna";
+	}
+	
+	//qna delete
+	@GetMapping("/deleteQna")
+	public String deleteQna(@RequestParam("qna_seq") int qna_seq, Model model, HttpSession session) {
+        Member loginUser = (Member) session.getAttribute("loginUser");
+        
+        if (loginUser == null) {
+            model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "질문 삭제는 로그인 후 이용 가능합니다.");
+            model.addAttribute("messageType", "info");
+            return "login/login";
+        }
+
+        try {
+            // QnA 삭제 메소드 호출
+            qnaService.deleteQna(qna_seq); // qna_seq 전달
+            model.addAttribute("message", "QnA가 성공적으로 삭제되었습니다.");
+            model.addAttribute("messageType", "success");
+        } catch (IllegalArgumentException e) {
+            // 삭제 실패 시 메시지 처리
+            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageType", "error");
+        }
+        
+        // 삭제 후 목록 페이지로 리다이렉트
+        return "redirect:/myqna";
+    }
 	
 	
 	

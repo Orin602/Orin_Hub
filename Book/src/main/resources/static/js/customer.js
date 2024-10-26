@@ -25,8 +25,8 @@ function qna_write() {
 			icon: 'success',
 			confirmButtonText: '확인'
 		}).then((result) => {
-			if(result.isconfirmed) {
-				$("#qna_write_form").attr("action", "/qna-write-action").submit();
+			if(result.isConfirmed) {
+				$("#qna-write-form").attr("action", "/qna-write-action").submit();
 			}
 		});
 	}
@@ -59,8 +59,8 @@ function qna_update() {
 			icon: 'success',
 			confirmButtonText: '확인'
 		}).then((result) => {
-			if(result.isconfirmed) {
-				$("#qna_update_form").attr("action", "/qna-update-action").submit();
+			if(result.isConfirmed) {
+				$("#qna_edit_form").attr("action", "/qna-edit-action").submit();
 			}
 		});
 	}

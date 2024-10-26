@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>QnA edit Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/customer.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/customer.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{/include/header}"></th:block>
+<div class="qna_edit_container">
+	<h2>QnA 수정</h2>
+	<form class="qna_edit_form" id="qna_edit_form" method="post">
+		<input type="hidden" name="qna_seq" th:value="${qna.qna_seq}" />
+		<label>제목</label>
+		<input type="text" name="title" id="title" th:value="${qna.title}" />
+		<label>내용</label>
+		<textarea name="content" id="content" th:text="${qna.content}"></textarea>
+	</form>
+	<button class="before-page-btn" type="button" onclick="window.history.back()">이전 페이지</button>
+	<button class="qna_update_btn" type="button" onclick="qna_update()">질문 수정</button>
+</div>
+</body>
+</html>

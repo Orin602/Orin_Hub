@@ -91,4 +91,9 @@ public class NoticeServiceImpl implements NoticeService {
         return false; // 임시로 false 반환 (중복 좋아요가 없다고 가정)
     }
 
+	@Override
+	public List<Notice> getAllNotices() {
+		return noticeRepo.findAll();
+	}
+
 }

@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.demo.domain.Member;
+import com.demo.domain.Qna;
 import com.demo.domain.Reply;
 import com.demo.domain.Review;
 import com.demo.domain.ReviewInteraction;
+import com.demo.service.QnaService;
 import com.demo.service.ReplyService;
 import com.demo.service.ReviewInteractionService;
 import com.demo.service.ReviewService;
@@ -26,6 +28,8 @@ public class MypageController {
 	private ReplyService replyService;
 	@Autowired
 	private ReviewInteractionService riService; 
+	@Autowired
+	private QnaService qnaService;
 	
 	
 	// 마이페이지
@@ -79,5 +83,21 @@ public class MypageController {
 		model.addAttribute("myReply", myReply);
 		
 		return "mypage/myReply";
+	}
+	
+	// 내 질문 현황
+	@GetMapping("/myqna")
+	public String myQnaView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			return "login/login";
+		}
+		model.addAttribute("loginUser", loginUser);
+		List<Qna> myQna = qnaService.getMyQna(loginUser.getId());
+		
+		model.addAttribute("myQna", myQna);
+		
+		return "mypage/myQna";
 	}
 }

@@ -9,18 +9,70 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 <script th:src="@{/js/admin.js}"></script>
+<script>
+    function toggleContent(header) {
+        // 해당 h3 태그의 다음 sibling 요소(content-list)를 토글합니다.
+        const content = header.nextElementSibling;
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block"; // 보여주기
+        } else {
+            content.style.display = "none"; // 숨기기
+        }
+    }
+</script>
 </head>
 <body>
 <div class="admin-main-container">
-	<h2>관리자
-		페이지
-	</h2>
-	<h3>로그아웃 == 메인페이지로 이동</h3>
-	<p>공지사항</p>
-	<p>회원관리 (회원가입 날짜 + 총 리뷰갯수)</p>
-	<p>질문관리 (고정할 질의응답 + 일반 질의응답)</p>
-	<p>리뷰관리 (관리자는 바로 삭제 가능하도록)</p>
-	<p>댓글관리 (관리자는 바로 삭제 가능하도록)</p>
+	<h1>관리자 페이지</h1>
+	 <!-- 관리자 정보 및 로그아웃 버튼 -->
+	 <div class="admin-section">
+	 	<h3>관리자 정보</h3>
+	 	<p>이름 : [[${admin.name}]]</p>
+	 	<p>이메일 : [[${admin.email}]]</p>
+	 	<button type="button" class="logout-btn" onclick="logout()">로그아웃</button>
+	 </div>
+	<!-- 공지사항 섹션 -->
+	<div class="admin-section">
+	    <h3 class="clickable" onclick="toggleContent(this)">공지사항 관리</h3>
+	    <div class="content-list" style="display: none;">
+	        <a th:href="@{/admin-notice-list}">전체리스트</a><br>
+	        <a th:href="@{/admin-notice-write}">작성</a><br>
+	        <a th:href="@{/admin-notice-ED}">수정/삭제</a><br>
+	    </div>
+	</div>
+	
+	<!-- 회원관리 섹션 -->
+	<div class="admin-section">
+	    <h3 class="clickable" onclick="toggleContent(this)">회원 관리</h3>
+	    <div class="content-list" style="display: none;">
+	        <a th:href="@{/admin-customer-list}">회원리스트</a><br>
+	    </div>
+	</div>
+	
+	<!-- 질문관리 섹션 -->
+	<div class="admin-section">
+	    <h3 class="clickable" onclick="toggleContent(this)">질문 관리</h3>
+	    <div class="content-list" style="display: none;">
+	        <a th:href="@{/admin-fix-qna}">고정 질문</a><br>
+	        <a th:href="@{/admin-customer-qna}">회원 질문</a><br>
+	    </div>
+	</div>
+	
+	<!-- 리뷰관리 섹션 -->
+	<div class="admin-section">
+	    <h3 class="clickable" onclick="toggleContent(this)">리뷰 관리</h3>
+	    <div class="content-list" style="display: none;">
+	        <a th:href="@{/admin-review}">리뷰 리스트</a><br>
+	    </div>
+	</div>
+	
+	<!-- 댓글관리 섹션 -->
+	<div class="admin-section">
+	    <h3 class="clickable" onclick="toggleContent(this)">댓글 관리</h3>
+	    <div class="content-list" style="display: none;">
+	        <a th:href="@{/admin-apply}">댓글 리스트</a><br>
+	    </div>
+	</div>
 </div>
 </body>
 </html>

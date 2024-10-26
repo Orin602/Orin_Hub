@@ -47,6 +47,9 @@ public class Qna {
 	private String answer;
 	@Temporal(value=TemporalType.TIMESTAMP)
 	private Date answer_date;
+	// 답변 상태 : 0 = '답변 대기', 1 = '답변 완료'
+	@ColumnDefault("0")
+	private int answer_status;
 	
 	//
 	@ManyToOne
