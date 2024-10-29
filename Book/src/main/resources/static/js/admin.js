@@ -55,7 +55,148 @@ function logout() {
 function notice_write() {
 	if($("#title").val() == "") {
 		swal.fire({
-			title: '제목은 '
-		})
+			title: '제목은을 입력해주세요.',
+			icon: 'warning'
+		});
+		$("#title").focus();
+		return false;
+	} else if($("#content").val() == "") {
+		swal.fire({
+			title: '내용을 입력해주세요.',
+			icon: 'warning'
+		});
+		$("#content").focus();
+		return false;
+	} else {
+		swal.fire({
+			title: '공지사항 작성 성공!',
+			text: '공지사항 목록 페이지로 이동합니다.',
+			icon: 'success',
+			confirmButtonText: '확인'
+		}).then((result) => {
+			if(result.isConfirmed) {
+				$("#notice-write-form").attr("action", "/notice-write-action").submit();
+			}
+		});
+	}
+	
+}
+
+// 공지사항 삭제
+function noticedelete() {
+	const noticeSeq = document.getElementById("notice-seq").value; // 공지사항의 ID를 가져오는 부분
+    const noticeTitle = document.getElementById("notice-title").innerText; // 제목을 가져오는 부분
+
+    Swal.fire({
+        title: '삭제 확인',
+        text: `${noticeTitle} 공지사항을 삭제하시겠습니까?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // AJAX 요청을 통해 공지사항 삭제
+            $.ajax({
+                url: '/notice/delete', // 삭제 요청 URL
+                type: 'DELETE',
+                data: { notice_seq: noticeSeq }, // 삭제할 공지사항의 ID
+                success: function(response) {
+                    // 삭제 성공 시
+                    Swal.fire({
+                        title: '삭제 완료',
+                        text: '공지사항이 삭제되었습니다.',
+                        icon: 'success'
+                    }).then(() => {
+                        location.href = '/admin-notice-list';
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // 삭제 실패 시
+                    Swal.fire({
+                        title: '삭제 실패',
+                        text: '공지사항 삭제에 실패했습니다.',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
+}
+
+// 이미지 삭제
+function deleteImage(buttonElement) {
+	const notice_seq = buttonElement.getAttribute('data-notice-seq');
+	const imageIndex = buttonElement.getAttribute('data-index');
+	const remainingImages = [];
+	$(".uploaded-image").each(function(index, element) {
+		if(index !== imageIndex) {
+			remainingImages.push($(element).find("img").attr("src"));
+		}
+	});
+	// 삭제된 이미지를 제외한 나머지 이미지를 서버로 전송
+    $("#notice-edit-form").append(
+        $("<input>", {
+            type: "hidden",
+            name: "uploadedImages",
+            value: remainingImages.join(",")
+        })
+    );
+    $.ajax({
+        url: '/delete-image-notice',
+        type: 'GET',
+        data: { 
+            notice_seq: notice_seq,
+            imageIndex: imageIndex 
+        },
+        success: function(response) {
+            swal.fire({
+                title: '삭제 성공',
+                text: '이미지를 성공적으로 삭제하였습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            swal.fire({
+                title: '삭제 실패',
+                text: '이미지 삭제 중 오류가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
+        }
+    });
+}
+
+// 공지사항 수정
+function update_notice() {
+	if($("#title").val() == "") {
+		swal.fire({
+			title: '제목을 입력해주세요.',
+			icon: 'warning'
+		});
+		$("#title").focus();
+		return false;
+	} else if($("#content").val() == "") {
+		swal.fire({
+			title: '내용을 입력해주세요.',
+			icon: 'warning'
+		});
+		$("#content").focus();
+		return false;
+	} else {
+		swal.fire({
+			title: '리뷰 수정 성공',
+			icon: 'success',
+			confirmButtonText: '확인'
+		}).then((result) => {
+			if(result.isConfirmed) {
+				$("#notice-edit-form").attr("action", "/update-notice").submit();
+			}
+		});
 	}
 }

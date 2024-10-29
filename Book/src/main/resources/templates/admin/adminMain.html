@@ -23,7 +23,7 @@
 </head>
 <body>
 <div class="admin-main-container">
-	<h1>관리자 페이지</h1>
+	<h1><a th:href="@{/adminMain}">관리자 페이지</a></h1>
 	 <!-- 관리자 정보 및 로그아웃 버튼 -->
 	 <div class="admin-section">
 	 	<h3>관리자 정보</h3>
@@ -37,7 +37,6 @@
 	    <div class="content-list" style="display: none;">
 	        <a th:href="@{/admin-notice-list}">전체리스트</a><br>
 	        <a th:href="@{/admin-notice-write}">작성</a><br>
-	        <a th:href="@{/admin-notice-ED}">수정/삭제</a><br>
 	    </div>
 	</div>
 	

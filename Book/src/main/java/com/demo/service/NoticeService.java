@@ -13,7 +13,7 @@ public interface NoticeService {
 	// 공지사항 삭제
 	void deleteNotice(int notice_seq);
 	// 공지사항 수정
-	Notice updateNotice(int notice_seq, Notice notice);
+	void updateNotice(Notice notice);
 	// 공지사항 조회
 	List<Notice> getAllNotices(Sort sort);
 	Notice getNoticeById(int notice_seq);
@@ -23,4 +23,6 @@ public interface NoticeService {
 	void increaseViewCount(int notice_seq, String sessionId);
 	// 공지사항 좋아요(likeCount)
 	void increaseLikeCount(int notice_seq, String id);
+	
+	void deleteImage(int notice_seq, int imageIndex);
 }

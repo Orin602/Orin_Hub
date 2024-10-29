@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>notice edit Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>공지사항 수정</h1>
+	<form class="notice-edit-form" id="notice-edit-form" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="notice_seq" th:value="${notice.notice_seq}" />
+		<!-- 이미지 관리 -->
+		<div class="uploaded-images">
+			<th:block th:if="${#lists.isEmpty(notice.uploadedImages)}">
+				<div class="uploaded-image">
+					<img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:200px; height:200px;">
+				</div>
+			</th:block>
+			<th:block th:unless="${#lists.isEmpty(notice.uploadedImages)}">
+				<th:block th:each="image, iterStat : ${notice.uploadedImages}">
+					<div class="uploaded-image">
+						<img th:src="@{${image}}" th:alt="${notice.title}" style="width:200px; height:200px;">
+						<button type="button" th:data-notice-seq="${notice.notice_seq}"
+							th:data-index="${iterStat.index}" class="edit-imgdelete-btn"
+							onclick="deleteImage(this)">삭제
+						</button>
+					</div>
+				</th:block>
+			</th:block>
+		</div>
+		<label>제목</label>
+		<input type="text" name="title" id="title" th:value="${notice.title}" />
+		<label>내용</label>
+		<textarea name="content" id="content" th:text="${notice.content}"></textarea>
+		<input type="file" name="uploadFile" id="uploadFile" multiple>
+	</form>
+	<div class="edit-button">
+		<button class="before-btn" type="button" onclick="window.location.href='/admin-notice-list'">목록으로</button>
+		<button class="edit-btn" type="button" onclick="update_notice()">공지사항 수정</button>
+	</div>
+</div>
+</body>
+</html>

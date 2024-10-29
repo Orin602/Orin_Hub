@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -8,8 +9,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Notice;
+import com.demo.domain.Review;
 import com.demo.persistence.NoticeRepository;
 
 @Service
@@ -31,17 +35,19 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-    public Notice updateNotice(int notice_seq, Notice updatedNotice) {
-        Notice notice = noticeRepo.findById(notice_seq)
-                .orElseThrow(() -> new IllegalArgumentException("공지사항을 찾을 수 없습니다."));
+    public void updateNotice(Notice updatedNotice) {
+        Notice notice = noticeRepo.getNoticeBySeq(updatedNotice.getNotice_seq());
+                
         
+        notice.setNotice_seq(notice.getNotice_seq());
+        notice.setMember(updatedNotice.getMember());
         notice.setTitle(updatedNotice.getTitle());
         notice.setContent(updatedNotice.getContent());
         notice.setNoticeImageUrl(updatedNotice.getNoticeImageUrl());
         notice.setNotice_date(new Date());
         // 필요시 추가 필드 업데이트
 
-        return noticeRepo.save(notice);
+       noticeRepo.save(notice);
     }
 
 	@Override
@@ -96,4 +102,28 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeRepo.findAll();
 	}
 
+	@Override
+	@Transactional
+	public void deleteImage(int notice_seq, int imageIndex) {
+		Notice notice = noticeRepo.getNoticeBySeq(notice_seq);
+		List<String> uploadImages = notice.getUploadedImages();
+		
+		if (imageIndex >= 0 && imageIndex < uploadImages.size()) {
+	        // 이미지 리스트에서 해당 인덱스의 이미지 삭제
+	        String imageUrlToRemove = uploadImages.remove(imageIndex);
+	        
+	        try {
+	            // 파일 시스템에서 이미지 삭제
+	            FileUploadUtil.deleteFile(imageUrlToRemove);
+	        } catch (IOException e) {
+	            // IOException을 RuntimeException으로 전환하여 처리
+	            throw new RuntimeException("Failed to delete image file: " + imageUrlToRemove, e);
+	        }
+		       notice.setUploadedImages(uploadImages);
+		       noticeRepo.save(notice);
+		} else {
+	        throw new IllegalArgumentException("Invalid image index: " + imageIndex);
+	    }
+	
+	}
 }
