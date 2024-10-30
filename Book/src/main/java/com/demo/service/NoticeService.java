@@ -13,7 +13,7 @@ public interface NoticeService {
 	// 공지사항 삭제
 	void deleteNotice(int notice_seq);
 	// 공지사항 수정
-	void updateNotice(Notice notice);
+	void updateNotice(Notice vo);
 	// 공지사항 조회
 	List<Notice> getAllNotices(Sort sort);
 	Notice getNoticeById(int notice_seq);

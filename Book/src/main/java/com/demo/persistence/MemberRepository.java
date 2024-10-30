@@ -13,7 +13,7 @@ import com.demo.domain.Member;
 public interface MemberRepository extends JpaRepository<Member, String> {
 
 	// 전체 회원목록 조회
-	@Query(value="SELECT * FROM member ORDER BY signupDate DESC", nativeQuery=true)
+	@Query(value="SELECT * FROM member ORDER BY signup_date DESC", nativeQuery=true)
 	List<Member> getAllMember();
 	
 	// 특정 회원 조회

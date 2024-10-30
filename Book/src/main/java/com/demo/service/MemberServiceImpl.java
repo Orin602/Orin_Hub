@@ -1,5 +1,7 @@
 package com.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -121,5 +123,24 @@ public class MemberServiceImpl implements MemberService {
 	public void deleteMember(Member vo) {
 		memberRepo.deleteMemberByIdAndPassword(vo.getId(), vo.getPwd());
 	}
+
+	// 관리자용
+	@Override
+	public List<Member> getAllMembers() {
+		return memberRepo.getAllMember();
+	}
+	@Override
+	public Member getMemberById(String id) {
+		return memberRepo.findMemberById(id);
+	}
+	// 회원코드 수정 메서드
+    @Override
+    public void updateMemberCode(String id, int memberCode) {
+        Member member = memberRepo.findMemberById(id);
+        if (member != null) {
+            member.setMembercode(memberCode);
+            memberRepo.save(member); // 변경된 회원 정보를 저장
+        }
+    }
 
 }

@@ -108,6 +108,14 @@ public class AdminContoller {
 	// 관리자 공지사항 작성
 	@GetMapping("/admin-notice-write")
 	public String writeNotice(HttpSession session, Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
 	    
 	    return "admin/section/notice_write"; // 뷰 이름
 	}
@@ -218,11 +226,12 @@ public class AdminContoller {
 	}
 	// 공지사항 수정 처리
 	@PostMapping("/update-notice")
-	public String updateNotice(HttpSession session, Model model, Notice notice,
+	public String updateNotice(HttpSession session, Model model, Notice vo,
 			@RequestParam("uploadFile") MultipartFile[] uploadFile,
 			@RequestParam("notice_seq") int notice_seq) {
 		Member admin = (Member)session.getAttribute("admin");
-		Notice vo = noticeService.getNoticeById(notice_seq);
+		Notice notice = noticeService.getNoticeById(notice_seq);
+		
 		
 		if(admin == null) {
 			model.addAttribute("message", "로그인 페이지로 이동");
@@ -238,26 +247,26 @@ public class AdminContoller {
 			
 			return "redirect:/admin-notice-list";
 		}
-		vo.setTitle(notice.getTitle());
-		vo.setContent(notice.getContent());
+		notice.setTitle(vo.getTitle());
+		notice.setContent(vo.getContent());
 		// 기존 이미지 리스트 유지
-		List<String> existingImages = vo.getUploadedImages();
+		List<String> existingImages = notice.getUploadedImages();
 		if(existingImages == null) {
 			existingImages = new ArrayList<>();
 		}
 		// 새로 업로드된 이미지 추가
-		if(notice.getUploadedImages() != null) {
-			existingImages.addAll(notice.getUploadedImages());
+		if(vo.getUploadedImages() != null) {
+			existingImages.addAll(vo.getUploadedImages());
 		}
 		
 		// 수정된 이미지 리스트 설정
-		vo.setUploadedImages(existingImages);
+		notice.setUploadedImages(existingImages);
 		// 파일 업로드
-		if(uploadFile.length > 0 || !vo.getUploadedImages().isEmpty()) {
+		if(uploadFile.length > 0 || !notice.getUploadedImages().isEmpty()) {
 			List<String> fileUrls = new ArrayList<>();
 			
-			if(!vo.getUploadedImages().isEmpty()) {
-				fileUrls.addAll(vo.getUploadedImages());
+			if(!notice.getUploadedImages().isEmpty()) {
+				fileUrls.addAll(notice.getUploadedImages());
 			}
 			for(MultipartFile file : uploadFile) {
 				if(!file.isEmpty()) {
@@ -284,9 +293,9 @@ public class AdminContoller {
 					}
 				}
 			}
-			vo.setUploadedImages(fileUrls);
+			notice.setUploadedImages(fileUrls);
 		}
-		noticeService.updateNotice(vo);
+		noticeService.updateNotice(notice);
 		return "redirect:/admin-notice-list";
 	}
 
@@ -300,32 +309,82 @@ public class AdminContoller {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패: " + e.getMessage());
 		}
 	}
+	
+	// 회원관리 페이지
 	@GetMapping("/admin-customer-list")
 	public String allCustomerList(HttpSession session, Model model) {
-	    // 회원 목록을 가져오는 로직 구현
+		Member admin = (Member)session.getAttribute("admin");
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
+		// 회원 목록을 가져오는 로직 구현
+		List<Member> members = memberService.getAllMembers();
+		model.addAttribute("members", members);
 	    return "admin/section/customer_list"; // 뷰 이름
 	}
+	
+	
 
+	// 고정질문 페이지
 	@GetMapping("/admin-fix-qna")
 	public String fixedQuestions(HttpSession session, Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
 	    // 고정 질문 목록을 가져오는 로직 구현
 	    return "admin/section/fixed_questions"; // 뷰 이름
 	}
 
+	// 회원질문 페이지
 	@GetMapping("/admin-customer-qna")
 	public String customerQuestions(HttpSession session, Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
 	    // 회원 질문 목록을 가져오는 로직 구현
 	    return "admin/section/customer_questions"; // 뷰 이름
 	}
 
+	// 리뷰 관리 페이지
 	@GetMapping("/admin-review")
 	public String reviewList(HttpSession session, Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
 	    // 리뷰 목록을 가져오는 로직 구현
 	    return "admin/section/review_list"; // 뷰 이름
 	}
 
+	// 댓글 관리 페이지
 	@GetMapping("/admin-apply")
 	public String commentList(HttpSession session, Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
 	    // 댓글 목록을 가져오는 로직 구현
 	    return "admin/section/comment_list"; // 뷰 이름
 	}

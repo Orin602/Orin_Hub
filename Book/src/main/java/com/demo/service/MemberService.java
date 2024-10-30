@@ -1,5 +1,7 @@
 package com.demo.service;
 
+import java.util.List;
+
 import com.demo.domain.Member;
 
 public interface MemberService {
@@ -35,4 +37,12 @@ public interface MemberService {
 	
 	// 회원 탈퇴
 	public void deleteMember(Member vo);
+	
+	// 관리자용
+	// 전체 회원 목록 조회
+	List<Member> getAllMembers();
+	// 특정 회원 조회 (검색)
+	Member getMemberById(String id);
+	// 회원코드 수정
+    void updateMemberCode(String id, int memberCode);
 }

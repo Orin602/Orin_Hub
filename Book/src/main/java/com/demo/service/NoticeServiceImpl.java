@@ -35,19 +35,14 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-    public void updateNotice(Notice updatedNotice) {
-        Notice notice = noticeRepo.getNoticeBySeq(updatedNotice.getNotice_seq());
-                
-        
-        notice.setNotice_seq(notice.getNotice_seq());
-        notice.setMember(updatedNotice.getMember());
-        notice.setTitle(updatedNotice.getTitle());
-        notice.setContent(updatedNotice.getContent());
-        notice.setNoticeImageUrl(updatedNotice.getNoticeImageUrl());
-        notice.setNotice_date(new Date());
-        // 필요시 추가 필드 업데이트
+    public void updateNotice(Notice vo) {
+        Notice update_notice = noticeRepo.getNoticeBySeq(vo.getNotice_seq());
 
-       noticeRepo.save(notice);
+        vo.setMember(update_notice.getMember());
+        vo.setNotice_seq(update_notice.getNotice_seq());
+        vo.setMember(update_notice.getMember());
+        
+       noticeRepo.save(update_notice);
     }
 
 	@Override
