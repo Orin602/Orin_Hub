@@ -213,7 +213,10 @@ $(document).ready(function() {
     });
 });
 // 회원코드 수정 함수
-function updateMemberCode(memberId) {
+function updateMemberCode(button) {
+	const memberId = button.getAttribute('data-memberid'); 
+    const currentMemberCode = button.getAttribute('th:alt'); 
+
     Swal.fire({
         title: '회원코드를 수정합니다.',
         input: 'number',
@@ -222,71 +225,54 @@ function updateMemberCode(memberId) {
         showCancelButton: true,
         confirmButtonText: '수정',
         cancelButtonText: '취소',
-        preConfirm: (newCode) => {
-			// 입력값 검증 (0 또는 1인지 확인)
-            if (newCode !== '0' && newCode !== '1') {
-                Swal.showValidationMessage('회원코드는 0 또는 1만 입력 가능합니다.');
-                return false;
+        preConfirm: (newMemberCode) => {
+            if (!newMemberCode || newMemberCode < 0 || newMemberCode > 1) {
+                Swal.showValidationMessage('올바른 회원코드를 입력하세요. (0 또는 1)');
+                return false; // 유효성 검사 실패 시 false 반환
             }
-            return fetch(`/update-membercode`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: memberId,
-                    memberCode: newCode
-                })
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error(response.statusText);
-                }
-                return response.json();
-            }).catch(error => {
-                Swal.showValidationMessage(`요청 실패: ${error}`);
-            });
+            return newMemberCode; // 유효성 검사 통과 시 새로운 회원코드 반환
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire('수정 완료', '회원코드가 성공적으로 수정되었습니다.', 'success').then(() => {
-                location.reload();  // 페이지 새로고침
+            // AJAX 요청을 통해 서버에 업데이트 요청을 보냄
+            $.ajax({
+                url: `/update-membercode`,
+                type: 'post',
+                data: { 
+                    id: memberId, // 회원 ID 추가
+                    newMemberCode: result.value // 새로운 회원코드를 포함
+                },
+                success: function(response) {
+                    Swal.fire({
+	                    title: '성공',
+	                    text: response,
+	                    icon: 'success'
+	                }).then(() => {
+	                    location.reload(); // 확인 버튼 클릭 시 페이지 새로고침
+	                });
+                },
+                error: function(xhr) {
+                    // 오류 발생 시 처리
+	                console.error('Error details:', xhr.status, xhr.statusText); // 오류 로그
+	                if (xhr.status === 401) {
+	                    Swal.fire({
+	                        title: '권한 오류',
+	                        text: '로그인 후 다시 시도하세요.',
+	                        icon: 'warning'
+	                    }).then(() => {
+	                        window.location.href = '/admin/admin_login'; // 관리자 로그인 페이지로 리다이렉트
+	                    });
+	                } else {
+	                    Swal.fire('오류', '회원코드 수정에 실패했습니다. 다시 시도해주세요.', 'error');
+	                }
+                }
             });
         }
     });
 }
 
-// 회원탈퇴 처리 함수
-function deleteMember(memberId) {
-    Swal.fire({
-        title: '정말로 탈퇴 처리하시겠습니까?',
-        text: "이 작업은 되돌릴 수 없습니다!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '회원 탈퇴',
-        cancelButtonText: '취소'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch(`/admin/delete-member`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: memberId
-                })
-            }).then(response => {
-                if (response.ok) {
-                    Swal.fire('탈퇴 완료', '회원이 성공적으로 탈퇴되었습니다.', 'success').then(() => {
-                        location.reload();  // 페이지 새로고침
-                    });
-                } else {
-                    Swal.fire('오류 발생', '회원 탈퇴 처리에 실패했습니다.', 'error');
-                }
-            }).catch((error) => {
-                Swal.fire('오류 발생', `탈퇴 요청 실패: ${error}`, 'error');
-            });
-        }
-    });
-}
+
+
+
 
 

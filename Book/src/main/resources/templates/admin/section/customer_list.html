@@ -25,7 +25,7 @@
 		            <th>이름</th>
 		            <th>회원코드</th>
 		            <th>가입일</th>
-		            <th>회원 탈퇴 처리</th>
+		            <th>회원 탈퇴 여부</th>
 		        </tr>
 		    </thead>
 		    <tbody id="memberTableBody">
@@ -36,11 +36,16 @@
 		            <td th:text="${member.name}"></td>
 		            <td>
 		                <span th:text="${member.membercode}"></span>
-		                <button type="button" onclick="updateMemberCode('${member.id}')">수정</button>
+		                <button class="update-btn" type="button" th:alt="${member.membercode}" 
+		                	th:data-memberid="${member.id}" th:data-membercode="${member.membercode}" 
+		                	onclick="updateMemberCode(this)">수정</button>
 		            </td>
 		            <td th:text="${member.signupDate}"></td>
 		            <td>
-		                <button type="button" onclick="deleteMember('${member.id}')">회원탈퇴</button>
+		            	<span th:text="${member.withdrawalRequest == 0 ? 'X' : 'O'}"></span>
+		                <button class="delete-btn" type="button" th:alt="${member.withdrawalRequest}"
+		                	th:data-memberid="${member.id}"
+		                onclick="deleteMember(this)">회원탈퇴</button>
 		            </td>
 		        </tr>
 		    </tbody>

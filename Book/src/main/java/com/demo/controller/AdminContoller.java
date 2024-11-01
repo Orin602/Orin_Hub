@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -326,7 +327,22 @@ public class AdminContoller {
 		model.addAttribute("members", members);
 	    return "admin/section/customer_list"; // 뷰 이름
 	}
+	// 회원코드 수정
+	@PostMapping("/update-membercode")
+    public ResponseEntity<String> updateMemberCode(HttpSession session, @RequestParam String id,
+    		@RequestParam int newMemberCode, Model model) {
+        Member admin = (Member) session.getAttribute("admin");
+        
+        if (admin == null) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인후 가능한 기능입니다."); // 401 Unauthorized 응답
+        }
+        
+        memberService.updateMemberCode(id, newMemberCode); // 서비스 메서드 호출
+        return ResponseEntity.ok("회원코드가 수정되었습니다."); // 성공 메시지 반환
+    }
 	
+
 	
 
 	// 고정질문 페이지

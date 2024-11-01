@@ -43,6 +43,9 @@ public class Member {
     @Temporal(value = TemporalType.TIMESTAMP)
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private Date signupDate;  // 가입 날짜
+    
+    @ColumnDefault("0") // 탈퇴 요청 기본값을 0으로 설정 (대기)
+    private int withdrawalRequest; // 회원 탈퇴 요청 상태
 
     @PrePersist
     protected void onCreate() {
