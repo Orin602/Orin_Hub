@@ -44,7 +44,7 @@
 		            <td>
 		            	<span th:text="${member.withdrawalRequest == 0 ? 'X' : 'O'}"></span>
 		                <button class="delete-btn" type="button" th:alt="${member.withdrawalRequest}"
-		                	th:data-memberid="${member.id}"
+		                	th:data-memberid="${member.id}" th:data-withdrawalRequest="${member.withdrawalRequest}"
 		                onclick="deleteMember(this)">회원탈퇴</button>
 		            </td>
 		        </tr>

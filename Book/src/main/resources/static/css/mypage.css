@@ -39,9 +39,16 @@ body {
     flex: 1 1 30%; /* 각 버튼의 너비 조정 (최소 30%) */
     text-align: center; /* 텍스트 가운데 정렬 */
 }
-
 .mypagelist a:hover {
     background-color: #0033cc; /* 호버 시 색상 변화 */
+}
+/* 회원 탈퇴 버튼 스타일 */
+.delete-btn {
+    background-color: red; /* 탈퇴 버튼 색상 */
+}
+
+.delete-btn:hover {
+    background-color: darkred; /* 호버 시 색상 변화 */
 }
 
 

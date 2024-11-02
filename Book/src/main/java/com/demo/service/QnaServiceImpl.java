@@ -40,11 +40,6 @@ public class QnaServiceImpl implements QnaService {
     }
 
     @Override
-    public List<Qna> getAllQnas(Sort sort) {
-        return qnaRepo.findAll(sort);
-    }
-
-    @Override
     public Qna addAnswer(int qna_seq, String answer) {
         Qna qna = qnaRepo.findById(qna_seq).orElseThrow(() ->
             new IllegalArgumentException("해당 Q&A를 찾을 수 없습니다."));
@@ -69,6 +64,24 @@ public class QnaServiceImpl implements QnaService {
 	@Override
 	public Qna findQnaBySeq(int qna_seq) {
 		return qnaRepo.findQnaBySeq(qna_seq);
+	}
+
+	@Override
+	public List<Qna> getFixQna() {
+		return qnaRepo.findFixQna();
+	}
+
+	@Override
+	public List<Qna> getCustomerQna() {
+		return qnaRepo.findCustomerQna();
+	}
+
+	@Override
+	public Qna createFixQna(Qna qna) {
+		qna.setQna_date(new Date()); // 작성 날짜 설정
+	    qna.setAnswer_date(new Date()); // 답변 날짜를 현재로 설정
+	    qna.setAnswer_status(1); // 답변 상태를 '답변 완료'로 설정 (1)
+	    return qnaRepo.save(qna);
 	}
 
 	

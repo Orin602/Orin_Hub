@@ -55,7 +55,7 @@ function logout() {
 function notice_write() {
 	if($("#title").val() == "") {
 		swal.fire({
-			title: '제목은을 입력해주세요.',
+			title: '제목을 입력해주세요.',
 			icon: 'warning'
 		});
 		$("#title").focus();
@@ -271,8 +271,193 @@ function updateMemberCode(button) {
     });
 }
 
+// 회원 탈퇴 처리함수
+function deleteMember(button) {
+	const memberId = button.getAttribute('data-memberid');
+	const withdrawalRequest = button.getAttribute('data-withdrawalRequest');
+	
+	if(withdrawalRequest === '0') {
+		swal.fire({
+			title: '탈퇴 처리 불가',
+			text: '탈퇴 요청을 하지 않은 회원입니다.',
+			icon: 'warning',
+			confirmButtonText: '확인'
+		});
+		return;
+	}
+	swal.fire({
+		title: '정말로 탈퇴 처리 하시겠습니까?',
+		text: '이 작업은 되돌릴 수 없습니다.',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonText: '회원 탈퇴',
+		cancelButtonText: '취소'
+	}).then((result) => {
+		if(result.isConfirmed) {
+			$.ajax({
+				url: '/delete-member-admin',
+				type: 'POST',
+				data: { id: memberId },
+				success: function(response) {
+					swal.fire({
+						title: '탈퇴 처리 성공',
+						text: response,
+						icon: 'success'
+					}).then(() => {
+						location.reload();
+					});
+				},
+				error: function(xhr) {
+					console.error('Error : ', xhr.status, xhr.statusText);
+					if(xhr.status === 401) {
+						swal.fire({
+							title: '권한 오류',
+							text: '관리자 로그인 후 시도하세요.',
+							icon: 'warning'
+						}).then(() => {
+							window.location.href = '/admin/admin_login';
+						});
+					} else {
+						swal.fire('오류', '회원 탈퇴 처리 실패... 다시 시도해주세요.');
+					}
+				}
+			});
+		}
+	});
+}
 
+// 고정질문 작성
+function fix_qna_write() {
+	if($("#title").val() == "") {
+		swal.fire({
+			title: '제목을 입력해주세요.',
+			icon: 'warning',
+			confirmButtonText: '확인'
+		});
+		$("#title").focus();
+		return false;
+	} else if($("#answer").val() == "") {
+		swal.fire({
+			title: '답변을 입력해주세요.',
+			icon: 'warning',
+			confirmButtonText: '확인'
+		});
+		$("#answer").focus();
+		return false;
+	} else {
+		swal.fire({
+			title: '고정질문 작성 성공!',
+			icon: 'success',
+			confirmButtonText: '확인'
+		}).then((result) => {
+			$("#fix-qna-form").attr("action", "fix-qna-write-form").submit();
+		})
+	}
+}
+// 고정질문 수정
+function editFixQna(button) {
+	const qna_seq = button.getAttribute('data-seq');
+	window.location.href = `/fix-qna-edit?qna_seq=${qna_seq}`;
+}
+function update_fix_qna() {
+	if($("#title").val() == "") {
+		swal.fire({
+			title: '제목을 입력해주세요.',
+			icon: 'warning',
+			confirmButtonText: '확인'
+		});
+		$("#title").focus();
+		return false;
+	} else if($("#answer").val() == "") {
+		swal.fire({
+			title: '답변을 입력해주세요.',
+			icon: 'warning',
+			confirmButtonText: '확인'
+		});
+		$("#answer").focus();
+		return false;
+	} else {
+		swal.fire({
+			title: '고정질문 수정 성공!',
+			icon: 'success',
+			confirmButtonText: '확인'
+		}).then((result) => {
+			$("#fix-qna-edit-form").attr("action", "/fix-qna-edit-form").submit();
+		})
+	}
+}
 
-
+// 고정질문 삭제
+function deleteFixQna(button) {
+	const qna_seq = button.getAttribute('data-seq');
+	
+	swal.fire({
+		title: '삭제 확인',
+		text: '이 질문을 삭제하시겠습니까?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonText: '삭제',
+		cancelButtonText: '취소'
+	}).then((result) => {
+		if (result.isConfirmed) { // 사용자가 확인 버튼을 클릭했는지 확인
+			$.ajax({
+				url: '/delete-fix-qna',
+				type: 'POST',
+				data: { qna_seq: qna_seq },
+				success: function() {
+					swal.fire('삭제 성공', '정상적으로 삭제 처리 되었습니다.').then(() => {
+						location.reload(); // 페이지 새로고침
+					});
+				},
+				error: function(xhr) {
+					swal.fire('오류', '질문 삭제 실패...', 'error');
+				}
+			});
+		}
+	});
+}
+// 회원질문 답변
+function customer_qna_answer(button) {
+	const qna_seq = button.getAttribute('data-seq');
+	
+	swal.fire({
+		title: '답변 작성',
+		input: 'textarea',
+		inputLabel: '답변을 입력하세요.',
+		inputPlaceholder: '답변은 여기에 입력해주세요!',
+		showCancelButton: true,
+		confirmButtonText: '제출',
+        cancelButtonText: '취소',
+        preConfirm: (answer) => {
+			if(!answer) {
+				swal.showValidationMessage('답변을 작성하지 않았어요..~!');
+			}
+			return answer;
+		}
+	}).then((result) => {
+		if(result.isConfirmed) {
+			$.ajax({
+				url: '/customer-qna-answer',
+				type: 'POST',
+				data: {
+					qna_seq: qna_seq,
+					answer: result.value
+				},
+				success: function(response) {
+					swal.fire({
+						title: '답변 성공!',
+						text: '답변을 성공적으로 제출하였습니다.',
+						icon: 'success',
+						confirmButtonText: '확인' 
+					});
+					location.reload();
+				},
+				error: function(xhr) {
+					swal.fire('오류', '답변 제출 실패.', 'error');
+				}
+			});
+		}
+	});
+}
 
 

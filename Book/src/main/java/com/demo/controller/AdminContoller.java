@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -22,8 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.demo.domain.FileUploadUtil;
 import com.demo.domain.Member;
 import com.demo.domain.Notice;
+import com.demo.domain.Qna;
+import com.demo.domain.Review;
 import com.demo.service.MemberService;
 import com.demo.service.NoticeService;
+import com.demo.service.QnaService;
+import com.demo.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -35,6 +39,10 @@ public class AdminContoller {
 	private MemberService memberService;
 	@Autowired
 	private NoticeService noticeService;
+	@Autowired
+	private QnaService qnaService;
+	@Autowired
+	private ReviewService reviewService;
 	
 	@GetMapping("/admin")
 	public String adminLogin() {
@@ -341,7 +349,32 @@ public class AdminContoller {
         memberService.updateMemberCode(id, newMemberCode); // 서비스 메서드 호출
         return ResponseEntity.ok("회원코드가 수정되었습니다."); // 성공 메시지 반환
     }
-	
+	// 회원 탈퇴 처리
+	@PostMapping("/delete-member-admin")
+	public ResponseEntity<String> deleteMemberAction (HttpSession session, Model model,
+			@RequestParam("id") String memberId) {
+		Member admin = (Member)session.getAttribute("admin");
+		
+		if(admin == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("로그인후 가능한 기능입니다."); // 401 Unauthorized 응답
+		}
+		
+		try {
+			Member member = memberService.getMember(memberId);
+			
+			if(member == null) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body("회원 정보를 찾을 수 없습니다.");
+			}
+			memberService.deleteMember(member);
+			
+			return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+					body("회원 탈퇴 처리 중 오류가 발생했습니다.");
+		}
+	}
 
 	
 
@@ -351,13 +384,96 @@ public class AdminContoller {
 		Member admin = (Member)session.getAttribute("admin");
 		if(admin == null) {
 			model.addAttribute("message", "로그인 페이지로 이동");
-            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
+            model.addAttribute("text", "질문관리를 위해 로그인해주세요.");
             model.addAttribute("messageType", "info");
             
             return "admin/admin_login";
 		}
 	    // 고정 질문 목록을 가져오는 로직 구현
+		List<Qna> adminQna = qnaService.getFixQna();
+		model.addAttribute("adminQna", adminQna);
+		
 	    return "admin/section/fixed_questions"; // 뷰 이름
+	}
+	// 고정질문 작성 페이지
+	@GetMapping("/fix-qna-write")
+	public String fixQnaWriteView(HttpSession session, Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "고정질문 작성을 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
+		return "admin/section/fix_qna_write";
+		
+	}
+	// 고정질문 작성 처리
+	@PostMapping("/fix-qna-write-form")
+	public String fixQnaWriteAction(HttpSession session, Model model, Qna fixQna) {
+		Member admin = (Member)session.getAttribute("admin");
+		
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "고정질문 작성을 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
+		fixQna.setMember(admin);
+		qnaService.createFixQna(fixQna);
+		return "redirect:/admin-fix-qna";
+	}
+	// 고정질문 삭제 처리
+	@PostMapping("/delete-fix-qna")
+	public String deleteFixQnaAction(@RequestParam("qna_seq") int qna_seq, HttpSession session,
+			Model model) {
+		Member admin = (Member)session.getAttribute("admin");
+		
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "고정질문 삭제를 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
+		qnaService.deleteQna(qna_seq);
+		return "redirect:/admin-fix-qna";		
+	}
+	// 고정질문 수정 페이지
+	@GetMapping("/fix-qna-edit")
+	public String editFixQnaView(@RequestParam("qna_seq")int qna_seq, Model model, HttpSession session) {
+		Member admin = (Member)session.getAttribute("admin");
+		
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "질문 수정을 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
+		Qna qna = qnaService.findQnaBySeq(qna_seq);
+		model.addAttribute("qna", qna);
+		
+		return "admin/section/fix_qna_edit";
+	}
+	// 고정질문 수정 처리
+	@PostMapping("/fix-qna-edit-form")
+	public String editFixQnaAction(HttpSession session, Model model, Qna vo) {
+		Member admin = (Member)session.getAttribute("admin");
+		
+		if(admin == null) {
+			model.addAttribute("message", "로그인 페이지로 이동");
+            model.addAttribute("text", "질문 수정을 위해 로그인해주세요.");
+            model.addAttribute("messageType", "info");
+            
+            return "admin/admin_login";
+		}
+		qnaService.updateQna(vo);
+		
+		return "redirect:/admin-fix-qna";
 	}
 
 	// 회원질문 페이지
@@ -372,37 +488,37 @@ public class AdminContoller {
             return "admin/admin_login";
 		}
 	    // 회원 질문 목록을 가져오는 로직 구현
+		List<Qna> customerQna = qnaService.getCustomerQna();
+		model.addAttribute("customerQna", customerQna);
+		
 	    return "admin/section/customer_questions"; // 뷰 이름
 	}
-
-	// 리뷰 관리 페이지
-	@GetMapping("/admin-review")
-	public String reviewList(HttpSession session, Model model) {
+	// 회원질문 답변처리
+	@PostMapping("/customer-qna-answer")
+	@ResponseBody
+	public ResponseEntity<String> submitCustomerQnaAnswer(HttpSession session, Model model,
+			@RequestParam("qna_seq") int qna_seq, @RequestParam("answer") String answer) {
 		Member admin = (Member)session.getAttribute("admin");
 		if(admin == null) {
 			model.addAttribute("message", "로그인 페이지로 이동");
             model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
             model.addAttribute("messageType", "info");
             
-            return "admin/admin_login";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 필요");
 		}
-	    // 리뷰 목록을 가져오는 로직 구현
-	    return "admin/section/review_list"; // 뷰 이름
+		
+		Qna qna = qnaService.findQnaBySeq(qna_seq);
+		if(qna != null) {
+			qna.setAnswer(answer);
+			qna.setAnswer_date(new Date());
+			qna.setAnswer_status(1);
+			
+			qnaService.updateQna(qna);
+			return ResponseEntity.ok("답변이 성공적으로 제출되었습니다.");
+		} else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("질문을 찾을 수 없습니다.");
+		}
 	}
 
-	// 댓글 관리 페이지
-	@GetMapping("/admin-apply")
-	public String commentList(HttpSession session, Model model) {
-		Member admin = (Member)session.getAttribute("admin");
-		if(admin == null) {
-			model.addAttribute("message", "로그인 페이지로 이동");
-            model.addAttribute("text", "회원관리를 위해 로그인해주세요.");
-            model.addAttribute("messageType", "info");
-            
-            return "admin/admin_login";
-		}
-	    // 댓글 목록을 가져오는 로직 구현
-	    return "admin/section/comment_list"; // 뷰 이름
-	}
 
 }

@@ -13,6 +13,8 @@ public interface QnaService {
 	
 	// Q&A 작성 (qna_date로 저장)
     Qna createQna(Qna qna);
+    // 고정 질문 작성
+    Qna createFixQna(Qna qna);
 
     // Q&A 삭제
     void deleteQna(int qna_seq);
@@ -20,12 +22,14 @@ public interface QnaService {
     // Q&A 수정 (qna_date로 저장)
     void updateQna(Qna qna);
 
-    // Q&A 전체 조회 (관리자용)
-    List<Qna> getAllQnas(Sort sort);
-
     // Q&A 특정 조회 (회원용)
     List<Qna> getMyQna(String id);
 
     // 답변 작성 (member_code가 1인 회원만 가능, answer_date로 저장)
     Qna addAnswer(int qna_seq, String answer);
+    
+    // qna 조회
+    List<Qna> getFixQna(); // 관리자용 고정 질문 조회
+    List<Qna> getCustomerQna(); // 고객용 질문 조회
+
 }

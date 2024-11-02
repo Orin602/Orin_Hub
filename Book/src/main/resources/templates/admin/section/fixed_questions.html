@@ -13,7 +13,28 @@
 <body>
 <th:block th:insert="~{admin/adminMain}"></th:block>
 <div class="all-container">
-
+	<h1>고정 질문(관리자)</h1>
+	<button class="fix-qna-write-btn" type="button" onclick="location.href='/fix-qna-write'">고정 질문 작성</button>
+	<div class="item" th:if="${adminQna.isEmpty()}">
+		<h3>작성한 고정 질문이 없습니다..</h3>
+	</div>
+	<div class="item" th:unless="${adminQna.isEmpty()}">
+		<div class="box" th:each=" qna : ${adminQna}">
+			<div class="qna-title">
+                <h4 th:text="${qna.title}"></h4>
+            </div>
+            <div class="qna-answer">
+                <p th:text="${qna.answer}"></p>
+            </div>
+            <div class="qna-actions">
+            	<input type="hidden" th:value="${qna.qna_seq}" />
+            	<button class="fix-qna-edit" type="button" th:data-seq="${qna.qna_seq}"
+            		onclick="editFixQna(this)">고정질문 수정</button>
+            	<button class="fix-qna-delete" type="button" th:data-seq="${qna.qna_seq}"
+            		onclick="deleteFixQna(this)">삭제</button>
+            </div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

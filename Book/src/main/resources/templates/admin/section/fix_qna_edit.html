@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>edit fix qna Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>고정 질문 수정</h1>
+	<form class="fix-qna-edit-form" id="fix-qna-edit-form" method="post">
+		<input type="hidden" name="qna_seq" th:value="${qna.qna_seq}" />
+		<label>질문</label>
+		<input type="text" name="title" id="title" th:value="${qna.title}" />
+		<label>답변</label>
+		<textarea rows="10" cols="20" name="answer" id="answer" th:text="${qna.answer}"></textarea>
+	</form>
+	<div class="edit-bottom">
+		<button class="before-btn" type="button" onclick="window.location.href='/admin-fix-qna'">목록으로</button>
+		<button class="edit-btn" type="button" onclick="update_fix_qna()">고정질문 수정</button>
+	</div>
+</div>
+</body>
+</html>

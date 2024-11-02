@@ -11,9 +11,14 @@ import com.demo.domain.Qna;
 
 public interface QnaRepository extends JpaRepository<Qna, Integer> {
 
-	// Q&A 전체 조회 (관리자용)
-    List<Qna> findAll(Sort sort);
+	// Fix Q&A 조회 (관리자용)
+	@Query("SELECT q FROM Qna q WHERE q.member.membercode =1")
+    List<Qna> findFixQna();
     
+    // customer Q&A 조회
+	@Query("SELECT q FROM Qna q WHERE q.member.membercode =0")
+    List<Qna> findCustomerQna();
+	
     // Q&A 특정 조회 (회원용)
     @Query("SELECT q FROM Qna q WHERE q.member.id = :id")
     public List<Qna> getMyQna(@Param("id") String id);

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>fix qna write Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>고정 질문 작성</h1>
+	<div class="item">
+		<form class="fix-qna-form" id="fix-qna-form" method="post">
+			<label>질문</label>
+			<input type="text" id="title" placeholder="질문을 입력해주세요." name="title"/>
+			<label>답변</label>
+			<textarea rows="10" cols="20" id="answer" placeholder="답변을 입력해주세요." name="answer"></textarea>
+		</form>
+	</div>
+	<button class="before-btn" type="button" onclick="window.location.href='/admin-fix-qna'">이전페이지</button>
+	<button class="write-btn" type="button" onclick="fix_qna_write()">고정질문 작성</button>
+</div>
+</body>
+</html>
