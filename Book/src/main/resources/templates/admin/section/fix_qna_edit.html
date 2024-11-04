@@ -14,16 +14,18 @@
 <th:block th:insert="~{admin/adminMain}"></th:block>
 <div class="all-container">
 	<h1>고정 질문 수정</h1>
-	<form class="fix-qna-edit-form" id="fix-qna-edit-form" method="post">
-		<input type="hidden" name="qna_seq" th:value="${qna.qna_seq}" />
-		<label>질문</label>
-		<input type="text" name="title" id="title" th:value="${qna.title}" />
-		<label>답변</label>
-		<textarea rows="10" cols="20" name="answer" id="answer" th:text="${qna.answer}"></textarea>
-	</form>
-	<div class="edit-bottom">
-		<button class="before-btn" type="button" onclick="window.location.href='/admin-fix-qna'">목록으로</button>
-		<button class="edit-btn" type="button" onclick="update_fix_qna()">고정질문 수정</button>
+	<div class="fix-edit-container">
+		<form class="fix-qna-edit-form" id="fix-qna-edit-form" method="post">
+			<input type="hidden" name="qna_seq" th:value="${qna.qna_seq}" />
+			<label>질문</label>
+			<input type="text" name="title" id="title" th:value="${qna.title}" />
+			<label>답변</label>
+			<textarea name="answer" id="answer" th:text="${qna.answer}"></textarea>
+		</form>
+		<div class="edit-button">
+			<button class="before-btn" type="button" onclick="window.location.href='/admin-fix-qna'">목록으로</button>
+			<button class="edit-btn" type="button" onclick="update_fix_qna()">고정질문 수정</button>
+		</div>
 	</div>
 </div>
 </body>
