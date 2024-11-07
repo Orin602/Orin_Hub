@@ -11,9 +11,8 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
-<th:block th:insert="~{include/header}"></th:block>
+<th:block th:insert="~{mypage/mypageMain}"></th:block>
 <div class="mybookmark">
-<th:block th:insert="~{mypage/mypagelist}"></th:block>
 	<h1>내가 즐겨찾기한 리뷰</h1>
 	<div th:if="${myBookMark.isEmpty()}">
 		<h3>즐겨찾기한 리뷰가 없습니다.</h3>

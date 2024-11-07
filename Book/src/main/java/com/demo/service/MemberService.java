@@ -45,4 +45,7 @@ public interface MemberService {
 	Member getMemberById(String id);
 	// 회원코드 수정
     void updateMemberCode(String id, int memberCode);
+
+	boolean processDeleteRequest(String id, String pwd);
+
 }

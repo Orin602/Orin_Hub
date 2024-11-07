@@ -11,11 +11,23 @@
 <script th:src="@{/js/customer.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{customer/customerMain}"></th:block>
 <div class="notice-container">
-	<th:block th:insert="~{customer/customerMain}"></th:block>
-	<h2>공지사항</h2>
-	<div calss="notice_table">
-	
+	<h2>공지사항 목록</h2>
+	<div class="notice_table" th:each="notice : ${notices}">
+		<a th:href="@{customer_notice_detail(notice_seq=${notice.notice_seq})}">
+			<th:block th:if="${#lists.isEmpty(notice.uploadedImages)}">
+				<img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:200px; height:200px;">
+			</th:block>
+			<th:block th:unless="${#lists.isEmpty(notice.uploadedImages)}">
+				<div th:with="firstImage=${notice.uploadedImages[0]}">
+					<img th:src="@{${firstImage}}" th:alt="${notice.title}" style="width:200px; height:200px;">
+				</div>
+			</th:block>
+		</a>
+		<h4>제목 : <span th:text="${notice.title}"></span></h4>
+		<h4>좋아요수 : <span th:text="${notice.likeCount}"></span> / 
+		조회수 : <span th:text="${notice.viewCount}"></span></h4>
 	</div>
 </div>
 </body>

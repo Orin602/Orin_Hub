@@ -44,23 +44,24 @@ body {
 }
 /* 회원 탈퇴 버튼 스타일 */
 .delete-btn {
-    background-color: red; /* 탈퇴 버튼 색상 */
+    background-color: red !important; /* 탈퇴 버튼 색상을 빨간색으로 설정하고 !important 사용 */
 }
 
+/* 회원 탈퇴 버튼 호버 스타일 */
 .delete-btn:hover {
-    background-color: darkred; /* 호버 시 색상 변화 */
+    background-color: darkred !important; /* 호버 시 색상 변화 */
 }
 
 
 /* 마이페이지 공톹 */
-.myreview, .myrecoment, .mybookmark, .myreply {
+.myreview, .myrecoment, .mybookmark, .myreply, .myqna {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
 }
 
-.review-list, .recoment-list, .bookmark-list, .reply-box {
+.review-list, .recoment-list, .bookmark-list, .reply-box, .qna-box {
     display: flex;
     flex-wrap: wrap; /* 여러 줄로 나누기 */
     justify-content: center; /* 가운데 정렬 */
@@ -161,7 +162,7 @@ tbody tr:hover {
     transition: background-color 0.3s; /* 배경색 변화 효과 */
 }
 
-button:hover {
+.mypage-btn:hover {
     background-color: #ff1a1a; /* 마우스 오버 시 배경색 변화 */
 }
 .comment-content {
@@ -170,4 +171,62 @@ button:hover {
     -webkit-line-clamp: 2; /* 줄 수 설정 (2줄) */
     overflow: hidden; /* 넘치는 내용 숨김 */
     text-overflow: ellipsis; /* ...으로 표시 */
+}
+
+/* 내 질문 현황 */
+.qna-item {
+	text-align: center;
+}
+.qna-item a {
+	display: inline-block; /* 블록 레벨 요소로 변경하여 버튼처럼 보이게 함 */
+    padding: 10px; /* 내부 여백 */
+    margin: 10px; /* 버튼 간의 여백 */
+    text-decoration: none; /* 링크 기본 스타일 제거 */
+    color: white; /* 텍스트 색상 */
+    background-color: #00cc05; /* 기본 버튼 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    transition: background-color 0.3s; /* 배경 색상 변화 애니메이션 */
+    cursor: pointer; /* 마우스 커서 변경 */
+    flex: 1 1 30%; /* 각 버튼의 너비 조정 (최소 30%) */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+.qna-item a:hover {
+	background-color: #006f03;
+}
+/* 수정 버튼 스타일 */
+.qna-edit-btn {
+    background-color: #ffc107; /* 노란색 배경 */
+    color: #fff; /* 텍스트 색상 */
+    padding: 10px 15px; /* 패딩 추가 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    font-weight: bold; /* 글씨 두께 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s, transform 0.3s; /* 부드러운 호버 효과 */
+}
+
+/* 호버 효과 */
+.qna-edit-btn:hover {
+    background-color: #e0a800; /* 호버 시 배경색 변경: 약간 어두운 노란색 */
+    transform: scale(1.05); /* 호버 시 크기 약간 증가 */
+}
+
+/* 삭제 버튼 스타일 */
+.qna-delete-btn {
+    background-color: #dc3545; /* 빨간색 배경 */
+    color: #fff; /* 텍스트 색상 */
+    padding: 10px 15px; /* 패딩 추가 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    font-weight: bold; /* 글씨 두께 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s, transform 0.3s; /* 부드러운 호버 효과 */
+}
+
+/* 호버 효과 */
+.qna-delete-btn:hover {
+    background-color: #c82333; /* 호버 시 배경색 변경: 약간 어두운 빨간색 */
+    transform: scale(1.05); /* 호버 시 크기 약간 증가 */
 }

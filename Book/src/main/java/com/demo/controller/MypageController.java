@@ -1,17 +1,24 @@
 package com.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.domain.Member;
 import com.demo.domain.Qna;
 import com.demo.domain.Reply;
 import com.demo.domain.Review;
 import com.demo.domain.ReviewInteraction;
+import com.demo.service.MemberService;
 import com.demo.service.QnaService;
 import com.demo.service.ReplyService;
 import com.demo.service.ReviewInteractionService;
@@ -30,6 +37,8 @@ public class MypageController {
 	private ReviewInteractionService riService; 
 	@Autowired
 	private QnaService qnaService;
+	@Autowired
+	private MemberService memberService;
 	
 	
 	// 마이페이지
@@ -48,6 +57,7 @@ public class MypageController {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		List<Review> myReview = reviewService.getByIdReview(loginUser.getId());
 		
+		model.addAttribute("loginUser", loginUser);
 		model.addAttribute("myReview", myReview);
 		
 		return "mypage/myReview";
@@ -59,6 +69,7 @@ public class MypageController {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		List<ReviewInteraction> myRecoment = riService.getRecommendationsByMemberId(loginUser.getId());
 		
+		model.addAttribute("loginUser", loginUser);
 		model.addAttribute("myRecoment", myRecoment);
 		
 		return "mypage/myRecoment";
@@ -70,6 +81,7 @@ public class MypageController {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		List<ReviewInteraction> myBookMark = riService.getBookmarksByMemberId(loginUser.getId());
 		
+		model.addAttribute("loginUser", loginUser);
 		model.addAttribute("myBookMark", myBookMark);
 		
 		return "mypage/myBookMark";
@@ -80,6 +92,7 @@ public class MypageController {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		List<Reply> myReply = replyService.getReplyByMember(loginUser.getId());
 		
+		model.addAttribute("loginUser", loginUser);
 		model.addAttribute("myReply", myReply);
 		
 		return "mypage/myReply";
@@ -99,5 +112,24 @@ public class MypageController {
 		model.addAttribute("myQna", myQna);
 		
 		return "mypage/myQna";
+	}
+	
+	@PostMapping("/deleteMember")
+	@ResponseBody
+	public ResponseEntity<?> deleteMemberRequest(@RequestBody Map<String, String> requestData, HttpSession session) {
+	    String userId = requestData.get("id");
+	    String userPwd = requestData.get("pwd");
+
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    if (loginUser == null || !loginUser.getId().equals(userId)) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized access");
+	    }
+
+	    boolean isDeleted = memberService.processDeleteRequest(userId, userPwd);
+	    if (isDeleted) {
+	        return ResponseEntity.ok().body("탈퇴 요청 성공");
+	    } else {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("아이디 또는 비밀번호가 일치하지 않습니다.");
+	    }
 	}
 }

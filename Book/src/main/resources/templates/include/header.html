@@ -26,16 +26,6 @@
         }
     });
 
-    // 테마
-    function toggleTheme() {
-        document.body.classList.toggle('dark-theme');
-        const isDarkTheme = document.body.classList.contains('dark-theme');
-        localStorage.setItem('darkTheme', isDarkTheme);
-
-        // 아이콘 토글
-        document.getElementById('themeToggleButtonLight').style.display = isDarkTheme ? 'none' : 'inline';
-        document.getElementById('themeToggleButtonDark').style.display = isDarkTheme ? 'inline' : 'none';
-    }
 </script>
 </head>
 <body>

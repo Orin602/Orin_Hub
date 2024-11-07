@@ -13,8 +13,15 @@
 <body>
 <th:block th:insert="~{include/header}"></th:block>
 <div class="mypage-main-container">
-	<h1>마이페이지</h1>
-	<th:block th:insert="~{mypage/mypagelist}"></th:block>
+    <h1>마이페이지</h1>
+    <div class="mypagelist">
+		<a th:href="@{/myreview}">내가 작성한 리뷰</a>
+		<a th:href="@{/myrecoment}">내가 추천한 리뷰</a>
+		<a th:href="@{/mybookmark}">내가 즐겨찾기한 리뷰</a>
+		<a th:href="@{/myreply}">내가 작성한 댓글</a>
+		<a th:href="@{/myqna}">내 질문 현황</a>
+		<a class="delete-btn" onclick="confirmDelete()">회원 탈퇴</a>
+	</div>
 </div>
 </body>
 </html>

@@ -58,4 +58,9 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Modifying
     @Query("DELETE FROM Member m WHERE m.id = :id AND m.pwd = :pwd")
     void deleteMemberByIdAndPassword(@Param("id") String id, @Param("pwd") String pwd);
+	@Modifying
+    @Transactional
+    @Query("UPDATE Member m SET m.withdrawalRequest = :withdrawalRequest WHERE m.id = :id AND m.pwd = :pwd")
+    int updateWithdrawalRequest(@Param("id") String id, @Param("pwd") String pwd, @Param("withdrawalRequest") int withdrawalRequest);
+	
 }

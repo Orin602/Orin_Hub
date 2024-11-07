@@ -17,7 +17,8 @@
 	<a th:href="@{/mybookmark}">내가 즐겨찾기한 리뷰</a>
 	<a th:href="@{/myreply}">내가 작성한 댓글</a>
 	<a th:href="@{/myqna}">내 질문 현황</a>
-	<a class="delete-btn" th:href="@{/deleteMember}">회원 탈퇴</a>
+	<a class="delete-btn" onclick="confirmDelete()">회원 탈퇴</a>
+	[[${loginUser.name}]]
 </div>
 </body>
 </html>

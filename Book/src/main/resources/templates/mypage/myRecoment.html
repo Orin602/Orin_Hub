@@ -11,9 +11,8 @@
 <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
-<th:block th:insert="~{include/header}"></th:block>
+<th:block th:insert="~{mypage/mypageMain}"></th:block>
 <div class="myrecoment">
-<th:block th:insert="~{mypage/mypagelist}"></th:block>
 	<h1>내가 추천한 리뷰</h1>
 	<div th:if="${myRecoment.isEmpty()}">
 		<h3>추천한 리뷰가 없습니다.</h3>

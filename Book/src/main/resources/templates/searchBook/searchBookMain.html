@@ -10,6 +10,7 @@
 <script th:src="@{/js/book.js}"></script>
 </head>
 <body>
+<th:block th:insert="~{include/header}"></th:block>
 	<div class="search-book-container">
 		<h1>도서 검색 결과</h1>
 		<h3>검색어 : [[${query}]]</h3>
@@ -20,6 +21,7 @@
 	                <img th:src="${item.imageUrl}" alt="Book Cover" style="width:200px;">
 	                <h4 th:text="${item.titleInfo}"></h4>
 	                <p th:text="${item.authorInfo}"></p>
+	                <p th:text="${item.kdcName1s}"></p>
                 </li>
             </ul>
         </div>

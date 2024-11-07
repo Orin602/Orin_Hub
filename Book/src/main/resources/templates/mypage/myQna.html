@@ -68,48 +68,49 @@ function deleteQna(button) {
 </script>
 </head>
 <body>
-<th:block th:insert="~{include/header}"></th:block>
+<th:block th:insert="~{mypage/mypageMain}"></th:block>
 <div class="myqna">
-<th:block th:insert="~{mypage/mypagelist}"></th:block>
 	<h1>내 질문 현황</h1>
-	<div th:if="${myQna.isEmpty()}">
-		<h3>작성한 질문이 없습니다.</h3>
-		<a th:href="@{/qna_write}">질문 작성</a>
-	</div>
-	<div th:unless="${myQna.isEmpty()}">
-		<a th:href="@{/qna_write}">질문 작성</a>
-		<div class="qna-box">
-			<table>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>제목</th>
-						<th>답변 현황</th>
-						<th>작성 날짜</th>
-						<th>작업</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="qna : ${myQna}">
-						<td th:text="${qna.qna_seq}"></td>
-						<td th:text="${qna.title}"></td>
-						<td>
-							<span th:text="${qna.answer_status == 1 ? '답변 완료' : ' 답변 대기'}"></span> <!-- 답변 현황 -->
-						</td>
-						<td th:text="${#dates.format(qna.qna_date, 'yyyy-MM-dd HH:mm:ss')}"></td> <!-- 질문 작성 날짜 -->
-						<td>
-	                        <!-- 수정 버튼 -->
-                            <button class="qna-edit-btn" type="button" th:attr="data-qna_seq=${qna.qna_seq},
-                            	data-qna_writer=${qna.member.id}, data-answer_status=${qna.answer_status},
-                            	data-qna_viewer=${loginUser.id}" onclick="editQna(this)">수정</button>
-                            <!-- 삭제 버튼 -->
-                            <button class="qna-delete-btn" type="button" th:attr="data-qna_seq=${qna.qna_seq},
-                            	data-qna_writer=${qna.member.id}, data-qna_viewer=${loginUser.id}"
-                            	onclick="deleteQna(this)">삭제</button>
-	                    </td>
-					</tr>
-				</tbody>
-			</table>
+	<div class="qna-item">
+		<div th:if="${myQna.isEmpty()}">
+			<h3>작성한 질문이 없습니다.</h3>
+			<a th:href="@{/qna_write}">질문 작성</a>
+		</div>
+		<div th:unless="${myQna.isEmpty()}">
+			<a th:href="@{/qna_write}">질문 작성</a>
+			<div class="qna-box">
+				<table>
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>제목</th>
+							<th>답변 현황</th>
+							<th>작성 날짜</th>
+							<th>작업</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="qna : ${myQna}">
+							<td th:text="${qna.qna_seq}"></td>
+							<td th:text="${qna.title}"></td>
+							<td>
+								<span th:text="${qna.answer_status == 1 ? '답변 완료' : ' 답변 대기'}"></span> <!-- 답변 현황 -->
+							</td>
+							<td th:text="${#dates.format(qna.qna_date, 'yyyy-MM-dd HH:mm:ss')}"></td> <!-- 질문 작성 날짜 -->
+							<td>
+		                        <!-- 수정 버튼 -->
+	                            <button class="qna-edit-btn" type="button" th:attr="data-qna_seq=${qna.qna_seq},
+	                            	data-qna_writer=${qna.member.id}, data-answer_status=${qna.answer_status},
+	                            	data-qna_viewer=${loginUser.id}" onclick="editQna(this)">수정</button>
+	                            <!-- 삭제 버튼 -->
+	                            <button class="qna-delete-btn" type="button" th:attr="data-qna_seq=${qna.qna_seq},
+	                            	data-qna_writer=${qna.member.id}, data-qna_viewer=${loginUser.id}"
+	                            	onclick="deleteQna(this)">삭제</button>
+		                    </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>

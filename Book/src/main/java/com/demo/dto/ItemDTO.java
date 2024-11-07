@@ -19,4 +19,5 @@ public class ItemDTO {
     private String titleInfo;   // 제목
     private String authorInfo;  // 저자
     private String imageUrl;    // 이미지 URL
+    private String kdcName1s;
 }

@@ -142,5 +142,10 @@ public class MemberServiceImpl implements MemberService {
             memberRepo.save(member); // 변경된 회원 정보를 저장
         }
     }
+    @Override
+    public boolean processDeleteRequest(String id, String pwd) {
+        int updatedRows = memberRepo.updateWithdrawalRequest(id, pwd, 1); // 탈퇴 요청 값 1로 업데이트
+        return updatedRows > 0; // 업데이트 성공 여부 반환
+    }
 
 }

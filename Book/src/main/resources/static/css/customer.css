@@ -1,34 +1,354 @@
 @charset "utf-8";
 
 .customer-main-container {
-    text-align: center; /* 가운데 정렬 */
+	text-align: center; /* 가운데 정렬 */
 }
 
 .customer-main-container h2 {
-    display: flex; /* flexbox로 정렬 */
-    justify-content: center; /* 가운데 정렬 */
-    gap: 20px; /* 버튼 사이 간격 조절 */
+	display: flex; /* flexbox로 정렬 */
+	justify-content: center; /* 가운데 정렬 */
+	gap: 20px; /* 버튼 사이 간격 조절 */
 }
 
-.customer-main-container a {
-    display: inline-block; /* 버튼처럼 보이도록 */
-    padding: 10px 20px; /* 여백 조절 */
-    border-radius: 5px; /* 둥근 테두리 */
-    text-decoration: none; /* 밑줄 제거 */
-    color: white; /* 글자 색상 */
-    font-weight: bold; /* 글자 두께 */
-    transition: background-color 0.3s; /* 배경색 변화 애니메이션 */
+.customer-main-container a , .qna-container a{
+	display: inline-block; /* 버튼처럼 보이도록 */
+	padding: 10px 20px; /* 여백 조절 */
+	border-radius: 5px; /* 둥근 테두리 */
+	text-decoration: none; /* 밑줄 제거 */
+	color: white; /* 글자 색상 */
+	font-weight: bold; /* 글자 두께 */
+	transition: background-color 0.3s; /* 배경색 변화 애니메이션 */
 }
-
+.qna-container a {
+	background-color: violet;
+}
+.qna-container a:hover {
+	background-color: #7A1DB7;
+}
 .customer-main-container a:nth-child(1) {
-    background-color: #4CAF50; /* 첫 번째 버튼 색상 */
+	background-color: #4CAF50; /* 첫 번째 버튼 색상 */
 }
 
 .customer-main-container a:nth-child(2) {
-    background-color: #2196F3; /* 두 번째 버튼 색상 */
+	background-color: #2196F3; /* 두 번째 버튼 색상 */
 }
 
 /* hover 효과 */
 .customer-main-container a:hover {
-    filter: brightness(85%); /* 마우스 오버 시 어두워짐 */
+	filter: brightness(85%); /* 마우스 오버 시 어두워짐 */
+}
+
+/* notice, notice-detail */
+.notice-container, .notice-detail-container {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    border: 1px solid #ccc; /* 테두리 스타일 */
+    border-radius: 8px; /* 모서리 둥글게 */
+}
+.notice_table {
+    display: inline-block;
+    width: 30%;
+    margin: 1% 1%; /* 좌우 1%씩 간격을 줌 */
+    box-sizing: border-box;
+    vertical-align: top; /* 상단 정렬 */
+    border: 1px solid #ccc; /* 테두리 스타일 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 16px;
+    text-align: center;
+}
+
+.notice_table img {
+    width: 100%; /* 이미지가 블록의 너비에 맞춰 표시 */
+    height: auto; /* 이미지의 비율 유지 */
+    border-radius: 4px;
+}
+
+.notice_table h4 {
+    font-size: 16px;
+    margin: 8px 0;
+}
+.items {
+    display: inline-block; /* 가운데 정렬 */
+    width: 80%; /* 컨테이너 너비 */
+    border: 1px solid #ddd; /* 테두리 */
+    border-radius: 8px; /* 둥근 모서리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    padding: 20px;
+    margin: 20px 20px;
+    background-color: #f9f9f9; /* 배경색 */
+    text-align: center;
+}
+.notice-content img {
+    width: 100%; /* 이미지가 박스의 너비에 맞춰 표시 */
+    max-width: 200px; /* 최대 너비 */
+    height: auto; /* 이미지 비율 유지 */
+    margin: 10px;
+    border-radius: 4px; /* 이미지 모서리 둥글게 */
+}
+.before-btn {
+	display: block;
+    margin: 20px auto; /* 자동 좌우 마진으로 가운데 정렬 */
+    padding: 10px 20px;
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff; /* 버튼 글자색 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    width: 200px; /* 버튼 너비 설정 */
+}
+
+.before-btn:hover {
+    background-color: #0056b3; /* 버튼 호버 색상 */
+}
+
+.qna-container {
+	padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    border: 2px solid #ddd; /* 테두리 추가 */
+    border-radius: 10px; /* 테두리 모서리를 둥글게 */
+    background-color: #f9f9f9; /* 배경색 추가 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+.qna-container h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.fix-qnas {
+    margin-top: 20px;
+    width: 100%; /* 부모 컨테이너의 너비를 맞추기 위해 */
+}
+
+.qna_table {
+    margin-bottom: 20px;
+}
+
+.box {
+	padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background-color: #ffffff; /* 배경색을 밝게 */
+    width: 80%; /* 박스 너비를 80%로 설정 */
+    margin: 10px auto; /* 수평 중앙 정렬 */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 효과 */
+}
+
+.qna-title {
+    cursor: pointer;
+    font-size: 22px; /* 제목 글자 크기 살짝 키움 */
+    font-weight: bold;
+    color: #2c3e50; /* 좀 더 진한 파란색 계열 */
+    padding: 12px;
+    background-color: #ecf0f1; /* 밝은 회색 배경 */
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.qna-title:hover {
+    background-color: #bdc3c7; /* 호버시 색상 변화 */
+}
+
+.qna-answer {
+    font-size: 18px;
+    color: #7f8c8d; /* 회색 계열 */
+    padding: 15px;
+    background-color: #f7f7f7; /* 아주 연한 회색 배경 */
+    border-radius: 8px;
+    display: none;
+    margin-top: 12px;
+}
+
+.qna-answer.show {
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+
+/* 질문 작성과 QnA 수정 페이지에만 적용되는 스타일 */
+
+/* 질문 작성 컨테이너 */
+.qna_write_container {
+    width: 100%;
+    max-width: 800px; /* 최대 너비 제한 */
+    margin: 40px auto; /* 수평 중앙 정렬 */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
+.qna_write_container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 제목 입력란 스타일 */
+.qna_write_container input[type="text"],
+.qna_write_container textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease;
+}
+
+.qna_write_container input[type="text"]:focus,
+.qna_write_container textarea:focus {
+    border-color: #3498db; /* 포커스시 파란색 테두리 */
+    outline: none;
+}
+
+/* 텍스트 영역(내용) 스타일 */
+.qna_write_container textarea {
+    resize: vertical; /* 세로로만 크기 조절 가능 */
+}
+
+/* 버튼 스타일 */
+.qna_write_container .before-page-btn,
+.qna_write_container .write-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.qna_write_container .before-page-btn {
+    background-color: #e2e2e2;
+    color: #333;
+    margin-right: 10px;
+}
+
+.qna_write_container .write-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.qna_write_container .before-page-btn:hover {
+    background-color: #d0d0d0;
+}
+
+.qna_write_container .write-btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.05); /* 호버 시 버튼 크기 확대 */
+}
+
+/* 버튼을 수평으로 정렬 */
+.qna_write_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qna_write_container button {
+    width: 200px;
+    margin-top: 15px;
+}
+
+/* QnA 수정 컨테이너 */
+.qna_edit_container {
+    width: 100%;
+    max-width: 800px; /* 최대 너비 제한 */
+    margin: 40px auto; /* 수평 중앙 정렬 */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
+.qna_edit_container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 제목 입력란 스타일 */
+.qna_edit_container input[type="text"],
+.qna_edit_container textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease;
+}
+
+.qna_edit_container input[type="text"]:focus,
+.qna_edit_container textarea:focus {
+    border-color: #3498db; /* 포커스시 파란색 테두리 */
+    outline: none;
+}
+
+/* 텍스트 영역(내용) 스타일 */
+.qna_edit_container textarea {
+    resize: vertical; /* 세로로만 크기 조절 가능 */
+}
+
+/* 버튼 스타일 */
+.qna_edit_container .before-page-btn,
+.qna_edit_container .qna_update_btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.qna_edit_container .before-page-btn {
+    background-color: #e2e2e2;
+    color: #333;
+    margin-right: 10px;
+}
+
+.qna_edit_container .qna_update_btn {
+    background-color: #27ae60;
+    color: white;
+}
+
+.qna_edit_container .before-page-btn:hover {
+    background-color: #d0d0d0;
+}
+
+.qna_edit_container .qna_update_btn:hover {
+    background-color: #2ecc71;
+    transform: scale(1.05); /* 호버 시 버튼 크기 확대 */
+}
+
+/* 버튼을 수평으로 정렬 */
+.qna_edit_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qna_edit_container button {
+    width: 200px;
+    margin-top: 15px;
 }

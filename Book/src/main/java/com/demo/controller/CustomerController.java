@@ -1,5 +1,7 @@
 package com.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.domain.Member;
+import com.demo.domain.Notice;
 import com.demo.domain.Qna;
 import com.demo.service.NoticeService;
 import com.demo.service.QnaService;
@@ -30,15 +33,33 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/notice")
-	public String noticeView() {
+	public String noticeView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
 		
+		List<Notice> notices = noticeService.getAllNotices();
+		model.addAttribute("notices", notices);
 		
 		return "customer/notice";
 	}
-	
-	@GetMapping("/fav_qna")
-	public String qnaView() {
+	// 공지사항 상세
+	@GetMapping("/customer_notice_detail")
+	public String noticeDetailView(HttpSession session, Model model,
+			@RequestParam("notice_seq") int notice_seq) {
 		
+		Notice notice = noticeService.getNoticeById(notice_seq);
+		
+		List<String> uploadImages = notice.getUploadedImages();
+		model.addAttribute("uploadImages", uploadImages);
+		model.addAttribute("notice", notice);
+		
+		return "customer/notice_detail";
+	}
+	@GetMapping("/fav_qna")
+	public String qnaView(HttpSession session, Model model) {
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		List<Qna> fixQna = qnaService.getFixQna();
+		model.addAttribute("fixQna", fixQna);
 		
 		return "customer/qna";
 	}
