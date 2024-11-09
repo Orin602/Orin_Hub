@@ -19,6 +19,7 @@ import com.demo.domain.Member;
 import com.demo.domain.SearchHistory;
 import com.demo.dto.BookRecommendation;
 import com.demo.dto.ItemDTO;
+import com.demo.dto.SearchResult;
 import com.demo.dto.SearchResultDTO;
 import com.demo.service.BookRecommendationService;
 import com.demo.service.SearchHistoryService;
@@ -38,8 +39,6 @@ public class MainController {
 	private SearchHistoryService searchHisService;
 	@Autowired
 	private SearchService searchService;
-	@Autowired
-    private ObjectMapper objectMapper;
 	
 	// 초기 화면
 	@GetMapping("/")
@@ -92,32 +91,53 @@ public class MainController {
 	// 도서 검색
 	@GetMapping("/search-book")
 	public String searchBooks(@RequestParam("query") String query, HttpSession session,
-            @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		SearchHistory searchHistory = new SearchHistory();
-		
-		
-		if(loginUser != null) {
-			searchHistory.setMember(loginUser);
-		}
-		
-		searchHistory.setQuery(query);
-		searchHistory.setSearch_date(new Date());
-		
-		searchHisService.saveSearchHistory(searchHistory);
-		
-		// 검색 서비스 호출
-        List<ItemDTO> items = searchService.searchBooks(query, page);
-        // 검색 결과를 세션에 저장
-        session.setAttribute("searchResults", items);
-        // 모델에 검색 결과 추가
-        model.addAttribute("items", items);
-        System.out.println("Items: " + items);
-        
-        // 검색어를 모델에 추가하여 검색어를 유지하도록 함
-        model.addAttribute("query", query);
+	        @RequestParam(value = "page", defaultValue = "1") int pageNum, Model model,
+	        @RequestParam(value = "srchTarget", defaultValue = "total") String srchTarget) {
 
-        // 결과를 보여줄 HTML 템플릿 이름
-        return "searchBook/searchBookMain";
-    }
+	    System.out.println("Received pageNum: " + pageNum);  // pageNum 값 확인
+
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    SearchHistory searchHistory = new SearchHistory();
+
+	    if (loginUser != null) {
+	        searchHistory.setMember(loginUser);
+	    }
+
+	    searchHistory.setQuery(query);
+	    searchHistory.setSearch_date(new Date());
+
+	    searchHisService.saveSearchHistory(searchHistory);
+
+	    // 검색 서비스 호출
+	    SearchResult result = searchService.searchBooks(query, pageNum, srchTarget);
+	    List<ItemDTO> items = result.getItems();  // 아이템 목록
+	    int totalPages = result.getTotalPages();  // 전체 페이지 수
+	    int totalResults = result.getTotalResults();  // 전체 검색 결과 수
+
+	    // 검색 결과를 세션에 저장
+	    session.setAttribute("searchResults", items);
+	    model.addAttribute("items", items);
+	    model.addAttribute("query", query);
+	    model.addAttribute("pageNum", pageNum);
+	    model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("totalResults", totalResults);
+
+	    // 인기 검색어 가져오기
+	    List<Object[]> topSearchQueries = searchHisService.getTopSearchQueries();
+	    List<Object[]> limitedTopSearchQueries = topSearchQueries.size() > 5
+	            ? topSearchQueries.subList(0, 5)
+	            : topSearchQueries;
+	    model.addAttribute("topSearchQueries", limitedTopSearchQueries);
+	    model.addAttribute("showMore", topSearchQueries.size() > 5);
+
+	    // 연관 검색어 추가
+	    List<Object[]> relatedSearches = searchHisService.getRelatedSearchQueries(query);
+	    model.addAttribute("relatedSearches", relatedSearches);
+
+	    // 결과를 보여줄 HTML 템플릿 이름
+	    return "searchBook/searchBookMain";
+	}
+
+
+
 }

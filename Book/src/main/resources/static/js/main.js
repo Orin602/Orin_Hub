@@ -28,15 +28,16 @@ function toggleTheme() {
 
 // 도서 검색
 function search_book() {
-	if($("#query").val() == "") {
-		swal.fire({
-			title: '검색어를 입력하세요.',
-			icon: 'warning',
-			confirmButtonText: '확인'
-		});
-		$("#query").focus();
-		return false;
-	} else {
-		$("#search-form").attr("action", "/search-book").submit();
-	}
+    if ($("#query").val() === "") {
+        swal.fire({
+            title: '검색어를 입력하세요.',
+            icon: 'warning',
+            confirmButtonText: '확인'
+        });
+        $("#query").focus();
+        return false;
+    } else {
+        let srchTarget = $("#srchTarget").val();
+        $("#search-form").attr("action", `/search-book?srchTarget=${srchTarget}`).submit();
+    }
 }

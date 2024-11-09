@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 
 import com.demo.dto.ItemDTO;
+import com.demo.dto.SearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -90,40 +91,83 @@ public class SearchService {
         this.objectMapper = objectMapper;
     }
 
-    public List<ItemDTO> searchBooks(String query, int page) {
-        final int resultsPerPage = 10;
-        final int startIndex = (page - 1) * resultsPerPage + 1; // 페이지당 시작 인덱스
-        
-        // API 요청 URL 생성
-        String url = String.format("https://www.nl.go.kr/NL/search/openApi/search.do?key=%s&kwd=%s&detailSearch=true&f1=title&start=%d&maxResults=%d&apiType=json&category=도서",
-                apiKey,
-                query,
-                startIndex,
-                resultsPerPage);
+//    public List<ItemDTO> searchBooks(String query, int page, String srchTarget) {
+//        final int resultsPerPage = 10; // 페이지당 결과 수
+//        final int startIndex = (page - 1) * resultsPerPage + 1; // 페이지 시작 인덱스 계산
+//        
+//        // 검색 조건 설정
+//        String searchField = srchTarget.equals("title") ? "title" : srchTarget.equals("author") ? "author" : "total";
+//        
+//        // URL 생성 (pageNum을 startIndex로 변환)
+//        String url = String.format("https://www.nl.go.kr/NL/search/openApi/search.do?key=%s&kwd=%s&detailSearch=true&f1=%s&start=%d&maxResults=%d&apiType=json&category=도서",
+//                apiKey, query, searchField, startIndex, resultsPerPage);
+//        
+//        // URL 출력
+//        System.out.println("API 요청 URL: " + url);
+//
+//        // API 호출
+//        String response = restTemplate.getForObject(url, String.class);
+//        System.out.println("API Response: " + response); // 응답 확인용
+//
+//        List<ItemDTO> items = new ArrayList<>();
+//        try {
+//            if (response != null && !response.isEmpty()) {
+//                JsonNode root = objectMapper.readTree(response);
+//                JsonNode resultNode = root.path("result"); // JSON 응답에서 'result' 노드에 접근
+//
+//                for (JsonNode itemNode : resultNode) {
+//                    ItemDTO item = new ItemDTO();
+//                    item.setTitleInfo(itemNode.path("titleInfo").asText().replaceAll("<[^>]*>", "").trim());
+//                    item.setAuthorInfo(itemNode.path("authorInfo").asText().replaceAll("<[^>]*>", "").trim());
+//
+//                    // 이미지 URL 처리
+//                    String imageUrl = itemNode.path("imageUrl").asText().trim();
+//                    if (imageUrl.isEmpty()) {
+//                        imageUrl = "/images/no_img.jpg"; // 기본 이미지 URL 설정
+//                    } else {
+//                        imageUrl = "http://cover.nl.go.kr/" + imageUrl;
+//                    }
+//                    item.setImageUrl(imageUrl);
+//                    items.add(item);
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return items;
+//    }
+    
+    public SearchResult searchBooks(String query, int pageNum, String srchTarget) {
+        final int resultsPerPage = 10; // 페이지당 결과 수
+        final int startIndex = (pageNum - 1) * resultsPerPage + 1; // start를 계산 (1부터 시작)
+
+        // 검색 조건 설정
+        String searchField = srchTarget.equals("title") ? "title" : srchTarget.equals("author") ? "author" : "total";
+
+        String url = String.format("https://www.nl.go.kr/NL/search/openApi/search.do?key=%s&kwd=%s&detailSearch=true&f1=%s&pageNum=%d&maxResults=%d&apiType=json&category=도서",
+                apiKey, query, searchField, pageNum, resultsPerPage);
 
         // API 호출
         String response = restTemplate.getForObject(url, String.class);
-        System.out.println("API Response: " + response); // 응답 확인용
 
         List<ItemDTO> items = new ArrayList<>();
+        int totalPages = 0;  // 전체 페이지 수
+        int totalResults = 0;  // 전체 검색 결과 수
+
         try {
             if (response != null && !response.isEmpty()) {
                 JsonNode root = objectMapper.readTree(response);
-                JsonNode resultNode = root.path("result"); // JSON 응답에서 'result' 노드에 접근
+                totalResults = root.path("total").asInt(); // 전체 검색 결과 수
+                totalPages = totalResults > 0 ? (int) Math.ceil((double) totalResults / resultsPerPage) : 0; // 전체 페이지 수 계산
 
+                JsonNode resultNode = root.path("result");
                 for (JsonNode itemNode : resultNode) {
                     ItemDTO item = new ItemDTO();
-                    item.setTitleInfo(itemNode.path("titleInfo").asText().replaceAll("<[^>]*>", "").trim()); // HTML 태그 제거
-                    item.setAuthorInfo(itemNode.path("authorInfo").asText().replaceAll("<[^>]*>", "").trim()); // HTML 태그 제거
-                    
-                    // 이미지 URL 처리
+                    item.setTitleInfo(itemNode.path("titleInfo").asText().replaceAll("<[^>]*>", "").trim());
+                    item.setAuthorInfo(itemNode.path("authorInfo").asText().replaceAll("<[^>]*>", "").trim());
                     String imageUrl = itemNode.path("imageUrl").asText().trim();
-                    if (imageUrl.isEmpty()) {
-                        imageUrl = "/images/no_img.jpg"; // 기본 이미지 URL 설정
-                    } else {
-                        imageUrl = "http://cover.nl.go.kr/" + imageUrl;
-                    }
-                    item.setImageUrl(imageUrl);
+                    item.setImageUrl(imageUrl.isEmpty() ? "/images/no_img.jpg" : "http://cover.nl.go.kr/" + imageUrl);
                     items.add(item);
                 }
             }
@@ -131,6 +175,10 @@ public class SearchService {
             e.printStackTrace();
         }
 
-        return items;
+        return new SearchResult(items, pageNum, totalPages, totalResults); // searchResult 반환
     }
+
+
+
+
 }

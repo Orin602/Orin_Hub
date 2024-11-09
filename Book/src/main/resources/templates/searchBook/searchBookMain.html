@@ -12,28 +12,52 @@
 <body>
 <th:block th:insert="~{include/header}"></th:block>
 	<div class="search-book-container">
-		<h1>도서 검색 결과</h1>
-		<h3>검색어 : [[${query}]]</h3>
-		<div id="results">
-            <!-- 검색 결과가 여기에 동적으로 추가됨 -->
-            <ul>
-                <li th:each="item : ${items}">
-	                <img th:src="${item.imageUrl}" alt="Book Cover" style="width:200px;">
-	                <h4 th:text="${item.titleInfo}"></h4>
-	                <p th:text="${item.authorInfo}"></p>
-	                <p th:text="${item.kdcName1s}"></p>
-                </li>
-            </ul>
-        </div>
+		<div class="search-history-container">
+	        <p>인기 검색어 :
+	        	<span th:each="queryData, iterStat : ${topSearchQueries}">
+	                <span th:text="${queryData[0]}"></span>
+	                <span th:if="${iterStat.index < 5}">, </span>
+	            </span>
+	            <span th:if="${showMore}">...</span>
+	        </p>
+	        <p>연관 검색어 : 
+	        	<span th:each="related : ${relatedSearches}">
+	        		<a th:href="@{'/search-book?query=' + ${related[0]}}" th:text="${related[0]}"></a>
+	        	</span>
+	        </p>
+	    </div>
+	    <div class="items">
+		    <h1>도서 검색 결과</h1>
+			<h3>검색어 : [[${query}]]</h3>
+			
+			<div class="results" id="results" th:each="item : ${items}">
+				<img th:src="${item.imageUrl}" alt="Book Cover" style="width:200px;">
+				<h4 th:text="${item.titleInfo}"></h4>
+				<p th:text="${item.authorInfo}"></p>
+				<p th:text="${item.kdcName1s}"></p>
+	        </div>
+	        
+<div class="pagination">
+    <span th:if="${pageNum > 1}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=1|}" class="pagination-button first">첫 페이지</a>
+    </span>
+    <span th:if="${pageNum > 1}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=${pageNum - 1}|}" class="pagination-button prev">이전</a>
+    </span>
+
+    <span class="page-info">페이지 [[${pageNum}]] / [[${totalPages}]]</span>
+
+    <span th:if="${pageNum < totalPages}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=${pageNum + 1}|}" class="pagination-button next">다음</a>
+    </span>
+    <span th:if="${pageNum < totalPages}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=${totalPages}|}" class="pagination-button last">마지막 페이지</a>
+    </span>
+</div>
+
+
+
+	    </div>
 	</div>
-	
 </body>
 </html>
- <!-- <li th:each="item : ${items}">
-                	<a th:href="@{book-review/{title}(title=${item.title})}">
-	                	<img th:src="${item.cover}" alt="Book Cover" style="width:100px;">
-	                </a>
-	                <h4 th:text="${item.title}"></h4>
-	                <p th:text="${item.author}"></p>
-	                <p th:text="${item.description}"></p>
-                </li> -->
