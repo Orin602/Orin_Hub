@@ -26,6 +26,31 @@
 			});
 		}
 	}
+	function delete_review() {
+	    // 작성자와 현재 로그인한 사용자가 동일한지 확인
+	    if (writer === viewer) {
+	        swal.fire({
+	            title: '정말로 삭제하시겠습니까?',
+	            text: '삭제된 리뷰는 복구할 수 없습니다.',
+	            icon: 'warning',
+	            showCancelButton: true, // 취소 버튼 추가
+	            confirmButtonText: '삭제',
+	            cancelButtonText: '취소'
+	        }).then((result) => {
+	            if (result.isConfirmed) {
+	                // 리뷰 삭제를 위한 URL로 이동 (GET 방식으로 전달)
+	                window.location.href = '/delete?review_seq=' + review_seq;
+	            }
+	        });
+	    } else {
+	        swal.fire({
+	            title: '리뷰 삭제 실패',
+	            icon: 'warning',
+	            text: '작성자만 삭제 가능합니다.',
+	            confirmButtonText: '확인'
+	        });
+	    }
+	}
 </script>
 </head>
 <body>
@@ -62,18 +87,22 @@
 		<h2>댓글</h2>
 		<div class="reply-box" th:each="reply : ${reply}">
 			<div class="reply-content">
-				<h5><span th:text="${reply.member.name}"></span>
-				<span th:text="${reply.content}"></span>
+				<h5><span th:text="${reply.member.name}"></span> : 
+				<span th:text="${reply.content}"></span><br>
 				<span th:text="${#dates.format(reply.reply_date, 'yyyy-MM-dd HH:mm')}"></span></h5>
-				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
+				<button type="button" th:data-reply-seq="${reply.replySeq}" th:data-reply-member-id="${reply.member.id}" 
+						th:data-login-user-id="${loginUser.id}" class="detail-replyedit-btn"
+						onclick="replyEdit(this)">댓글수정</button><br>
+				<button type="button" th:attr="data-reply-seq=${reply.replySeq}"
 						class="detail-replylike-btn" onclick="replyLike(this)">좋아요</button>&nbsp;
 				<span>좋아요 수 : <span th:text="${reply.likes}"></span></span>&nbsp;
-				<button type="button" th:attr="data-reply-seq=${reply.replySeq}" 
-						class="detail-replydelete-btn" onclick="replyDelete(this)">댓글삭제</button>
+				<button type="button" th:data-reply-seq="${reply.replySeq}" th:data-reply-member-id="${reply.member.id}" 
+						th:data-login-user-id="${loginUser.id}" class="detail-replydelete-btn"
+						onclick="replyDelete(this)">댓글삭제</button>
 				<!-- th:attr은 속성 이름과 값을 동적으로 설정할 수 있게 한다. (JavaScript와 상호작용할 때 유용) -->
 			</div>
 		</div>
-		<div class="reply-content" th:if="${loginUser != null}">
+		<div class="reply-content">
 			<form class="reply-write-form" id="reply-write-form" method="post">
 				<input type="hidden" name="review_seq" th:value="${review.review_seq}">
 				<input type="hidden" name="member_id" th:value="${loginUser.id}">
@@ -88,6 +117,7 @@
         <button class="detail-edit-btn" type="button" onclick="checkAndEdit()">수정하기</button>
         </th:block>
 	</div>
+	<button class="delete-btn" type="button" onclick="delete_review()">리뷰 삭제</button>
 </div>
 </body>
 </html>

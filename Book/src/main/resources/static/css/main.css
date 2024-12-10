@@ -151,3 +151,71 @@
     margin: 0; /* 기본 마진 제거 */
     font-weight: normal; /* 기본 굵기 유지 */
 }
+
+
+/* 전체 폼 스타일 */
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* 요소 간 간격 */
+    background-color: #f9f9f9; /* 폼 배경 색상 */
+    padding: 10px 20px;
+    border-radius: 8px; /* 둥근 모서리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
+/* 셀렉트 박스 스타일 */
+.search-form select {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.search-form select:focus {
+    border-color: #007bff; /* 포커스 시 강조 색상 */
+    outline: none;
+}
+
+/* 검색 입력 필드 스타일 */
+.search-form input[type="search"] {
+    flex: 1; /* 가로 공간을 유연하게 사용 */
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+.search-form input[type="search"]:focus {
+    border-color: #007bff; /* 포커스 시 강조 색상 */
+    outline: none;
+}
+
+/* 버튼 스타일 */
+.search-form button {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff; /* 기본 버튼 색상 */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-form button:hover {
+    background-color: #0056b3; /* 호버 시 어두운 색상 */
+    transform: scale(1.05); /* 약간 확대 */
+}
+
+.search-form button:active {
+    background-color: #003d80; /* 클릭 시 더 어두운 색상 */
+    transform: scale(1); /* 원래 크기 */
+}
+

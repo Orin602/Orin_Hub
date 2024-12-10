@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -465,7 +466,7 @@ public class ReviewController {
 	    }
 
 	    // 댓글 작성자와 로그인한 사용자 확인
-	    if (!replyUser.getMember().getId().equals(loginUser.getId())) {
+	    if (replyUser.getMember() == null || !replyUser.getMember().getId().equals(loginUser.getId())) {
 	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "작성자만 댓글을 삭제할 수 있습니다."));
 	    }
 
@@ -474,10 +475,56 @@ public class ReviewController {
 	        replyService.deleteReply(replySeq);
 	        return ResponseEntity.ok(Collections.singletonMap("message", "댓글이 성공적으로 삭제되었습니다."));
 	    } catch (Exception e) {
+	        e.printStackTrace();  // 에러 로그 추가
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "댓글 삭제 중 오류가 발생했습니다."));
 	    }
 	}
 
+
+
+	@GetMapping("/delete")
+	public String deleteReview(@RequestParam("review_seq") int review_seq, HttpSession session, Model model) {
+	    Member loginUser = (Member) session.getAttribute("loginUser");
+	    Review review = reviewService.getReviewBySeq(review_seq);
+	    
+	    // 로그인 상태 확인
+	    if (loginUser == null) {
+	        model.addAttribute("message", "로그인 페이지로 이동");
+	        model.addAttribute("text", "리뷰 삭제를 위해 로그인해주세요.");
+	        model.addAttribute("messageType", "info");
+	        return "login/login"; // 로그인 페이지로 이동
+	    }
+
+	    // 작성자 확인
+	    if (!review.getMember().getId().equals(loginUser.getId())) {
+	        model.addAttribute("message", "삭제 불가");
+	        model.addAttribute("text", "작성자만 리뷰를 삭제할 수 있습니다.");
+	        model.addAttribute("messageType", "error");
+	        return "redirect:/review"; // 리뷰 목록 페이지로 이동
+	    }
+	    
+	    // 리뷰 삭제 처리
+	    reviewService.deleteReview(review);
+	    
+	    // 리뷰 삭제 후 목록으로 리다이렉트
+	    return "redirect:/review"; // 리뷰 목록 페이지로 이동
+	}
+
+	@PutMapping("/update-reply")
+	public ResponseEntity<String> updateReply(@RequestBody Map<String, Object> request) {
+		try {
+			// 요청받은 데이터 추출
+			int replySeq = Integer.parseInt(request.get("replySeq").toString());
+			String updatedReply = request.get("content").toString();
+			
+			replyService.updateReply(replySeq, updatedReply);
+			
+			return ResponseEntity.ok("댓글이 성공적으로 수정되었습니다."); 
+		} catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+					body("댓글 수정에 실패했습니다. 다시 시도해 주세요.");
+		}
+	}
 }
 
 

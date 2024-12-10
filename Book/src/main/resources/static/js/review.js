@@ -53,27 +53,27 @@ function deleteImage(buttonElement) {
 	const reviewSeq = buttonElement.getAttribute('data-review-seq');
 	const imageIndex = buttonElement.getAttribute('data-index');
 	const remainingImages = [];
-    $(".uploaded-image").each(function(index, element) {
-        if (index !== imageIndex) {
-            remainingImages.push($(element).find("img").attr("src"));
-        }
-    });
-    
-    // 삭제된 이미지를 제외한 나머지 이미지를 서버로 전송
-    $("#review-edit-form").append(
-        $("<input>", {
-            type: "hidden",
-            name: "uploadedImages",
-            value: remainingImages.join(",")
-        })
-    );
+	$(".uploaded-image").each(function(index, element) {
+		if (index !== imageIndex) {
+			remainingImages.push($(element).find("img").attr("src"));
+		}
+	});
+
+	// 삭제된 이미지를 제외한 나머지 이미지를 서버로 전송
+	$("#review-edit-form").append(
+		$("<input>", {
+			type: "hidden",
+			name: "uploadedImages",
+			value: remainingImages.join(",")
+		})
+	);
 	$.ajax({
 		url: '/delete-image',
 		type: 'GET',
-		data: { 
-            reviewSeq: reviewSeq,
-            imageIndex: imageIndex 
-        },
+		data: {
+			reviewSeq: reviewSeq,
+			imageIndex: imageIndex
+		},
 		success: function(response) {
 			swal.fire({
 				title: '삭제 성공',
@@ -81,7 +81,7 @@ function deleteImage(buttonElement) {
 				icon: 'success',
 				confirmButtonText: '확인'
 			}).then((result) => {
-				if(result.isConfirmed) {
+				if (result.isConfirmed) {
 					location.reload();
 				}
 			});
@@ -99,14 +99,14 @@ function deleteImage(buttonElement) {
 
 // 리뷰 수정
 function update_review() {
-	if($("#title").val() == "") {
+	if ($("#title").val() == "") {
 		swal.fire({
 			title: '제목을 입력해주세요.',
 			icon: 'warning'
 		});
 		$("#title").focus();
 		return false;
-	} else if($("#content").val() == "") {
+	} else if ($("#content").val() == "") {
 		swal.fire({
 			title: '내용을 입력해주세요.',
 			icon: 'warning'
@@ -120,12 +120,12 @@ function update_review() {
 			icon: 'success',
 			confirmButtonText: '확인'
 		}).then((result) => {
-            if (result.isConfirmed) {
-                $("#review-edit-form").attr("action", "/update-review").submit();
-            }
-        });
+			if (result.isConfirmed) {
+				$("#review-edit-form").attr("action", "/update-review").submit();
+			}
+		});
 	}
-	
+
 }
 
 // 리뷰 추천
@@ -259,91 +259,162 @@ function reply_write() {
 
 // 댓글 좋아요 처리
 function replyLike(buttonElement) {
-    var replySeq = $(buttonElement).data('reply-seq');
-    console.log("replySeq:", replySeq); // 확인용 로그
-    $.ajax({
-        url: `/replies/${replySeq}/like`,
-        method: 'POST',
-        success: function(response) {
-            // 서버 응답에 따라 메시지 설정
-            var title = '좋아요 성공';
-            var text = '좋아요가 성공적으로 추가되었습니다.';
+	var replySeq = $(buttonElement).data('reply-seq');
 
-            if (response.includes("취소되었습니다")) {
-                title = '좋아요 취소';
-                text = '좋아요가 취소되었습니다.';
-            }
+	$.ajax({
+		url: `/replies/${replySeq}/like`,
+		method: 'POST',
+		success: function(response) {
+			// 서버 응답에 따라 메시지 설정
+			var title = '좋아요 성공';
+			var text = '좋아요가 성공적으로 추가되었습니다.';
 
-            swal.fire({
-                title: title,
-                text: text,
-                icon: 'success',
-                confirmButtonText: '확인'
-            }).then(() => {
-                location.reload(); // 페이지 새로 고침
-            });
-        },
-        error: function(xhr, status, error) {
-            swal.fire({
-                title: '에러',
-                text: '좋아요 처리 중 오류가 발생했습니다.',
-                icon: 'error',
-                confirmButtonText: '확인'
-            });
-        }
-    });
+			if (response.includes("취소되었습니다")) {
+				title = '좋아요 취소';
+				text = '좋아요가 취소되었습니다.';
+			}
+
+			swal.fire({
+				title: title,
+				text: text,
+				icon: 'success',
+				confirmButtonText: '확인'
+			}).then(() => {
+				location.reload(); // 페이지 새로 고침
+			});
+		},
+		error: function(xhr, status, error) {
+			swal.fire({
+				title: '에러',
+				text: '좋아요 처리 중 오류가 발생했습니다.',
+				icon: 'error',
+				confirmButtonText: '확인'
+			});
+		}
+	});
 }
 
-// 댓글 삭제 처리
+// 댓글 수정
+function replyEdit(buttonElement) {
+	// 댓글 작성자 id와 현재 로그인한 사용자 id 가져오기
+	var replySeq = $(buttonElement).attr("data-reply-seq"); // 댓글 seq
+	var replyMemberId = $(buttonElement).attr("data-reply-member-id"); // 댓글 작성자 ID
+	var loginUserId = $(buttonElement).attr("data-login-user-id"); // 로그인한 사용자 ID
+	
+	// 댓글 작성자와 로그인한 사용자가 일치하는지 확인
+	if(replyMemberId === loginUserId) {
+		swal.fire({
+			title: '댓글 수정',
+			input: 'text',
+			inputLabel: '수정할 댓글을 입력하세요.',
+			inputPlaceholder: '댓글 내용을 입력해 주세요.',
+			showCancelButton: true,
+			confirmButtonText: '수정하기',
+			cancelButtonText: '취소',
+			inputValidator: (value) => {
+				if(!value) {
+					return '수정할 댓글 내용을 입력해야 합니다.';
+				}
+			}
+		}).then((result) => {
+			if(result.isConfirmed) {
+				var updatedReply = result.value;
+				
+				$.ajax({
+					url: '/update-reply',	// controller 요청 url
+					type: 'PUT',
+					contentType: 'application/json',
+					data: JSON.stringify({
+						replySeq: replySeq,
+						content: updatedReply
+					}),
+					success: function(response) {
+						swal.fire({
+							title: '수정 완료',
+							text: '댓글을 성공적으로 수정하였습니다.',
+							icon: 'success',
+							confirmButtonText: '확인'
+						}).then(() => {
+							location.reload();
+						});
+					},
+					error: function(xhr, status, error) {
+						swal.fire({
+							title: '수정 실패',
+							text: '서버에서 오류가 발생했습니다. 다시 시도해 주세요.',
+							icon: 'error',
+							confirmButtonText: '확인'
+						});
+					}
+				});
+			}
+		});
+	} else { // 댓글 작성자와 수정버튼을 누른 사용자가 다를경우
+		swal.fire({
+			title: '수정 불가',
+			text: '댓글 작성자만 수정이 가능합니다.',
+			icon: 'warning',
+			confirmButtonText: '확인'
+		});
+	}
+}
+
+// 댓글 삭제
 function replyDelete(buttonElement) {
-    var replySeq = $(buttonElement).data('reply-seq');
-    
-    swal.fire({
-        title: '댓글 삭제 확인',
-        text: '정말로 이 댓글을 삭제하시겠습니까?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '삭제',
-        cancelButtonText: '취소',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: `/replies/${replySeq}/delete`,
-                method: 'POST',
-                success: function(response) {
-                    // 성공 메시지 표시
-                    swal.fire({
-                        title: '삭제 성공',
-                        text: '댓글이 성공적으로 삭제되었습니다.',
-                        icon: 'success',
-                        confirmButtonText: '확인'
-                    }).then(() => {
-                        location.reload(); // 페이지 새로 고침
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // 서버 오류 처리
-                    let errorMessage = '댓글 삭제에 실패했습니다.';
-                    
-                    // 서버에서 반환한 에러 메시지에 따라 다르게 처리
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    
-                    swal.fire({
-                        title: '삭제 실패',
-                        text: errorMessage,
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    });
-                }
-            });
-        }
-    });
+	// 버튼에서 댓글 정보와 사용자 ID 가져오기
+	var replySeq = $(buttonElement).data('reply-seq'); // 댓글 시퀀스
+	var replyMemberId = $(buttonElement).data('reply-member-id'); // 댓글 작성자 ID
+	var loginUserId = $(buttonElement).data('login-user-id'); // 현재 로그인한 사용자 ID
+	
+	if(replyMemberId === loginUserId) { // 작성자와 로그인한 사용자가 일치할 경우
+		swal.fire({
+			title: '댓글 삭제 확인',
+			text: '정말로 이 댓글을 삭제하시겠습니까?',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '삭제',
+			cancelButtonText: '취소',
+			reverseButtons: true
+		}).then((result) => {
+			if(result.isConfirmed) {
+				$.ajax({
+					url: `/replies/${replySeq}/delete`,
+					method: 'POST',
+					success: function(response) {
+						swal.fire({
+							title: '삭제 성공',
+							text: '댓글을 성공적으로 삭제하였습니다.',
+							icon: 'success',
+							confirmButtonText: '확인'
+						}).then(() => {
+							location.reload();
+						});
+					},
+					error: function(xhr, status, error) {
+						let errorMessage = '댓글 삭제에 실패했습니다.';
+						
+						// 서버에서 반환한 에러 메시지 처리
+						if (xhr.responseJSON && xhr.responseJSON.message) {
+						    errorMessage = xhr.responseJSON.message;
+						}
+						
+						swal.fire({
+						    title: '삭제 실패',
+						    text: errorMessage,
+						    icon: 'error',
+						    confirmButtonText: '확인'
+						});
+					}
+				});
+			}
+		});
+	} else {
+		swal.fire({
+		    title: '삭제 불가',
+		    text: '댓글 작성자만 삭제할 수 있습니다.',
+		    icon: 'warning',
+		    confirmButtonText: '확인'
+		});
+	}
 }
-
-
-
-
 

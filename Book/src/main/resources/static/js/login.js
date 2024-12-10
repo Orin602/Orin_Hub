@@ -220,19 +220,23 @@ $(document).ready(function() {
 
 // 로그인
 function login() {
+	// 1. ID 필드가 비어 있는지 확인
     if ($("#id").val() == "") {
         swal.fire({
             title: 'ID를 입력해 주세요',
             icon: 'warning'
         });
         return false;
-    } else if ($("#pwd").val() == "") {
+    } 
+    // 2. Password 필드가 비어 있는지 확인
+    else if ($("#pwd").val() == "") {
         swal.fire({
             title: 'Password를 입력해 주세요',
             icon: 'warning'
         });
         return false;
     }
+    // 3. 모든 필드가 채워졌다면 폼을 제출
     $("#login-form").attr("action", "/login").submit();
 }
 

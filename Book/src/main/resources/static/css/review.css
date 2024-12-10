@@ -271,24 +271,13 @@
     margin: 5px 0; /* h5 태그 간격 */
 }
 
-/* 버튼 색상 구분 */
-.detail-replylike-btn {
-	cursor: pointer; /* 포인터 효과 */
-    background-color: #007bff; /* 좋아요 버튼 색상 */
-}
 
-.detail-replydelete-btn {
+.delete-btn {
 	cursor: pointer; /* 포인터 효과 */
     background-color: #dc3545; /* 삭제 버튼 색상 */
 }
 
-/* 버튼 호버 효과 */
-.detail-replylike-btn:hover {
-    background-color: #0056b3; /* 호버 색상 */
-    transform: scale(1.05); /* 마우스 올렸을 때 크기 증가 */
-}
-
-.detail-replydelete-btn:hover {
+.delete-btn:hover {
     background-color: #c82333; /* 호버 색상 */
     transform: scale(1.05); /* 마우스 올렸을 때 크기 증가 */
 }
@@ -371,6 +360,14 @@
     cursor: pointer;
     transition: background-color 0.3s;
 }
+.delete-btn {
+	color: white;
+	border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 .edit-btn:hover {
 	background-color: #0056b3; /* 호버 색상 */
 }
@@ -394,10 +391,53 @@ label {
 input[type="text"],
 textarea,
 input[type="file"] {
-    width: 98%; /* 가로 너비 100% */
+
     padding: 8px; /* 내부 여백 */
     margin-top: 5px; /* 위쪽 여백 */
     border: 1px solid #ccc; /* 테두리 */
     border-radius: 4px; /* 모서리 둥글게 */
 }
 
+/* 댓글 수정 버튼 (연두색) */
+.detail-replyedit-btn {
+    background-color: #90ee90; /* 연두색 */
+    color: #ffffff;
+}
+
+.detail-replyedit-btn:hover {
+    background-color: #66cc66; /* 진한 연두색 */
+    transform: scale(1.05); /* 버튼 확대 */
+}
+
+/* 댓글 좋아요 버튼 (하늘색) */
+.detail-replylike-btn {
+    background-color: #87cefa; /* 하늘색 */
+    color: #ffffff;
+}
+
+.detail-replylike-btn:hover {
+    background-color: #5db3f0; /* 진한 하늘색 */
+    transform: scale(1.05); /* 버튼 확대 */
+}
+
+/* 댓글 삭제 버튼 (빨간색) */
+.detail-replydelete-btn {
+    background-color: #ff6347; /* 빨간색 */
+    color: #ffffff;
+}
+
+.detail-replydelete-btn:hover {
+    background-color: #e04a36; /* 진한 빨간색 */
+    transform: scale(1.05); /* 버튼 확대 */
+}
+
+.detail-replyedit-btn,
+.detail-replylike-btn,
+.detail-replydelete-btn {
+	border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 8px; /* 버튼을 둥글게 */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* 호버 시 색상과 크기 변경 */
+}

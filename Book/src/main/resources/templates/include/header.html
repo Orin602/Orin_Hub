@@ -49,7 +49,7 @@
             <a th:href="@{/main}">메인페이지</a>
             <a th:href="@{/review}">리뷰</a>
         </h1>
-        <form id="search-form" method="get">
+        <form class="search-form" id="search-form" method="get">
 	        <!-- 검색 대상 선택 -->
 		    <select name="srchTarget" id="srchTarget" class="searchTarget">
 		        <option value="total">전체</option>
@@ -57,7 +57,7 @@
 		        <option value="author">저자</option>
 		    </select>
 	        <input type="search" name="query" id="query" placeholder="도서 검색..." aria-label="도서 검색" />
-	        <button type="button" onclick="search_book()">검색</button>
+	        <button class="search-btn" type="button" onclick="search_book()">검색</button>
 	    </form>
     </div>
 </div>

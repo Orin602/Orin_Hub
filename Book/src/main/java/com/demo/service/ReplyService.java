@@ -19,7 +19,7 @@ public interface ReplyService {
 	void saveReply(Reply vo);
 	
 	// 댓글 수정
-	void updateReply(int replySeq, Reply vo);
+	void updateReply(int replySeq, String content);
 	
 	// 댓글 삭제
 	void deleteReply(int replySeq);

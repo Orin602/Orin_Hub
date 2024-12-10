@@ -71,15 +71,15 @@ public class ReplyServiceImpl implements ReplyService {
 	// 댓글 수정
 	@Override
 	@Transactional
-	public void updateReply(int replySeq, Reply vo) {
-		Optional<Reply> beforeReply = replyRepo.findById(replySeq); 
-		if(beforeReply.isPresent()) {
-			Reply reply = beforeReply.get();
-			reply.setContent(vo.getContent());
-			replyRepo.save(reply);
-		} else {
-			throw new IllegalArgumentException("잘못된 댓글 번호: " + replySeq);
-		}
+	public void updateReply(int replySeq, String content) {
+	    Optional<Reply> beforeReply = replyRepo.findById(replySeq); 
+	    if (beforeReply.isPresent()) {
+	        Reply reply = beforeReply.get();
+	        reply.setContent(content); // 댓글 내용 수정
+	        replyRepo.save(reply); // 수정된 댓글 저장
+	    } else {
+	        throw new IllegalArgumentException("잘못된 댓글 번호: " + replySeq); // 댓글이 없으면 예외 발생
+	    }
 	}
 
 	@Override

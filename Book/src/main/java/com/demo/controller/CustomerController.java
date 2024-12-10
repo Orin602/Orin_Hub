@@ -94,7 +94,7 @@ public class CustomerController {
 		qna.setMember(loginUser);
 		qnaService.createQna(qna);
 		
-		return "customer/qna";
+		return "redirect:/myqna";
 	}
 	
 	//qna update
