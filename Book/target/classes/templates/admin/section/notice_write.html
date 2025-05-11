@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>notice write Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>공지사항 작성</h1>
+	<div class="notice-write-container">
+		<div class="item">
+			<form class="notice-write-form" id="notice-write-form" method="post" enctype="multipart/form-data">
+				<label for="title">제목</label>
+			    <input type="text" id="title" name="title" placeholder="제목을 입력해주세요." class="form-input" />
+			    
+			    <label for="content">내용</label>
+			    <textarea name="content" id="content" placeholder="내용을 입력해주세요." class="form-textarea"></textarea>
+			    <label class="custom-file-uploads" for="uploadFile">
+				    <input type="file" name="uploadFile" id="uploadFile" multiple>
+				    이미지 업로드 (선택 사항)
+				</label>
+			</form>
+		</div>
+		<button class="before-btn" type="button" onclick="window.location.href='/admin-notice-list'">이전페이지</button>
+		<button class="write-btn" type="button" onclick="notice_write()">공지사항 작성</button>
+	</div>
+</div>
+</body>
+</html>

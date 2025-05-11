@@ -1,0 +1,232 @@
+@charset "utf-8";
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.mypage-main-container {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    border: 1px solid #ccc; /* 테두리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    padding: 20px;
+}
+.mypagelist {
+    max-width: 800px; /* 최대 너비 설정 */
+    margin: 20px auto; /* 중앙 정렬 */
+    padding: 20px; /* 내부 여백 */
+    border: 1px solid #ccc; /* 테두리 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    background-color: #f9f9f9; /* 배경 색상 */
+    justify-content: space-around; /* 아이템 간격을 고르게 배치 */
+}
+
+.mypagelist a {
+    display: inline-block; /* 블록 레벨 요소로 변경하여 버튼처럼 보이게 함 */
+    padding: 10px; /* 내부 여백 */
+    margin: 10px; /* 버튼 간의 여백 */
+    text-decoration: none; /* 링크 기본 스타일 제거 */
+    color: white; /* 텍스트 색상 */
+    background-color: blue; /* 기본 버튼 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    transition: background-color 0.3s; /* 배경 색상 변화 애니메이션 */
+    cursor: pointer; /* 마우스 커서 변경 */
+    flex: 1 1 30%; /* 각 버튼의 너비 조정 (최소 30%) */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+.mypagelist a:hover {
+    background-color: #0033cc; /* 호버 시 색상 변화 */
+}
+/* 회원 탈퇴 버튼 스타일 */
+.delete-btn {
+    background-color: red !important; /* 탈퇴 버튼 색상을 빨간색으로 설정하고 !important 사용 */
+}
+
+/* 회원 탈퇴 버튼 호버 스타일 */
+.delete-btn:hover {
+    background-color: darkred !important; /* 호버 시 색상 변화 */
+}
+
+
+/* 마이페이지 공톹 */
+.myreview, .myrecoment, .mybookmark, .myreply, .myqna {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.review-list, .recoment-list, .bookmark-list, .reply-box, .qna-box {
+    display: flex;
+    flex-wrap: wrap; /* 여러 줄로 나누기 */
+    justify-content: center; /* 가운데 정렬 */
+    gap: 20px; /* review-box 사이 간격 */
+    max-width: 1200px; /* 전체 너비 제한 */
+    margin: 0 auto;
+    max-height: 1000px; /* 최대 높이 설정 (원하는 높이로 조정) */
+    overflow-y: auto; /* 세로 방향 스크롤 활성화 */
+    padding: 10px; /* 패딩 추가 (선택 사항) */
+    border: 1px solid #ccc; /* 테두리 추가 (선택 사항) */
+    margin-bottom: 10px;
+}
+
+.review-box, .reco-box, .bookmark-box {
+    width: calc(33.333% - 20px); /* 3개씩 한 줄에 배치, 간격 고려 */
+    background-color: #fff;
+    border: 1px solid #ccc; /* 테두리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    transition: transform 0.3s ease; /* 호버 효과 */
+    min-height: 300px; /* 최소 높이를 설정하여 박스 크기 유지 */
+}
+
+.review-box:hover, .reco-box:hover, .bookmark-box:hover {
+    transform: translateY(-5px); /* 마우스 오버 시 살짝 위로 이동 */
+}
+
+.review-box img, .reco-box img, .bookmark-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px; /* 이미지 모서리 둥글게 */
+    margin-bottom: 10px;
+}
+
+.review-box h4, .reco-box h4, .bookmark-box h4 {
+    margin: 10px 0;
+}
+
+.review-date, .reco-date, .bookmark-date {
+    color: #666;
+    font-size: 14px;
+}
+
+/* 내가 작성한 리뷰 페이지 */
+
+/* 내가 추천한 리뷰 페이지 */
+
+/* 내가 즐겨찾기한 리뷰 페이지 */
+
+/* 내가 작성한 댓글 페이지 */
+table {
+    width: 70%; /* 전체 너비 */
+    border-collapse: collapse; /* 테두리 겹치기 */
+    margin: 20px 0; /* 테이블 위아래 여백 */
+    border: 1px solid #ccc; /* 테이블 전체 테두리 */
+}
+thead {
+    position: sticky; /* 헤더 고정 */
+    top: 0; /* 위쪽에 붙이기 */
+    background-color: #f2f2f2; /* 헤더 배경색 */
+    z-index: 1; /* 다른 요소 위에 표시 */
+}
+tbody {
+    display: block; /* 블록으로 설정하여 스크롤 가능하게 */
+    max-height: 400px; /* 원하는 높이 */
+    overflow-y: auto; /* 세로 스크롤 */
+}
+tr {
+    display: table; /* 각 행을 테이블 형태로 표시 */
+    width: 100%; /* 너비 100% */
+    table-layout: fixed; /* 고정 레이아웃 */
+}
+th, td {
+    padding: 12px; /* 셀 안쪽 여백 */
+    text-align: center; /* 텍스트 왼쪽 정렬 */
+    border-bottom: 1px solid #ddd; /* 아래 테두리 */
+    border-right: 1px solid #ddd; /* 오른쪽 테두리 */
+    word-wrap: break-word; /* 긴 단어 줄 바꿈 */
+}
+
+th {
+    color: #333; /* 헤더 텍스트 색상 */
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5; /* 행 마우스 오버 시 배경색 */
+}
+
+.mypage-btn {
+    background-color: #ff4d4d; /* 삭제 버튼 배경색 */
+    color: white; /* 삭제 버튼 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    padding: 6px 12px; /* 버튼 안쪽 여백 */
+    border-radius: 4px; /* 둥근 모서리 */
+    cursor: pointer; /* 마우스 포인터 변경 */
+    transition: background-color 0.3s; /* 배경색 변화 효과 */
+}
+
+.mypage-btn:hover {
+    background-color: #ff1a1a; /* 마우스 오버 시 배경색 변화 */
+}
+.comment-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* 줄 수 설정 (2줄) */
+    overflow: hidden; /* 넘치는 내용 숨김 */
+    text-overflow: ellipsis; /* ...으로 표시 */
+}
+
+/* 내 질문 현황 */
+.qna-item {
+	text-align: center;
+}
+.qna-item a {
+	display: inline-block; /* 블록 레벨 요소로 변경하여 버튼처럼 보이게 함 */
+    padding: 10px; /* 내부 여백 */
+    margin: 10px; /* 버튼 간의 여백 */
+    text-decoration: none; /* 링크 기본 스타일 제거 */
+    color: white; /* 텍스트 색상 */
+    background-color: #00cc05; /* 기본 버튼 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    transition: background-color 0.3s; /* 배경 색상 변화 애니메이션 */
+    cursor: pointer; /* 마우스 커서 변경 */
+    flex: 1 1 30%; /* 각 버튼의 너비 조정 (최소 30%) */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+.qna-item a:hover {
+	background-color: #006f03;
+}
+/* 수정 버튼 스타일 */
+.qna-edit-btn {
+    background-color: #ffc107; /* 노란색 배경 */
+    color: #fff; /* 텍스트 색상 */
+    padding: 10px 15px; /* 패딩 추가 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    font-weight: bold; /* 글씨 두께 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s, transform 0.3s; /* 부드러운 호버 효과 */
+}
+
+/* 호버 효과 */
+.qna-edit-btn:hover {
+    background-color: #e0a800; /* 호버 시 배경색 변경: 약간 어두운 노란색 */
+    transform: scale(1.05); /* 호버 시 크기 약간 증가 */
+}
+
+/* 삭제 버튼 스타일 */
+.qna-delete-btn {
+    background-color: #dc3545; /* 빨간색 배경 */
+    color: #fff; /* 텍스트 색상 */
+    padding: 10px 15px; /* 패딩 추가 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    font-weight: bold; /* 글씨 두께 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s, transform 0.3s; /* 부드러운 호버 효과 */
+}
+
+/* 호버 효과 */
+.qna-delete-btn:hover {
+    background-color: #c82333; /* 호버 시 배경색 변경: 약간 어두운 빨간색 */
+    transform: scale(1.05); /* 호버 시 크기 약간 증가 */
+}

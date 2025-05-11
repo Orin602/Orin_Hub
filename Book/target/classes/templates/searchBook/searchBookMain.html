@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>도서 검색 결과</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" th:href="@{/css/book.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:src="@{/js/book.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{include/header}"></th:block>
+	<div class="search-book-container">
+		<div class="search-history-container">
+	        <p>인기 검색어 :
+	        	<span th:each="queryData, iterStat : ${topSearchQueries}">
+	                <span th:text="${queryData[0]}"></span>
+	                <span th:if="${iterStat.index < 5}">, </span>
+	            </span>
+	            <span th:if="${showMore}">...</span>
+	        </p>
+	        <p>연관 검색어 : 
+	        	<span th:each="related : ${relatedSearches}">
+	        		<a th:href="@{'/search-book?query=' + ${related[0]}}" th:text="${related[0]}"></a>
+	        	</span>
+	        </p>
+	    </div>
+	    <div class="items">
+		    <h1>도서 검색 결과</h1>
+			<h3>검색어 : [[${query}]]</h3>
+			
+			<div class="results" id="results" th:each="item : ${items}">
+				<img th:src="${item.imageUrl}" alt="Book Cover" style="width:200px;">
+				<h4 th:text="${item.titleInfo}"></h4>
+				<p th:text="${item.authorInfo}"></p>
+				<p th:text="${item.kdcName1s}"></p>
+	        </div>
+	        
+<div class="pagination">
+    <span th:if="${pageNum > 1}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=1|}" class="pagination-button first">첫 페이지</a>
+    </span>
+    <span th:if="${pageNum > 1}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=${pageNum - 1}|}" class="pagination-button prev">이전</a>
+    </span>
+
+    <span class="page-info">페이지 [[${pageNum}]] / [[${totalPages}]]</span>
+
+    <span th:if="${pageNum < totalPages}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=${pageNum + 1}|}" class="pagination-button next">다음</a>
+    </span>
+    <span th:if="${pageNum < totalPages}">
+        <a th:href="@{|/search-book?query=${query}&srchTarget=${srchTarget}&page=${totalPages}|}" class="pagination-button last">마지막 페이지</a>
+    </span>
+</div>
+
+
+
+	    </div>
+	</div>
+</body>
+</html>

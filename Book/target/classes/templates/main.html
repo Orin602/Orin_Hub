@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Main</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script>
+    $(document).ready(function() {
+        var message = /*[[${message}]]*/ '';
+        var messageType = /*[[${messageType}]]*/ '';
+        var text = /*[[${text}]]*/ '';
+
+        if (message) {
+            Swal.fire({
+                title: '알림',
+                text: message,
+                icon: messageType || 'info', // 메시지 타입이 없는 경우 기본값으로 'info' 사용
+                confirmButtonText: '확인'
+            });
+        }
+
+        $('.month-btn').click(function() {
+            var start_date = $(this).data('start-date');
+            var end_date = $(this).data('end-date');
+
+            console.log('추천을 가져옵니다:', start_date, end_date); // 디버깅 로그
+
+            $.ajax({
+                url: '/fetch-recommendations',
+                method: 'GET',
+                data: { start_date: start_date, end_date: end_date },
+                success: function(data) {
+                	$('#recommendations-list').empty(); // 이전 데이터 삭제
+                    console.log('Response:', data); // 디버깅 로그
+
+                    if (data.error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: '데이터 오류',
+                            icon: 'error',
+                            confirmButtonText: '확인'
+                        });
+                        $('#recommendations-list').html('<li>추천이 없습니다.</li>'); // 추천이 없을 때 표시
+                    } else if (data.message) {
+                        Swal.fire({
+                            title: '알림',
+                            text: data.message,
+                            icon: 'info',
+                            confirmButtonText: '확인'
+                        });
+                    } else {
+                        var recommendations = data.recommendations || []; // 기본값으로 빈 배열 설정
+                        var totalCount = data.totalCount || 0; // totalCount 값 설정
+                     
+                        // totalCount를 사용하여 목록 상단에 추가
+                        var listHtml = '<h1>추천 책 : ' + totalCount + '권</h1>'; // 총 추천 책 수
+
+                        if (Array.isArray(recommendations) && recommendations.length > 0) {
+                            recommendations.forEach(function(recommendation) {
+                                listHtml += '<li class="recommendations-item">' +
+                                    '<h2>' + recommendation.recomtitle + '</h2>' +
+                                    '<img src="' + recommendation.recomfilepath + '" alt="책 이미지">' +
+                                    '<p>' + recommendation.recomauthor.replace(';', '/') + '</p>' +
+                                    '<p>' + recommendation.recomcontens + '</p>' +
+                                    '<p>날짜: ' + recommendation.regdate + '</p>' +
+                                    '</li>';
+                            });
+                            $('#recommendations-list').html(listHtml);
+                        } else {
+                            $('#recommendations-list').html('<li>추천이 없습니다.</li>'); // 추천이 없을 때 표시
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed:', error); // 디버깅 로그
+                }
+            });
+        });
+    });
+</script>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div class="main-container">
+	<h1>사서 도서 추천</h1>
+	<div th:if="${error}">
+	    <p th:text="${error}"></p>
+	</div>
+	<div class="recommendations-btns">
+	    <button class="month-btn" data-start-date="20240101" data-end-date="20240131">January</button>
+	    <button class="month-btn" data-start-date="20240201" data-end-date="20240229">February</button>
+	    <button class="month-btn" data-start-date="20240301" data-end-date="20240331">March</button>
+	    <button class="month-btn" data-start-date="20240401" data-end-date="20240430">April</button>
+	    <button class="month-btn" data-start-date="20240501" data-end-date="20240531">May</button>
+	    <button class="month-btn" data-start-date="20240601" data-end-date="20240630">June</button>
+	    <button class="month-btn" data-start-date="20240701" data-end-date="20240731">July</button>
+	    <button class="month-btn" data-start-date="20240801" data-end-date="20240831">August</button>
+	    <button class="month-btn" data-start-date="20240901" data-end-date="20240930">September</button>
+	    <button class="month-btn" data-start-date="20241001" data-end-date="20241031">October</button>
+	    <button class="month-btn" data-start-date="20241101" data-end-date="20241130">November</button>
+	    <button class="month-btn" data-start-date="20241201" data-end-date="20241231">December</button>
+	</div>
+	<div id="recommendations-container" class="recommendations-container">
+	    <ul id="recommendations-list" class="recommendateions-list">
+	        <!-- 추천 목록이 여기에 동적으로 추가됩니다. -->
+	    </ul>
+	</div>
+</div>
+
+</body>
+</html>

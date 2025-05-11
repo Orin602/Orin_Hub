@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>Admin Login Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<div class="admin-login-container">
+	<h1>관리자 로그인</h1>
+	<div class="login-box">
+		<form id="admin-login-form" method="post">
+			<input type="text" id="id" name="id" placeholder="Admin ID">
+			<input type="password" name="pwd" id="pwd" placeholder="Password">
+		</form>
+		<button class="admin-login-btn" type="button" onclick="admin_login()">로그인</button>
+		<button class="mainpage-btn" type="button" onclick="window.location.href='/main'">메인으로 이동</button>
+	</div>
+</div>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var message = [[${message}]];
+	var messageType = [[${messageType}]];
+	var text = [[${text}]];
+	/*]]>*/
+	$(document).ready(function() {
+	    if (message && messageType) {
+	        Swal.fire({
+	            title: message,
+	            text: text,
+	            icon: messageType
+	        });
+	    }
+	}); 
+</script>
+</body>
+</html>

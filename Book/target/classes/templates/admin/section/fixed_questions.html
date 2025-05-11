@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>fixed questions Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>고정 질문(관리자)</h1>
+	<button class="fix-qna-write-btn" type="button" onclick="location.href='/fix-qna-write'">고정 질문 작성</button>
+	<div class="fix-qna-container">
+		<div class="item" th:if="${adminQna.isEmpty()}">
+			<h3>작성한 고정 질문이 없습니다..</h3>
+		</div>
+		<div class="item" th:unless="${adminQna.isEmpty()}">
+			<div class="box" th:each=" qna : ${adminQna}">
+				<div class="qna-title">
+	                <h4 th:text="${qna.title}"></h4>
+	            </div>
+	            <div class="qna-answer">
+	                <p th:text="${qna.answer}"></p>
+	            </div>
+	            <div class="qna-actions">
+	            	<input type="hidden" th:value="${qna.qna_seq}" />
+	            	<button class="fix-qna-edit" type="button" th:data-seq="${qna.qna_seq}"
+	            		onclick="editFixQna(this)">고정질문 수정</button>
+	            	<button class="fix-qna-delete" type="button" th:data-seq="${qna.qna_seq}"
+	            		onclick="deleteFixQna(this)">삭제</button>
+	            </div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

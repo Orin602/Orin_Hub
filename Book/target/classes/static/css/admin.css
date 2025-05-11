@@ -1,0 +1,835 @@
+@charset "utf-8";
+
+/* admin : h3 cursor */
+.clickable {
+	cursor: pointer; /* 커서를 포인터로 변경 */
+	color: #007bff; /* 링크 색상 (필요에 따라 조정) */
+}
+
+.clickable:hover {
+	text-decoration: none; /* 호버 시 밑줄 제거 (선택 사항) */
+	color: #0056b3; /* 호버 시 색상 변경 (필요에 따라 조정) */
+}
+
+/* admin-login */
+.admin-login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f9; /* 부드러운 배경 색상 */
+    padding: 20px;
+}
+
+.admin-login-container h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* login-box 스타일 */
+.login-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 350px; /* 최대 너비 제한 */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    text-align: center; /* 내부 텍스트와 요소들 가운데 정렬 */
+}
+
+/* 로그인 폼 내부 인풋 스타일 */
+#admin-login-form input[type="text"],
+#admin-login-form input[type="password"] {
+    width: 100%;
+    max-width: 300px; /* 최대 너비 제한 */
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+#admin-login-form input[type="text"]:focus,
+#admin-login-form input[type="password"]:focus {
+    border-color: #66b2ff;
+    outline: none;
+}
+
+/* 버튼 스타일 */
+.login-box button {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-login-btn {
+    background-color: #28a745; /* 초록색 */
+}
+
+.admin-login-btn:hover {
+    background-color: #218838; /* 어두운 초록색 */
+}
+
+.mainpage-btn {
+    background-color: #007bff; /* 파란색 */
+}
+
+.mainpage-btn:hover {
+    background-color: #0069d9; /* 어두운 파란색 */
+}
+
+
+/* admin-main */
+/* admin-main-container */
+.admin-main-container {
+    width: 250px; /* 적절한 너비 설정 */
+    background-color: #f9f9f9; /* 전체 배경색 */
+    padding: 20px;
+    border-right: 2px solid #ddd; /* 좌측 구분선 */
+    position: absolute;
+    left: 0; /* 왼쪽 위치 고정 */
+    top: 0;
+    height: 100vh; /* 전체 높이 */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 중앙 정렬 */
+.admin-main-container h1, .admin-main-container .admin-section {
+    text-align: center;
+}
+
+/* a 태그 스타일 */
+.admin-main-container a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: #333; /* 텍스트 색상 */
+    font-weight: 500;
+}
+.admin-main-container a:visited,
+.admin-main-container a:link {
+    color: #333; /* 방문 후 색상 유지 */
+}
+
+/* admin-section 구역 스타일 */
+.admin-main-container .admin-section {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #ffffff; /* admin-section 배경색 */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* clickable 스타일 */
+.admin-main-container .clickable {
+    font-weight: bold;
+    cursor: pointer;
+    color: #007bff; /* 기본 색상 */
+    position: relative;
+}
+.admin-main-container .clickable:hover {
+    color: #0056b3; /* 호버 시 색상 변화 */
+}
+.admin-main-container .clickable::after {
+    content: '▼'; /* 접기/펼치기 표시 */
+    position: absolute;
+    right: 10px;
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+}
+.admin-main-container .clickable.active::after {
+    transform: rotate(180deg); /* active 상태에서 화살표 회전 */
+}
+
+/* content-list 스타일 */
+.admin-main-container .content-list {
+    padding-top: 10px;
+    text-align: center;
+}
+
+/* 로그아웃 버튼 스타일 */
+.admin-main-container .logout-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #dc3545; /* 강렬한 빨간색 */
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.admin-main-container .logout-btn:hover {
+    background-color: #c82333; /* 어두운 빨간색으로 호버 효과 */
+}
+
+
+/* 공지사항 css */
+
+/* 전체 컨테이너 설정 */
+.all-container {
+    margin-left: 270px; 
+    padding: 20px;
+    background-color: #f4f7fc; /* 부드러운 배경색 */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* 공지사항 제목 */
+.all-container h1 {
+    font-size: 2.2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 버튼 스타일 공통 설정 */
+.btn {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+
+/* items 컨테이너 설정 */
+.items {
+    display: flex;
+    flex-wrap: wrap; /* 줄바꿈 허용하여 3개씩 배치 */
+    gap: 20px; /* 아이템 간의 간격 */
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px; /* 최대 너비 설정 */
+}
+
+/* item 설정 */
+.item {
+    flex: 1 1 calc(33.33% - 20px); /* 한 줄에 3개씩 배치되도록 설정 */
+    display: flex;
+    justify-content: center;
+}
+
+/* box 스타일 */
+.box {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 300px; /* 각 박스 최대 너비 설정 */
+}
+
+/* 이미지 스타일 */
+.box img {
+    border-radius: 5px;
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+/* 제목과 좋아요, 조회수 스타일 */
+.box h4 {
+    font-size: 1.1em;
+    color: #444;
+    margin: 10px 0;
+}
+
+.box h4 span {
+    color: #007bff;
+}
+
+/* 공지사항 상세 컨테이너 */
+.notice-detail-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 조회수와 좋아요수 표시 박스 */
+.count-box {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.count-box h4 {
+    font-size: 1.1em;
+    color: #666;
+}
+
+/* 공지사항 내용 */
+.notice-detail-content h4 {
+    margin: 15px 0;
+    font-size: 1.1em;
+    color: #444;
+}
+
+.notice-detail-content img {
+    display: block;
+    margin: 0 auto 20px;
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* 버튼 컨테이너 */
+.btn-box {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* 수정, 목록, 삭제 버튼 스타일 */
+.btn-box button, .notice-write-btn {
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+/* 공지사항 작성 버튼 */
+.notice-write-btn {
+    background-color: #007bff;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+.notice-write-btn:hover {
+    background-color: #0069d9;
+}
+/* 수정 버튼 스타일 */
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #0069d9;
+}
+
+/* 이전 페이지 버튼 스타일 */
+.before-btn {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.before-btn:hover {
+    background-color: #5a6268;
+}
+
+/* 삭제 버튼 스타일 */
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+/* 공지사항 수정 컨테이너 */
+.notice-edit-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* 상하 여백 추가 */
+}
+
+/* 제목 입력 필드 스타일 */
+.notice-edit-form label {
+    display: block;
+    font-size: 1.1em;
+    color: #444;
+    margin-bottom: 5px;
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+/* 제목과 내용 입력 필드 스타일 */
+.notice-edit-form input[type="text"],
+.notice-edit-form textarea {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* 텍스트 영역 스타일 */
+.notice-edit-form textarea {
+    resize: vertical; /* 수직 크기 조절 가능 */
+    min-height: 100px; /* 최소 높이 설정 */
+}
+
+/* 이미지 관리 영역 */
+.uploaded-images {
+    display: flex;
+    flex-wrap: wrap; /* 줄바꿈 허용 */
+    gap: 10px; /* 이미지 간격 */
+    margin-bottom: 20px; /* 하단 여백 */
+    justify-content: center;
+}
+
+/* 업로드된 이미지 스타일 */
+.uploaded-image {
+    position: relative; /* 버튼 위치를 위해 상대적 설정 */
+}
+
+.uploaded-image img {
+    border-radius: 5px;
+    width: 200px; /* 고정된 너비 */
+    height: 200px; /* 고정된 높이 */
+    object-fit: cover; /* 비율 유지 */
+}
+
+/* 삭제 버튼 스타일 */
+.edit-imgdelete-btn {
+    position: absolute; /* 이미지 위에 배치 */
+    top: 5px; /* 위쪽 여백 */
+    right: 5px; /* 오른쪽 여백 */
+    background-color: rgba(255, 0, 0, 0.8); /* 반투명 빨간색 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 0.8em; /* 작은 글씨 */
+    transition: background-color 0.3s;
+}
+
+.edit-imgdelete-btn:hover {
+    background-color: rgba(255, 0, 0, 1); /* 호버 시 불투명 빨간색 */
+}
+
+/* 버튼 컨테이너 스타일 */
+.edit-button {
+    justify-content: space-between; /* 양쪽 끝으로 배치 */
+    margin-top: 20px; /* 상단 여백 */
+}
+
+/* 버튼 스타일 공통 설정 */
+.edit-button button {
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+/* 목록으로 버튼 스타일 */
+.before-btn {
+    background-color: #6c757d; /* 회색 배경 */
+    color: #fff;
+}
+
+.before-btn:hover {
+    background-color: #5a6268; /* 어두운 회색 */
+}
+
+/* 공지사항 수정 버튼 스타일 */
+.edit-btn {
+    background-color: #007bff; /* 파란색 배경 */
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #0069d9; /* 어두운 파란색 */
+}
+/* 기본 파일 입력 숨기기 */
+.custom-file-upload input[type="file"] {
+    display: none; /* 기본 파일 입력 숨김 */
+}
+
+/* 사용자 정의 버튼 스타일 */
+.custom-file-upload {
+    display: inline-block; /* 인라인 블록으로 설정하여 버튼처럼 보이게 */
+    padding: 10px 350px; /* 상하 및 좌우 여백 */
+    border: 2px solid #007bff; /* 테두리 색상 */
+    border-radius: 5px; /* 둥근 모서리 */
+    background-color: #ffffff; /* 배경색 */
+    color: #007bff; /* 텍스트 색상 */
+    font-size: 1em; /* 폰트 크기 설정 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s, border-color 0.3s; /* 호버 및 포커스 애니메이션 */
+}
+/* 사용자 정의 버튼 호버 효과 */
+.custom-file-upload:hover {
+    background-color: #007bff; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 텍스트 색상 변경 */
+    border-color: #0056b3; /* 호버 시 테두리 색상 변경 */
+}
+
+/* 포커스 효과 */
+.custom-file-upload:focus {
+    outline: none; /* 기본 포커스 윤곽선 제거 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 효과 추가 */
+}
+
+
+/* 파일 업로드 커스터마이징 */
+.custom-file-uploads {
+    display: inline-block;
+    padding: 10px 100px; /* 여백 추가 */
+    margin-bottom: 10px;
+    border: 2px solid #007bff; /* 테두리 색상 */
+    border-radius: 5px; /* 둥근 모서리 */
+    background-color: #ffffff; /* 배경색 */
+    color: #007bff; /* 텍스트 색상 */
+    font-size: 1em; /* 폰트 크기 설정 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s, border-color 0.3s; /* 호버 및 포커스 애니메이션 */
+}
+
+/* 기본 파일 입력 숨기기 */
+.custom-file-uploads input[type="file"] {
+    display: none; /* 기본 파일 입력 숨김 */
+}
+
+/* 사용자 정의 버튼 호버 효과 */
+.custom-file-uploads:hover {
+    background-color: #007bff; /* 호버 시 배경색 변경 */
+    color: #fff; /* 호버 시 텍스트 색상 변경 */
+    border-color: #0056b3; /* 호버 시 테두리 색상 변경 */
+}
+/* 작성 버튼 스타일 */
+.write-btn {
+    background-color: #007bff; /* 배경색 */
+    color: #fff; /* 텍스트 색상 */
+    font-size: 1em; /* 폰트 크기 */
+    padding: 10px 20px; /* 패딩 */
+    border: none; /* 테두리 없음 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s; /* 배경색 변경 애니메이션 */
+    display: inline-block; /* 인라인 블록 요소로 설정 */
+    margin-right: 10px; /* 오른쪽 여백 */
+}
+
+/* 작성 버튼 호버 효과 */
+.write-btn:hover {
+    background-color: #0069d9; /* 호버 시 배경색 변경 */
+}
+
+/* 이전 페이지 버튼 스타일 */
+.before-btn {
+    background-color: #6c757d; /* 배경색 */
+    color: #fff; /* 텍스트 색상 */
+    font-size: 1em; /* 폰트 크기 */
+    padding: 10px 20px; /* 패딩 */
+    border: none; /* 테두리 없음 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: background-color 0.3s; /* 배경색 변경 애니메이션 */
+    display: inline-block; /* 인라인 블록 요소로 설정 */
+    margin-right: 10px; /* 오른쪽 여백 */
+}
+
+/* 이전 페이지 버튼 호버 효과 */
+.before-btn:hover {
+    background-color: #5a6268; /* 호버 시 배경색 변경 */
+}
+
+/* 버튼 통일성 위해 공통 클래스 추가 */
+.before-btn,
+.write-btn {
+    display: inline-block; /* 인라인 블록 요소로 설정 */
+    margin-right: 10px; /* 오른쪽 여백 */
+}
+/* 공지사항 작성 폼 내부 아이템 스타일 */
+.notice-write-container, .fix-write-container {
+    width: 100%;
+    max-width: 600px; /* 최대 너비 설정 */
+    background-color: #ffffff; /* 폼 배경색 */
+    padding: 20px; /* 폼 패딩 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 제목 및 내용 입력 필드 스타일 */
+.form-input,
+.form-textarea {
+    width: 100%; /* 전체 너비 100%로 설정 */
+    padding: 10px; /* 여백 추가 */
+    margin-bottom: 20px; /* 하단 여백 */
+    border: 1px solid #ccc; /* 테두리 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    box-sizing: border-box; /* 테두리와 패딩을 포함하여 너비 계산 */
+}
+
+/* 텍스트 영역 스타일 */
+.form-textarea {
+    resize: vertical; /* 세로 방향으로 크기 조절 가능하게 */
+    min-height: 150px; /* 최소 높이 설정 */
+}
+
+/* 회원 관리 */
+/* 검색 입력 필드 스타일 */
+#searchMember {
+    width: calc(80% - 22px); /* 100% 너비에서 패딩 및 테두리 여백 제외 */
+    padding: 10px; /* 여백 추가 */
+    border: 1px solid #ccc; /* 테두리 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+/* 고객 리스트 스타일 */
+.customer-list {
+    overflow-x: auto; /* 수평 스크롤 가능 */
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%; /* 테이블 너비 100% */
+    border-collapse: collapse; /* 테두리 겹치기 방지 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 테이블에 그림자 효과 */
+}
+
+/* 테이블 헤더 스타일 */
+thead {
+    background-color: #007bff; /* 헤더 배경색 */
+    color: #fff; /* 헤더 텍스트 색상 */
+    font-weight: bold; /* 굵은 글씨 */
+    font-size: 1.1em; /* 헤더 글씨 크기 */
+}
+
+/* 테이블 셀 스타일 */
+th, td {
+    padding: 10px; /* 패딩 추가 */
+    text-align: center; /* 중앙 정렬 */
+    border: 1px solid #ddd; /* 테두리 색상 */
+}
+
+/* 홀수 행 배경색 */
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* 배경색 */
+}
+/* 테이블 행의 배경색 변경 */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* 짝수 행 배경색 */
+}
+
+/* 버튼 스타일 */
+.update-btn, .delete-btn {
+    padding: 5px 10px; /* 버튼 패딩 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 클릭 가능한 커서 */
+    transition: background-color 0.3s; /* 호버 효과 */
+}
+
+.update-btn {
+    background-color: #28a745; /* 수정 버튼 배경색 */
+    color: #fff; /* 텍스트 색상 */
+}
+
+.update-btn:hover {
+    background-color: #218838; /* 호버 시 배경색 변경 */
+}
+
+/* question css */
+/* 고정 질문 작성 버튼 스타일 */
+.fix-qna-write-btn {
+    display: block; /* 블록 요소로 설정하여 중앙 정렬 */
+    padding: 10px; /* 패딩 추가 */
+    background-color: #007bff; /* 버튼 배경색 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    font-size: 1.2em; /* 폰트 크기 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 클릭 가능한 커서 */
+    transition: background-color 0.3s; /* 호버 효과 */
+    margin-bottom: 20px; /* 하단 여백 */
+    
+}
+
+.fix-qna-write-btn:hover {
+    background-color: #0056b3; /* 호버 시 배경색 변경 */
+}
+
+/* 고정 질문 컨테이너 스타일 */
+.fix-qna-container {
+    margin-top: 20px; /* 상단 여백 */
+}
+
+/* 질문 제목 스타일 */
+.qna-title h4 {
+    margin: 0; /* 기본 여백 제거 */
+    color: #007bff; /* 질문 제목 색상 */
+    font-size: 1.1em; /* 폰트 크기 조정 */
+    text-align: left; /* 제목을 왼쪽 정렬 */
+}
+
+/* 질문 답변 스타일 */
+.qna-answer p {
+    margin: 10px 0; /* 상하 여백 추가 */
+    color: #555; /* 답변 색상 */
+    line-height: 1.5; /* 줄 간격 조정 */
+}
+
+/* 질문 액션 버튼 스타일 */
+.qna-actions {
+    margin-top: 10px; /* 상단 여백 */
+    display: flex; /* 플렉스 박스 사용하여 버튼을 수평 정렬 */
+    justify-content: space-between; /* 버튼 간의 간격 조정 */
+}
+
+/* 수정 및 삭제 버튼 스타일 */
+.fix-qna-edit,
+.fix-qna-delete {
+    padding: 5px 10px; /* 패딩 추가 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 클릭 가능한 커서 */
+    margin-right: 5px; /* 오른쪽 여백 */
+    transition: background-color 0.3s; /* 호버 효과 */
+}
+
+.fix-qna-edit {
+    background-color: #28a745; /* 수정 버튼 배경색 */
+    color: #fff; /* 텍스트 색상 */
+}
+
+.fix-qna-edit:hover {
+    background-color: #218838; /* 호버 시 배경색 변경 */
+}
+
+.fix-qna-delete {
+    background-color: #dc3545; /* 삭제 버튼 배경색 */
+    color: #fff; /* 텍스트 색상 */
+}
+
+.fix-qna-delete:hover {
+    background-color: #c82333; /* 호버 시 배경색 변경 */
+}
+.fix-qna-form {
+	margin-bottom: 10px;
+}
+/* 질문 입력 필드 스타일 */
+.fix-qna-form #title {
+    padding: 10px; /* 여백 추가 */
+    border: 1px solid #ccc; /* 테두리 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    width: 100%; /* 전체 너비 */
+}
+
+/* 답변 입력 필드 스타일 */
+.fix-qna-form #answer {
+    padding: 10px; /* 여백 추가 */
+    border: 1px solid #ccc; /* 테두리 색상 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    width: 100%; /* 전체 너비 */
+    resize: vertical; /* 세로 방향으로 크기 조절 가능하게 */
+}
+
+/* 레이블 스타일 */
+.fix-qna-form label {
+    font-size: 1em; /* 폰트 크기 */
+    color: #333; /* 텍스트 색상 */
+}
+.fix-edit-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* 상하 여백 추가 */
+}
+
+/* 제목 입력 필드 스타일 */
+.fix-qna-edit-form label {
+    display: block;
+    font-size: 1.1em;
+    color: #444;
+    margin-bottom: 5px;
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+/* 제목과 내용 입력 필드 스타일 */
+.fix-qna-edit-form input[type="text"],
+.fix-qna-edit-form textarea {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* 텍스트 영역 스타일 */
+.fix-qna-edit-form textarea {
+    resize: vertical; /* 수직 크기 조절 가능 */
+    min-height: 100px; /* 최소 높이 설정 */
+}
+/* 답변 작성 버튼 스타일 */
+.answer-btn {
+    background-color: #a35af3; /* 새로운 배경색: 밝은 보라색 */
+    color: #fff; /* 텍스트 색상 */
+    padding: 10px 15px; /* 패딩 추가 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 1em; /* 폰트 크기 */
+    font-weight: bold; /* 글씨 두께 */
+    border: 2px solid transparent; /* 투명한 테두리 추가 */
+    transition: background-color 0.3s, transform 0.3s; /* 부드러운 호버 효과 */
+}
+
+/* 호버 효과 */
+.answer-btn:hover {
+    background-color: #8e3dc2; /* 호버 시 배경색 변경: 어두운 파란색 */
+    transform: scale(1.05); /* 호버 시 크기 약간 증가 */
+}
+
+/* 포커스 스타일 */
+.answer-btn:focus {
+    outline: none; /* 기본 포커스 아웃라인 제거 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 효과 */
+}
+/* 비활성화된 버튼 스타일 */
+.disabled-btn {
+    background-color: #6c757d; /* 비활성화된 버튼 배경색 */
+}
+
+/* 비활성화된 버튼 호버 효과 없음 */
+.disabled-btn:hover {
+    background-color: #6c757d; /* 비활성화된 버튼 호버 시 색상 변경 없음 */
+}

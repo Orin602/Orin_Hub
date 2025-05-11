@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>login</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script th:src="@{js/login.js}"></script>
+</head>
+<body>
+<div class="login-container">
+	<h1>로그인</h1>
+	<form id="login-form" method="post">
+		<input type="text" name="id" id="id" placeholder="ID">
+		<input type="password" name="pwd" id="pwd" placeholder="Password">
+		<button class="login-btn" type="button" onclick="login()">로그인</button>
+	</form>
+	<div class="find-form">
+		<button class="findid-btn" type="button" onclick="findId()">아이디찾기</button>
+		<button class="findpwd-btn" type="button" onclick="findPwd()">비밀번호찾기</button>
+	</div>
+</div>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var message = [[${message}]];
+	var messageType = [[${messageType}]];
+	var text = [[${text}]];
+	/*]]>*/
+	$(document).ready(function() {
+	    if (message && messageType) {
+	        Swal.fire({
+	            title: message,
+	            text: text,
+	            icon: messageType
+	        });
+	    }
+	}); 
+</script>
+</body>
+</html>

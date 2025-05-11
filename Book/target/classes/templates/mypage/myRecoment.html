@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>my recoment review</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/mypage.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{mypage/mypageMain}"></th:block>
+<div class="myrecoment">
+	<h1>내가 추천한 리뷰</h1>
+	<div th:if="${myRecoment.isEmpty()}">
+		<h3>추천한 리뷰가 없습니다.</h3>
+	</div>
+	<div th:unless="${myRecoment.isEmpty()}">
+		<div class="recoment-list">
+			<div class="reco-box" th:each="myreco : ${myRecoment}">
+				<a th:href="@{/review_detail(review_seq=${myreco.review.review_seq})}">
+					<th:block th:if="${#lists.isEmpty(myreco.review.uploadedImages)}">
+		                <img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:200px; height:200px;">
+		            </th:block>
+		            <th:block th:unless="${#lists.isEmpty(myreco.review.uploadedImages)}">
+		                <div th:with="firstImage=${myreco.review.uploadedImages[0]}">
+		                    <img th:src="@{${firstImage}}" th:alt="${myreco.review.title}" style="width:200px; height:200px;">
+		                </div>
+		           </th:block>
+				</a>
+				<h4>제목 : <span th:text="${myreco.review.title}"></span></h4>
+				<h4>작성자 : <span th:text="${myreco.review.member.name}"></span></h4>
+				<h4>추천 날짜 : <span class="reco-date" th:text="${#dates.format(myreco.interactionDate, 'yyyy-MM-dd')}"></span></h4>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
