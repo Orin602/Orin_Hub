@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ID 중복확인</title>
+</head>
+<body>
+    <h2>ID 중복확인</h2>
+    <form id="id-check-form" action="/check_id" method="get">
+        <input type="text" id="cInput" name="id" readonly>
+        <input type="submit" value="확인">
+        <th:block th:if="${message == 1}">
+        	[[${id}]] 사용 불가.
+        </th:block>
+        <th:block th:if="${message == -1}">
+        	[[{id}]] 사용 가능.
+        </th:block>
+    </form>
+    <div>
+        <p style="color:red;">
+            <span id="id-check-result"></span>
+        </p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', 
+        	function() {
+            	var params = new URLSearchParams(window.location.search);
+            	document.getElementById('cInput').value = params.get('id');
+        	}
+        );
+    </script>
+</body>
+</html>

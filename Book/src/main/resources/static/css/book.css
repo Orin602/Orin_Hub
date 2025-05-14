@@ -1,0 +1,262 @@
+@charset "EUC-KR";
+.search-form {
+	text-align: center;
+	max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.search-form select {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.search-form select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.search-form input[type="search"] {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+.search-form input[type="search"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.search-form button {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.search-form button:active {
+    background-color: #003d80;
+    transform: scale(1);
+}
+
+/* 전체 컨테이너 가운데 정렬 */
+.search-book-container {
+	max-width: 1200px;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 인기 검색어 및 연관 검색어 컨테이너 스타일 */
+.search-history-container {
+    width: 80%;
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    background-color: #f1f1f1;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-history-container p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    margin: 8px 0;
+}
+
+/* 인기 검색어, 연관 검색어 스타일 */
+.search-history-container span {
+    font-weight: bold;
+    color: #0056b3;
+}
+
+.search-history-container a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 8px;
+}
+
+.search-history-container a:hover {
+    text-decoration: underline;
+}
+
+/* 검색 결과 컨테이너 */
+.items {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 검색 결과 리스트 */
+.results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    border: 1px solid #ddd; /* 테두리로 구분 */
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+}
+
+/* 개별 검색 결과 아이템 */
+.results > div {
+	width: 45%;
+    background-color: #fff;
+    max-width: 280px;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s;
+}
+.results > div:hover {
+    transform: scale(1.05); /* 5% 확대 */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    background-color: #f5faff; /* 부드러운 배경 변화 (선택 사항) */
+}
+
+/* 아이템 이미지 */
+.results img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+/* 아이템 텍스트 스타일 */
+.results h4 {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+.results p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* 페이지네이션 컨테이너 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* a링크를 버튼처럼 보이게 */
+.pagination-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 5px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s ease;
+}
+
+/* 버튼 hover 상태 */
+.pagination-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* 약간 위로 올라가는 효과 */
+}
+
+/* 첫 페이지, 이전, 다음, 마지막 페이지 버튼에 다른 색상 */
+.pagination-button.first {
+    background-color: #28a745;
+}
+
+.pagination-button.first:hover {
+    background-color: #218838;
+}
+
+.pagination-button.prev {
+    background-color: #ffc107;
+}
+
+.pagination-button.prev:hover {
+    background-color: #e0a800;
+}
+
+.pagination-button.next {
+    background-color: #ffc107;
+}
+
+.pagination-button.next:hover {
+    background-color: #e0a800;
+}
+
+.pagination-button.last {
+    background-color: #28a745;
+}
+
+.pagination-button.last:hover {
+    background-color: #218838;
+}
+
+/* 페이지 번호 표시 */
+.page-info {
+    font-size: 18px;  /* 글자 크기 조금 더 크게 */
+    font-weight: bold;  /* 글씨 두껍게 */
+    margin: 0 10px;  /* 양 옆에 여백을 추가하여 다른 요소들과 간격을 둠 */
+    color: #333;  /* 텍스트 색상을 어두운 회색으로 설정 */
+    padding: 5px 10px;  /* 텍스트 주변에 패딩 추가 */
+    border-radius: 4px;  /* 둥근 모서리 */
+    background-color: #f0f0f0;  /* 부드러운 배경색 추가 */
+    display: inline-block;  /* 페이지 번호를 inline-block으로 만들어 버튼처럼 보이게 */
+}
+
+/* 모바일 대응을 위한 스타일 */
+@media (max-width: 768px) {
+    .pagination-button {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    .page-info {
+        font-size: 14px;
+    }
+}
+
+

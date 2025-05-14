@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Naver Callback</title>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<script>
+	// 네이버 로그인 초기화
+	var naver_id_login = new naver_id_login("C5pjI5ZQefS8nnMDReyb", "http://localhost:9010/oauth/naver/callback");
+	// 사용자 조회
+	naver_id_login.get_naver_userprofile("naverSignUp()");
+	
+	function naverSignUp() {
+		const userInfo = {
+		    email: naver_id_login.getProfileData('email'),
+		    name: naver_id_login.getProfileData('name'),
+		    id: naver_id_login.getProfileData('id'),
+		    provider: 'naver'
+		};
+		
+		saveUserToSession(userInfo);
+	}
+	
+	function saveUserToSession(userInfo) {
+		$.ajax({
+			url: '/oauth/naver/callback',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(userInfo),
+			success: function(response) {
+				if (response.status === 'login_success') {
+			        window.opener.location.href = "/main";
+			    } else if (response.status === 'signup_required'){
+					sessionStorage.setItem('naver_user', JSON.stringify(userInfo));
+			        window.opener.location.href = "/oauth/contract";
+			    }
+			    window.close();
+			},
+	        error: function(err) {
+	            console.error('세션 저장 중 오류:', err);
+	        }
+		});
+	}
+	
+	function closeAndRedirect() {
+		window.opener.location.href = "/oauth/contract";
+		window.close();
+	}
+</script>
+</body>
+</html>

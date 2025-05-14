@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script th:src="@{/js/login.js}"></script>
+<script>
+$(document).ready(function() {
+	$(".join-btn").click(function(event) {
+		event.preventDefault(); // 기본 폼 제출 방지
+		
+		const name = $("#name").val().trim();
+		const email = $("#email").val().trim();
+		const telephone = $("#telephone").val().trim();
+		const address = $("#address").val().trim();
+		const addressDetail = $("#addressDetail").val().trim();
+
+		if (!name || !email || !telephone || !address) {
+			Swal.fire({
+				icon : 'warning',
+				title : '입력 누락',
+				text : '모든 필수 항목을 입력해주세요.'
+			});
+		} else {
+			$("#sns-join-form").attr("action", "/oauth/joinAction").submit();
+		}
+	});
+	
+	//주소 검색 버튼 클릭 시 새 창 열기
+	$("#address-search-btn").click(function() {
+		var searchWindow = window.open("/address-search", "_blank", "width=600,height=400");
+	
+		searchWindow.onload = function() {
+			// 주소 검색 페이지가 로드된 후에 부모 창에 값 전달
+			searchWindow.document.getElementById('selected-address').addEventListener('change', function() {
+				var selectedAddress = searchWindow.document.getElementById('selected-address').value;
+				if (selectedAddress) {
+					$("#address").val(selectedAddress); // 부모 창의 주소 입력란에 값 입력
+				}
+			});
+		};
+	});
+});
+</script>
+
+</head>
+<body>
+<th:block th:insert="~{include/header}"></th:block>
+<div class="join-container">
+	<h1 class="join-h1">회원가입</h1>
+	<form class="sns-join-form" id="sns-join-form" method="post">
+		<input type="hidden" name="id" id="id" th:value="${id}" readonly>
+		<h3>이름</h3>
+		<input type="text" name="name" id="name" th:value="${name}" required>
+		<h3>이메일</h3>
+		<span>
+			<input type="email" name="email" id="email" th:value="${email != null ? email : ''}" required>
+		</span>
+		<h3>휴대전화</h3>
+		<span>
+		    <input type="text" name="telephone" id="telephone" required>
+		</span>
+		
+		<!-- 주소 입력란 -->
+        <input type="text" name="address" id="address" placeholder="기본 주소" readonly>
+        <button class="address-btn" type="button" id="address-search-btn">주소 검색</button>
+
+        <!-- 상세 주소 입력란 -->
+        <input type="text" name="addressDetail" id="addressDetail" placeholder="상세 주소">
+        
+		<input type="hidden" name="provider" th:value="${provider}">
+
+    	<button type="button" class="join-btn" onclick="snsJoin()">회원가입</button>
+	</form>
+</div>
+</body>
+</html>

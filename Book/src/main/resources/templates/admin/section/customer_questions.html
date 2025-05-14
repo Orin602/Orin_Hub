@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>customer questions Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>회원 질문 관리</h1>
+	<div class="customer-qnas" th:if="${customerQna.isEmpty()}">
+		<h3>아직 회원 질문이 없습니다..</h3>
+	</div>
+	<div class="customer-qnas" th:unless="${customerQna.isEmpty()}">
+		<table>
+            <thead>
+                <tr>
+                    <th>질문자 ID</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>질문 날짜</th>
+                    <th>답변 여부</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="qna : ${customerQna}">
+                    <td th:text="${qna.member.id}">질문자 ID</td>
+                    <td th:text="${qna.title}">제목</td>
+                    <td th:text="${qna.content}">내용</td>
+                    <td th:text="${#dates.format(qna.qna_date, 'yyyy-MM-dd HH:mm')}">질문 날짜</td>
+                    <td>
+                        <span th:if="${qna.answer_status == 0}">대기</span>
+                        <span th:if="${qna.answer_status == 1}">완료</span>
+                    </td>
+                    <td>
+                        <button th:if="${qna.answer_status == 0}" class="answer-btn" th:data-seq="${qna.qna_seq}"
+                            onclick="customer_qna_answer(this)">
+                            답변 작성
+                        </button>
+                        <button th:if="${qna.answer_status == 1}" class="disabled-btn" 
+                            disabled>
+                            답변 완료
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	</div>
+</div>
+</body>
+</html>

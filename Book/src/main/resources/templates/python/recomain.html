@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>PYTHON Recommend Main</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/reco.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/reco.js}"></script>
+<script>
+function reco_btn() {
+	const select = document.querySelector('.recommend_type_select');
+	const keyword = document.getElementById("query").value;
+	const selectedOption = select.value;
+	
+	let url = '';	// Flask API URL 초기화
+	
+	// 선택한 추천 방식에 따라 URL 설정
+    if (selectedOption === '기본') {
+		url = `http://localhost:5000/content_recommend?title=${encodeURIComponent(keyword)}`;
+	} else if (selectedOption === '저자') {
+		url = `http://localhost:5000/author_recommend?author=${encodeURIComponent(keyword)}`;
+	} else if (selectedOption === '출판사') {
+		url = `http://localhost:5000/publisher_recommend?publisher=${encodeURIComponent(keyword)}`;
+	}
+ 
+	// Flask API로 요청 보내기
+    fetch(url)
+    	.then(response => response.json())
+    	.then(data => {
+			displayResults(data);
+    	})
+    	.catch(error => {
+			console.error('Error:', error);
+			Swal.fire({
+			    title: '추천 결과를 가져오는 데 문제가 발생했습니다.',
+			    icon: 'error',
+			    confirmButtonText: '확인',
+			});
+    	});
+}
+function displayResults(results) {
+    const resultContainer = document.getElementById('reco_result');
+    resultContainer.innerHTML = ''; // 이전 결과 삭제
+
+    if (results.length === 0) {
+        resultContainer.innerHTML = '<p>추천된 책이 없습니다.</p>';
+    } else {
+        results.forEach(book => {
+            const bookItem = document.createElement('div');
+            bookItem.className = 'book-item';
+            bookItem.innerHTML = `
+                <img src="${book.image}" alt="${book.title}" class="book-cover">
+                <p class="book-title">${book.title}</p>
+                <p class="book-author">${book.author}</p>
+                <p class="book-publisher">${book.publisher}</p>
+                <div class="book-sales-and-score">
+	                <p class="book-sales_count">판매지수: ${book.sales_count}</p>
+	                <p class="book-score">평점: ${book.score}</p>
+	            </div>
+	            <p class="book_genre">
+	            <span class="hashtag" 
+	                onclick="${book.genre ? `hashtagRecommend('${book.genre}')` : 'event.preventDefault();'}"
+	                style="${book.genre ? '' : 'cursor: not-allowed; color: gray;'}">
+	              #${book.genre || '해시 태그 없음'}
+	          </span>
+	            </p>
+            `;
+            bookItem.addEventListener('click', () => {
+				const title = encodeURIComponent(book.title);
+				const author = encodeURIComponent(book.author);
+				const image = encodeURIComponent(book.image);
+				
+				window.location.href = `/review-write-form3?bookTitle=${title}&bookAuthor=${author}&bookImageUrl=${image}`;
+            });
+            
+            resultContainer.appendChild(bookItem);
+        });
+    }
+}
+//해시태그 클릭 시 해당 장르로 추천 받기
+function hashtagRecommend(genre) {
+    fetch(`http://localhost:5000/hashtag_recommend?tag=${genre}`)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data); // 해당 장르로 추천 받은 책들 표시
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            swal.fire({
+                title: '추천 결과를 가져오는 데 문제가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인',
+            });
+        });
+}
+//랜덤 추천 버튼 클릭 시
+function getRandomBooks() {
+    fetch('http://localhost:5000/random_recommend')
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: '추천 결과를 가져오는 데 문제가 발생했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인',
+            });
+        });
+}
+</script>
+</head>
+<body>
+<th:block th:insert="~{include/header}"></th:block>
+<div class="python_reco_container">
+	<h2>책 추천 받기</h2>
+	<div class="reco_info">
+		<h3>추천 이용방법</h3>
+		<hr>
+		<button type="button" class="random_recommend_btn"onclick="getRandomBooks()">랜덤추천</button> : 랜덤으로 10권의 책을 추천합니다.
+		<hr>
+		<p>키워드 추천 : 사용자가 입력한 키워드를 기반으로 책을 추천합니다.<br>
+			<span>- 저자(Author) 선택 : 입 입력한 저자 이름과 일치하거나 일부 포함된 저자의 책을 추천합니다.</span><br>
+			<span>- 출판사(Publisher) 선택 : 입력한 출판사명과 일치하거나 일부 포함된 출판사의 책을 추천합니다.</span><br>
+			<span>- 기본값(Content) 선택 : 제목, 장르, 저자, 출판사 정보를 조합하여 입력한 키워드와 유사한 책을 콘텐츠 기반으로 추천합니다.</span>
+		</p>
+		<hr>
+		<p>해시태그 추천 : 추천된 책들 중 하나의 해시태그(장르)를 클릭하면, 동일하거나 유사한 해시태그를 가진 책들을 추천합니다.</p>
+
+	</div>
+	<div class="input_keyword">
+		<form class="keyword_form" id="keyword_form">
+			<select class="recommend_type_select">
+				<option value="기본">기본값</option>
+				<option value="저자">저자</option>
+				<option value="출판사">출판사</option>
+			</select>
+			<input type="search" id="query" placeholder="키워드를 입력해 주세요." />
+			<button type="button" class="input_keyword_btn" onclick="reco_btn()">추천받기</button>
+		</form>
+	</div>
+	<!-- 키워드 입력 후 추천 결과 나열 -->
+	<div class="reco_result" id="reco_result">
+	</div>
+</div>
+</body>
+</html>

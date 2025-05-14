@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>my review</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/mypage.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{mypage/mypageMain}"></th:block>
+<div class="myorder">
+	<h1>내 주문 목록</h1>
+	<div th:if="${myStore.isEmpty()}">
+		<h3>주문한 내역이 없습니다.</h3>
+	</div>
+	<div th:unless="${myStore.isEmpty()}">
+        <div class="order-list">
+	        <div class="order-box" th:each="order : ${myStore}">
+                <th:block th:if="${#lists.isEmpty(order.imageUrl)}">
+                    <img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:200px; height:200px;">
+                </th:block>
+                <th:block th:unless="${#lists.isEmpty(order.imageUrl)}">
+                    <div th:with="firstImage=${order.imageUrl}">
+                        <img th:src="@{${firstImage}}" th:alt="${order.title}" style="width:200px; height:200px;">
+                    </div>
+                </th:block>
+	            <h4>제목 : <span id="title" th:text="${order.title}"></span></h4>
+	            <h4>주문 가격 : <span id="price" th:text="${order.price}"></span> 원</h4>
+	            <h4>구매 개수 : <span id="ea" th:text="${order.EA}"></span></h4>
+	            <h4>배송지 : <span id="address" th:text="${order.address}"></span></h4>
+	            <h4>주문한 날짜 : <span class="order-date" th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></span></h4>
+	            <h4>주문 상태 : <span id="status" th:text="${order.status.displayName}"></span></h4>
+	            <input type="hidden" id="storeseq" th:value="${order.storeseq}"/>
+	            <div class="btn-box">
+	            	<button class="edit_btn" type="button" th:data-storeseq="${order.storeseq}" onclick="edit_order(this)">수정</button>
+	            	<button class="delete_btn" type="button" th:data-storeseq="${order.storeseq}" onclick="delete_order(this)">삭제</button>
+	            </div>
+	        </div>
+	    </div>
+    </div>
+</div>
+</body>
+</html>

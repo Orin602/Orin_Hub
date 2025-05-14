@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>update history</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>추천 도서 업데이트 기록</h1>
+	<canvas id="updateChart" width="600" height="300"></canvas>
+	<p>최근 업데이트 날짜 : <span id="last-update-date">불러오는 중...</span></p> 
+	<button class="yes24_update_btn" onclick="updateYes24Books()">추천 데이터 업데이트</button>
+	<p id="update-status" style="margin-top:10px;"></p>
+	<script>
+		function updateYes24Books() {
+			fetch('http://localhost:5000/update_yes24_books')
+				.then(response => response.json().then(data => ({ status: response.status, body: data})))
+				.then(({ status, body}) => {
+					const messageElem = document.getElementById('update-status');
+					if (status === 200) {
+		                messageElem.innerText = '✅ ' + body.message;
+		                messageElem.style.color = 'green';
+		                fetchLastUpdateDate(); // 업데이트 성공 시 날짜 갱신
+		                
+		            } else {
+		                messageElem.innerText = '⚠️ ' + body.message;
+		                messageElem.style.color = 'orange';
+		                
+		            }
+				})
+				.catch(error => {
+		            document.getElementById('update-status').innerText = '❌ 오류 발생: ' + error;
+		            document.getElementById('update-status').style.color = 'red';
+		        });
+	    }
+		function fetchLastUpdateDate() {
+			fetch('http://localhost:5000/last_update_date')
+				.then(response => response.json())
+				.then(data => {
+					const lastDate = data.last_updated || '없음';
+					document.getElementById('last-update-date').innerText = lastDate;
+				})
+				.catch(error => {
+					document.getElementById('last-update-date').innerText = '불러오기 실패';
+				});
+	    }
+		fetch('http://localhost:5000/update_history')
+			.then(response => response.json())
+			.then(data => {
+				const labels = data.map(entry => entry.date);
+				const chartData = data.map(() => 1); // 업데이트 횟수 1씩
+				const ctx = document.getElementById('updateChart').getContext('2d');
+				new Chart(ctx, {
+					type: 'line',
+					data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '업데이트 이력',
+                            data: chartData,
+                            fill: false,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            tension: 0.3,
+                            pointRadius: 5
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                ticks: {
+                                    maxRotation: 90,
+                                    minRotation: 45
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+				});
+			})
+			.catch(err => {
+            console.error('그래프 로딩 중 오류 발생:', err);
+        });
+	</script>
+</div>
+</body>
+</html>

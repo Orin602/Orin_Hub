@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>QnA Main Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/customer.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/customer.js}"></script>
+<script>
+    function toggleAnswer(titleElement) {
+        // 해당 title의 다음 요소인 qna-answer를 찾음
+        var answerElement = titleElement.nextElementSibling;
+        
+        // 답변이 보이면 숨기고, 숨겨져 있으면 보이게 설정
+        if (answerElement.style.display === "none") {
+            answerElement.style.display = "block";
+        } else {
+            answerElement.style.display = "none";
+        }
+    }
+</script>
+
+</head>
+<body>
+<th:block th:insert="~{customer/customerMain}"></th:block>
+<div class="qna-container">
+	<h2>자주 묻는 질문</h2>
+	
+	<div class="fix-qnas">
+		<div class="qna_table" th:if="${fixQna.isEmpty()}">
+			<h3>자주 묻는 질문이 아직 정리되지 않았어요...</h3>
+		</div>
+		<div class="qna_table" th:unless="${fixQna.isEmpty()}">
+			<div class="box" th:each=" qna : ${fixQna}">
+				<div class="qna-title" onclick="toggleAnswer(this)">
+					<h4 th:text="${qna.title}"></h4>
+				</div>
+				<div class="qna-answer" style="display: none;">
+					<h5 th:text="${qna.answer}"></h5>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

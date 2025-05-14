@@ -1,0 +1,166 @@
+/* 전체 컨테이너 */
+.python_reco_container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #f7f9fc;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+}
+
+/* 추천 이용 방법 */
+.reco_info {
+	padding: 20px;
+	background-color: #ffffff;
+	border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.reco_info h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.reco_info p {
+    font-size: 16px;
+    color: #555;
+}
+
+.reco_info span {
+    color: #4a90e2;
+    font-weight: bold;
+}
+
+.reco_info hr {
+    border: 1px solid #e0e0e0;
+    margin: 15px 0;
+}
+
+/* 키워드 입력 */
+.input_keyword {
+    margin-bottom: 30px;
+}
+
+/* 랜덤 추천 버튼 */
+.random_recommend_btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.random_recommend_btn:hover {
+    background-color: #357ABD;
+}
+
+.input_keyword input[type="search"] {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-right: 10px;
+}
+
+.input_keyword_btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.input_keyword_btn:hover {
+    background-color: #357ABD;
+}
+.input_keyword select,
+.input_keyword input[type="search"] {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.input_keyword select {
+    width: 150px;
+}
+.reco_result {
+    display: flex;              /* Flexbox 사용 */
+    flex-wrap: wrap;            /* 아이템들이 넘칠 경우 다음 줄로 감 */
+    justify-content: center;  /* 아이템 사이의 간격을 균등하게 배치 */
+    gap: 20px;                  /* 각 아이템 간의 간격 (필요에 맞게 조정) */
+}
+
+/* 책 리스트 */
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* 책 아이템 */
+.book-item {
+    width: 250px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.book-item:hover {
+    transform: translateY(-5px);
+}
+
+.book-cover {
+    width: 180px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.book-title,
+.book-author,
+.book-publisher {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin: 5px 0;
+}
+
+.book-sales_count p {
+    color: #777;
+    margin-top: 5px;
+    font-size: 14px;
+}
+.book_genre {
+    margin-top: 10px;
+}
+
+.hashtag {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.hashtag:hover {
+    text-decoration: underline;
+}

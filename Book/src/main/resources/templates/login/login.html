@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>login</title>
+<!-- 카카오 로그인 SDK -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+<!-- 네이버 로그인 SDK -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"></script>
+<!-- 네이버 로그인 라이브러리 -->
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+
+<!-- 구글 로그인 -->
+<meta name="google-signin-client_id" content="">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script th:src="@{js/login.js}"></script>
+<style>
+/* 전체 로그인 컨테이너 스타일 */
+.social-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 버튼들을 중앙 정렬 */
+    gap: 20px; /* 각 버튼 간 일정 간격 유지 */
+    width: 300px; /* 일정한 너비로 설정 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 각 버튼 div를 동일한 크기와 스타일로 설정 */
+.social-login .login-button,
+.social-login #kakao_id_login,
+.social-login #google_id_login {
+    width: 100%; /* 부모 div 크기에 맞춰서 */
+    height: 50px; /* 고정된 높이 */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 이미지 중앙 정렬 */
+    border-radius: 5px; /* 버튼 모서리 둥글게 */
+    box-sizing: border-box;
+}
+
+/* 카카오 로그인 버튼 스타일 */
+#kakao_id_login {
+    background-color: #FEE500;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#kakao_id_login img {
+    max-width: 100%; /* 이미지가 div 안에서 넘치지 않도록 */
+    max-height: 100%; /* 이미지 크기 조절 */
+    border-radius: 5px;
+}
+
+
+</style>
+</head>
+<body>
+<th:block th:insert="~{include/header}"></th:block>
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var message = [[${message}]];
+	var messageType = [[${messageType}]];
+	var text = [[${text}]];
+	/*]]>*/
+	$(document).ready(function() {
+	    if (message && messageType) {
+	        Swal.fire({
+	            title: message,
+	            text: text,
+	            icon: messageType
+	        });
+	    }
+	}); 
+</script>
+
+<div class="login-container">
+	<h1>로그인</h1>
+	<form id="login-form" method="post">
+		<input type="text" name="id" id="id" placeholder="ID" autocomplete="username">
+		<input type="password" name="pwd" id="pwd" placeholder="Password" autocomplete="current-password">
+		<button class="login-btn" type="button" onclick="login()">로그인</button>
+	</form>
+	<div class="find-form">
+		<button class="findid-btn" type="button" onclick="findId()">아이디찾기</button>
+		<button class="findpwd-btn" type="button" onclick="findPwd()">비밀번호찾기</button>
+	</div>
+	<br><hr>
+	<div class="social-login">
+		<h1>소셜 로그인</h1>
+		<div id="naver_id_login" class="login-button" style="display:block;">
+		
+		</div>
+		<div id="kakao_id_login" style="cursor:pointer; background-color:#FEE500; border-radius:5px;">
+			<img src="images/kakao_login.png" alt="카카오 로그인" onclick="kakaoLogin()">
+		</div>
+		<div id="google_id_login" data-client_id=""
+			data-callback="onSignIn" data-auto_prompt="false">
+		</div>
+		<div class="g_id_signin" data-type="standard" data-shape="rect"
+			data-theme="outline" data-text="signin_with" data-size="large">
+		</div>
+	</div>
+	
+</div>
+<script>
+  // 1. 카카오 SDK 초기화
+  Kakao.init('');
+  console.log('Kakao 초기화 여부:', Kakao.isInitialized());
+  
+  // 2. 로그인 함수 정의
+  function kakaoLogin() {
+    Kakao.Auth.login({
+      scope: 'profile_nickname, account_email',
+      success: function (authObj) {
+        console.log('인증 성공', authObj);
+
+        Kakao.API.request({
+          url: '/v2/user/me',
+          success: function (res) {
+            console.log('사용자 정보', res);
+            const kakaoAccount = res.kakao_account;
+
+            const userInfo = {
+				id: res.id.toString(),
+				email: kakaoAccount.email,
+				name: kakaoAccount.profile.nickname,
+				provider: 'kakao'
+            };
+            
+            fetch('/oauth/kakao/callback', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(userInfo)
+            })
+            .then(response => response.json())
+            .then(result => {
+              if (result.status == 'login_success') {
+                window.location.href = '/main';
+              } else if (result.status == 'signup_required') {
+					sessionStorage.setItem('kakao_user', JSON.stringify(userInfo));
+					window.location.href = '/oauth/contract'
+              }
+            })
+            .catch(error => {
+              console.error('오류 발생', error);
+            });
+          },
+          fail: function (error) {
+            console.error('사용자 정보 요청 실패', error);
+          }
+        });
+      },
+      fail: function (err) {
+        console.error('로그인 실패', err);
+      }
+    });
+  }
+
+</script>
+<script>
+	// 네이버 로그인 초기화
+	var naver_id_login = new naver_id_login("", "http://localhost:9010/oauth/naver/callback");
+	var state = naver_id_login.getUniqState();
+	naver_id_login.setButton("green", 3, 50);
+	naver_id_login.setDomain("localhost:9010");
+    naver_id_login.setState(state);
+    naver_id_login.setPopup(true); // 팝업 모드 활성화
+    naver_id_login.init_naver_id_login();
+</script>
+<script>
+window.onload = function() {
+    google.accounts.id.initialize({
+        client_id: "",
+        callback: onSignIn
+    });
+    google.accounts.id.renderButton(
+        document.getElementById("google_id_login"), {
+            theme: "outline",
+            size: "large",
+            text: "signin_with"
+        }
+    );
+};
+	// 구글 로그인
+	function onSignIn(response) {
+		const userObject = parseJwt(response.credential);
+		var id = userObject.sub;
+        var name = userObject.name;
+        var email = userObject.email;
+        var provider = "google";
+        
+        post_to_url("/oauth/google/callback", {
+			id: id, name: name, email: email, provider: provider
+        });
+    }
+
+    function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    }
+    
+    function post_to_url(path, params, method='post') {
+        const form = document.createElement('form');
+        form.method = method;
+        form.action = path;
+        
+        for(const key in params) {
+            if(params.hasOwnProperty(key)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = key;
+                hiddenField.value = params[key];
+                form.appendChild(hiddenField);
+            }
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</body>
+</html>

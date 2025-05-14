@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>order list Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>회원 구매 내역 관리</h1>
+	<div class="order-list">
+		<table border="1">
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>책 제목</th>
+		            <th>주문 수량</th>
+		            <th>총 가격</th>
+		            <th>주문 날짜</th>
+		            <th>주소</th>
+		            <th>주문 상태</th>
+		        </tr>
+		    </thead>
+		    <tbody id="orderTableBody">
+		        <!-- 전체 회원 리스트를 여기에 동적으로 채웁니다 -->
+		        <tr th:each="order : ${stores}">
+		            <td th:text="${order.member.id}"></td>
+		            <td th:text="${order.title}"></td>
+		            <td th:text="${order.EA}"> 권</td>
+		            <td th:text="${order.price}"> 원</td>
+		            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
+		            <td th:text="${order.address}"></td>
+		            <td>
+		            	<select th:data-order-id="${order.storeseq}" onchange="updateOrderStatus(this)">
+					        <option th:value="PENDING" th:selected="${order.status.name() == 'PENDING'}">대기</option>
+					        <option th:value="PROCESSING" th:selected="${order.status.name() == 'PROCESSING'}">처리 중</option>
+					        <option th:value="SHIPPED" th:selected="${order.status.name() == 'SHIPPED'}">배송됨</option>
+					        <option th:value="COMPLETED" th:selected="${order.status.name() == 'COMPLETED'}">확정</option>
+					        <option th:value="CANCELLED" th:selected="${order.status.name() == 'CANCELLED'}">취소됨</option>
+					    </select>
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
+	</div>
+</div>
+</body>
+</html>

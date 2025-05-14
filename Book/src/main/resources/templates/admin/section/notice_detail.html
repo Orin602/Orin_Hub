@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>notice detail Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/admin.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/admin.js}"></script>
+<script th:inline="javascript">
+	var writer = /*[[${notice.member.id}]]*/ '';
+	var viewer = /*[[${admin.id}]]*/ '';
+	var notice_seq = /*[[${notice.notice_seq}]]*/ 0;
+	
+	function checkAndEdit() {
+		if(writer == viewer) {
+			window.location.href = '/admin-notice-ED?notice_seq=' + notice_seq;
+		} else {
+			swal.fire({
+				title: '공지사항 수정 실패',
+				text: '작성자만 수정 가능합니다.',
+				icon: 'warning',
+				confirmButtonText: '확인'
+			});
+		}
+	}
+</script>
+</head>
+<body>
+<th:block th:insert="~{admin/adminMain}"></th:block>
+<div class="all-container">
+	<h1>공지사항 상세 보기</h1>
+	<div class="notice-detail-container">
+		<div class="count-box">
+			<h4>
+				조회수 : [[${notice.viewCount}]] &nbsp;&nbsp;&nbsp;
+				좋아요수 : [[${notice.likeCount}]]
+			</h4>
+		</div>
+		<div class="notice-detail-content">
+			<input type="hidden" id="notice-seq" th:value="${notice.notice_seq}">
+			<th:block th:if="${uploadImages == null or #lists.isEmpty(uploadImages)}">
+		        <img th:src="@{/images/no_img.jpg}" alt="이미지 없음" style="width:200px; height:200px;">
+		    </th:block>
+		    <th:block th:unless="${uploadImages == null or #lists.isEmpty(uploadImages)}">
+		        <div th:each="image : ${uploadImages}">
+		            <img th:src="@{${image}}" th:alt="${notice.title}" style="width:200px; height:200px;">
+		        </div>
+		    </th:block>
+			<h4>작성자 : <span th:text="${notice.member.name}"></span></h4>
+			<h4>제목 : <span id="notice-title" th:text="${notice.title}"></span></h4>
+			<span th:utext="${#strings.replace(notice.content, '\n', '<br/>')}"></span>
+			<h4>작성일 : <span th:text="${#dates.format(notice.notice_date, 'yyyy-MM-dd HH:mm')}"></span></h4>
+		</div>
+		<div class="btn-box">
+			<button class="edit-btn" type="button" onclick="checkAndEdit()">수정</button>
+			<button class="before-btn" type="button" onclick="window.location.href='/admin-notice-list'">목록</button>
+			<button class="delete-btn" type="button" onclick="noticedelete()">삭제</button>
+		</div>
+	</div>
+</div>
+</body>
+</html>

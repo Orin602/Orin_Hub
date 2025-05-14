@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Order main</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/order.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/order.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{include/header}"></th:block>
+<div class="order-booksearch">
+	<h1>도서 구매</h1>
+	<div class="searchform">
+		<form class="search-form" id="search-form" method="get">
+			<select name="searchTarget" id="searchTarget" class="searchTarget">
+				<option value="Keyword">전체</option>
+				<option value="Title">제목</option>
+				<option value="Author">저자</option>
+			</select>
+			<input type="search" name="query" id="query" placeholder="구매할 도서 검색...." />
+			<button class="search-btn" type="button" onclick="order_book()">검색</button>
+		</form>
+	</div>
+	<!-- 정렬 : Accuracy(기본값)-관련도, SalesPoint(판매량), CustomerRating(고객평점) -->
+	<div class="sort-buttons">
+	    <a th:href="@{/order-search(query=${query}, searchTarget=${searchTarget}, sort='Accuracy')}"
+	       th:classappend="${sort} == 'Accuracy' ? 'active' : ''">관련도순</a>
+	
+	    <a th:href="@{/order-search(query=${query}, searchTarget=${searchTarget}, sort='SalesPoint')}"
+	       th:classappend="${sort} == 'SalesPoint' ? 'active' : ''">판매량순</a>
+	
+	    <a th:href="@{/order-search(query=${query}, searchTarget=${searchTarget}, sort='CustomerRating')}"
+	       th:classappend="${sort} == 'CustomerRating' ? 'active' : ''">고객평점순</a>
+	</div>
+	<!-- 검색 목록 -->
+	<div class="searchlist">
+	<h2>검색어 : "[[${query}]]"</h2>
+		<div th:if="${#lists.isEmpty(books)}" class="booklist">
+			<h3>검색 결과가 없습니다..</h3>
+		</div>
+		<div th:unless="${#lists.isEmpty(books)}" class="booklist">
+			
+			<div th:each="book : ${books}" class="bookcard">
+				<img th:src="${book.cover}" alt="표지 이미지" width="150px" />
+				<h3>제목 : [[${book.title}]]</h3>
+				<p>저자 : [[${book.author}]]</p>
+				<p>
+				    회원 별점 :
+				    <span th:each="i : ${#numbers.sequence(1, 5)}">
+				        <span th:if="${book.customerReviewRank / 2.0 >= i}">★</span>
+				        <span th:if="${book.customerReviewRank / 2.0 >= i - 0.5 and book.customerReviewRank / 2.0 < i}">☆</span>
+				        <span th:if="${book.customerReviewRank / 2.0 < i - 0.5}">☆</span>
+				    </span>
+				    ([[${book.customerReviewRank / 2.0}]] / 5)
+				</p>
+
+				<p>판매 가격: <span th:text="${book.pricesales}"></span>원</p>
+				<p>정가 : <span th:text="${book.pricestandard}"></span>원</p>
+				<button type="button" class="order-btn"
+						th:attr="data-title=${book.title}, data-author=${book.author}, data-cover=${book.cover},
+								data-pricesales=${book.pricesales}, data-pricestandard=${book.pricestandard}" 
+				        onclick="goToOrder(this)">
+				    구매하기
+				</button>
+			</div>
+		</div>
+	</div>
+<!-- 페이지네이션 -->
+<div class="pagination-container" th:unless="${#lists.isEmpty(books)}">
+	<!-- 이전 버튼: 현재 페이지가 1보다 크면 표시 -->
+	<span th:if="${page > 1}"
+	      th:attr="onclick=|location.href='/order-search?query=${query}&searchTarget=${searchTarget}&sort=${sort}&page=${page - 1}'|"
+	      class="pagination-btn">‹ 이전</span>
+
+	<!-- 다음 버튼: 현재 페이지가 마지막 페이지보다 작으면 표시 -->
+	<span th:if="${page < T(java.lang.Math).min(totalPages, 50)}"
+	      th:attr="onclick=|location.href='/order-search?query=${query}&searchTarget=${searchTarget}&sort=${sort}&page=${page + 1}'|"
+	      class="pagination-btn">다음 ›</span>
+</div>
+
+
+</div>
+</body>
+</html>

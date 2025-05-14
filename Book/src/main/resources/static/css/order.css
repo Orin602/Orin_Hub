@@ -1,0 +1,374 @@
+/* 전체 정렬 및 레이아웃 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #f5f7fa;
+}
+
+.order-booksearch {
+    max-width: 1200px;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* 검색어 h2 중앙 정렬 */
+.order-booksearch h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+}
+
+/* 검색 폼 */
+.searchform {
+    margin-top: 20px;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.searchTarget,
+#query {
+    padding: 10px;
+    font-size: 16px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 정렬 버튼 */
+.sort-buttons {
+    margin: 20px 0;
+}
+
+.sort-buttons a {
+    padding: 8px 12px;
+    margin-right: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+}
+
+.sort-buttons a.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* 검색 결과 리스트 */
+.searchlist {
+    margin-top: 30px;
+}
+
+.booklist {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    justify-items: center;
+}
+
+/* 도서 카드 */
+.bookcard {
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+    background-color: #fff;
+}
+
+.bookcard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.bookcard h3 {
+    font-size: 18px;
+    margin: 10px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bookcard p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* 페이지네이션 */
+.pagination-container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pagination-btn {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination-btn:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination-btn.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border-color: #007bff;
+}
+
+/* 페이지네이션 컨테이너 분리 */
+.pagination-separator {
+    margin-top: 30px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+}
+
+
+/* 도서 구매 페이지 스타일 */
+.order-write-container {
+    max-width: 800px;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.order-write-container h1 {
+    font-size: 28px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* 책 미리보기 */
+.book-preview {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.book-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.book-preview h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.book-preview p {
+    font-size: 16px;
+    color: #666;
+    margin: 5px 0;
+}
+
+/* 구매 정보 */
+.order-info {
+    margin-top: 30px;
+}
+
+.order-info label {
+    font-size: 16px;
+    color: #333;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.order-info input[type="number"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 80px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.order-info input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.order-info span {
+    font-size: 16px;
+    color: #333;
+}
+
+.order-btn {
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+
+.order-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 총 금액 및 할인율 */
+#totalPrice, #priceDifference {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 버튼 스타일링 */
+.order-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* 기본 배송지 선택 */
+.address-container {
+    width: 80%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    margin-top: 30px;
+    text-align: center;
+    border: 1px solid #e0e0e0; /* 연한 회색 테두리로 배경과 구분 */
+    background-color: #f8f8f8; /* 부드러운 회색 배경 */
+}
+
+.address-container label {
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#defaultAddress {
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    outline: none;
+    background-color: #f1f1f1;
+}
+
+/* 새 배송지 입력 */
+.new-address-container {
+    width: 80%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    display: none; /* 처음에는 숨김 */
+    margin-top: 30px;
+    border: 1px solid #e0e0e0; /* 연한 회색 테두리로 배경과 구분 */
+    background-color: #f8f8f8; /* 부드러운 회색 배경 */
+}
+
+.new-address-container label {
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#address, #newAddressDetail {
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+/* 주소 검색 버튼 */
+.address-btn {
+    width: auto;
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #a8e6cf; /* 파스텔 연두색 */
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.address-btn:hover {
+    background-color: #80c8a2; /* 조금 더 어두운 연두색 */
+}
+
+/* 체크박스 레이블 */
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* 입력 필드 포커스 시 효과 */
+input[type="text"]:focus {
+    border-color: #007bff;
+}
+
+/* 기본 배송지 선택 체크박스 */
+#useDefaultAddress {
+    margin-right: 10px;
+}
+
+/* 새 배송지 입력 필드 라벨 */
+.new-address-container label {
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+}

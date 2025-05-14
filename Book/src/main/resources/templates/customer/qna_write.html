@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>QnA write Page</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/customer.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/customer.js}"></script>
+</head>
+<body>
+<th:block th:insert="~{/include/header}"></th:block>
+<div class="qna_write_container">
+	<h2>문의 작성</h2>
+	<form class="qna_write_form" id="qna-write-form" method="post">
+		<input type="text" id="title" name="title" placeholder="제목을 입력해주세요."/>
+		<textarea rows="10" cols="20" name="content" id="content" placeholder="내용을 입력해주세요."></textarea>
+	</form>
+	<button class="before-page-btn" type="button" onclick="window.location.href='/fav_qna'">목록으로</button>
+	<button class="write-btn" type="button" onclick="qna_write()">질문 작성</button>
+</div>
+</body>
+</html>

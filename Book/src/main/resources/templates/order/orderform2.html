@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Order Write</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/order.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/order.js}"></script>
+</head>
+<body>
+<div class="order-write-container">
+	<h1>도서 구매</h1>
+	<hr>
+	<div class="order-content">
+		<form class="order-write-form" id="order-write-form" method="post">
+			<!-- 책 미리보기 -->
+			<div class="book-preview" th:if="${title}">
+				<img th:src="${cover}" alt="책 이미지" style="width:200px;">
+				<h3>제목: <span th:text="${title}"></span></h3>
+				<p>저자: <span th:text="${author}"></span></p>
+				<p>정가: <span th:text="${priceStandard}"></span> 원</p>
+				<p>판매 가격: <span th:text="${priceSales}"></span> 원</p>
+			</div>
+			<hr>
+			<!-- 구매 정보 -->
+			<div class="order-info">
+				<label for="ea">구매 개수 : </label>
+				<input type="number" id="ea" name="ea" min="1" value="1" required><br><br>
+				
+				<label for="totalPrice">총 금액 (판매가 기준): </label>
+				<span id="totalPrice">[[${priceSales}]] 원</span><br><br>
+				
+				<label for="priceDifference">정가 대비 할인율 : </label>
+				<span id="priceDifference">0 %</span><br>
+				
+				<!-- 주소 입력란 -->
+				<hr>
+				<h3>배송지 입력</h3>
+
+				<!-- 기본 배송지 선택 -->
+				<div class="address-container">
+				    <label for="address">
+				        <input type="checkbox" id="useDefaultAddress" name="useDefaultAddress" checked>
+				        기본 배송지 사용
+				    </label>
+				    
+				    <input type="text" name="defaultAddress" id="defaultAddress" th:value="${loginUser.address}" readonly>
+				</div>
+				
+				<!-- 새 배송지 입력 -->
+				<div class="new-address-container" style="display:none;">
+				    <label for="newAddress">새 배송지</label>
+				    <input type="text" name="address" id="address" placeholder="새로운 주소 입력">
+				    <button class="address-btn" type="button" id="address-search-button">주소 검색</button>
+				    <label for="newAddressDetail">상세 주소</label>
+				    <input type="text" name="newAddressDetail" id="newAddressDetail" placeholder="상세 주소">
+				</div>
+
+		        <hr>
+				<input type="hidden" name="title" id="hidden-title" th:value="${title}">
+                <input type="hidden" name="author" id="hidden-author" th:value="${author}">
+                <input type="hidden" name="imageUrl" id="hidden-imageUrl" th:value="${cover}">
+                <input type="hidden" name="price" th:value="${priceSales}">
+                <input type="hidden" name="pricestandard" th:value="${priceStandard}">
+                <input type="hidden" name="totalPrice" id="hidden-totalPrice">
+				<input type="hidden" name="address" id="hidden-address">
+				<input type="hidden" name="ea" id="hidden-ea">
+                
+                <button type="button" class="order-btn" onclick="selectorder()">구매하기</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	document.getElementById("useDefaultAddress").addEventListener("change", function() {
+	    var useDefault = document.getElementById("useDefaultAddress").checked;
+	    var newAddressContainer = document.querySelector(".new-address-container");
+	    
+	    // 기본 배송지 사용 시 새 주소 입력란 숨김, 새 주소 사용 시 새 주소 입력란 보임
+	    if (useDefault) {
+	        newAddressContainer.style.display = "none";  // 숨기기
+	    } else {
+	        newAddressContainer.style.display = "block";  // 보이기
+	    }
+	});
+	// 주소 검색 버튼 클릭 시 새 창 열기
+	$("#address-search-button").click(function() {
+	    var searchWindow = window.open("/address-search", "_blank", "width=600,height=400");
+	    
+	    // 주소 검색창에서 선택한 주소를 부모 창에 전달할 수 있도록 설정
+	    searchWindow.onunload = function() {
+	        var selectedAddress = searchWindow.document.getElementById('selected-address').value;
+	        if (selectedAddress) {
+	            $("#address").val(selectedAddress);  // 부모 창의 주소 입력란에 값 입력
+	        }
+	    };
+	});
+    // 수량에 따른 총 가격 계산 및 할인율 표시
+    document.getElementById("ea").addEventListener("input", function() {
+        var ea = parseInt(document.getElementById("ea").value);
+        var price = parseInt(document.querySelector("input[name='price']").value);
+        var standardPrice = parseInt(document.querySelector("input[name='pricestandard']").value);
+        
+        // 판매 가격 * 수량 = 총 금액
+        var totalPrice = ea * price;
+        document.getElementById("totalPrice").textContent = totalPrice + " 원";
+        
+        // 정가와 비교하여 할인율 계산
+        var priceDifference = ((standardPrice - price) / standardPrice) * 100;
+        if (priceDifference < 0) priceDifference = 0; // 할인율이 음수일 경우 0으로 설정
+        document.getElementById("priceDifference").textContent = priceDifference.toFixed(2) + "%";
+    });
+</script>
+
+</body>
+</html>

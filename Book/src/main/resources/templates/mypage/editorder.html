@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>edit order</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/mypage.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/mypage.js}"></script>
+<style>
+/* 전체 컨테이너 스타일 */
+.order-edit-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 스타일 */
+.order-edit-container h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 폼 그룹 스타일 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* 각 라벨 스타일 */
+.form-group label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* 각 입력 필드 스타일 */
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* '수정 완료' 버튼 스타일 */
+.submit_btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #4ed64e;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit_btn:hover {
+    background-color: #45a049;
+}
+
+/* '취소' 버튼 스타일 */
+.cancel_btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #ff8888;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.cancel_btn:hover {
+    background-color: #e53935;
+}
+
+/* 주소 검색 버튼 스타일 */
+.address-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.address-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 상세 주소 입력 필드 스타일 */
+#newAddressDetail {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* 스타일을 좀 더 깔끔하게 하는 작은 스타일링 */
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+/* 전체 폼 너비에 맞는 정렬 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 주소 검색 버튼을 우측으로 정렬 */
+.address-btn {
+    margin-left: auto;
+    display: block;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+    .order-edit-container {
+        padding: 10px;
+    }
+
+    .form-group input,
+    .form-group button {
+        font-size: 14px;
+    }
+}
+
+</style>
+</head>
+<body>
+<div class="order-edit-container">
+    <h1>주문 내역 수정</h1>
+
+    <form th:action="@{/update_order}" method="post" id="orderEditForm">
+        <!-- storeSeq는 hidden input으로 전달 -->
+        <input type="hidden" id="storeseq" name="storeseq" th:value="${store.storeseq}" />
+        
+        <div class="form-group">
+            <label for="title">도서명:</label>
+            <input type="text" id="title" name="title" th:value="${store.title}" required readonly/>
+        </div>
+
+        <div class="form-group">
+            <label for="price">주문 가격:</label>
+            <input type="number" id="price" name="price" th:value="${store.price}" required readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="ea">구매 개수:</label>
+            <input type="number" id="ea" name="ea" th:value="${store.EA}" required min="1" />
+        </div>
+
+        <div class="form-group">
+            <label for="address">배송지:</label>
+            <input type="text" id="address" name="address" th:value="${store.address}" required />
+            <button class="address-btn" type="button" id="address-search-button">주소 검색</button>
+		    <label for="newAddressDetail">상세 주소</label>
+		    <input type="text" name="newAddressDetail" id="newAddressDetail" placeholder="상세 주소">
+        </div>
+
+
+        <div class="form-group">
+            <button type="submit" class="submit_btn">수정 완료</button>
+            <button type="button" class="cancel_btn" onclick="window.close()">취소</button>
+        </div>
+    </form>
+</div>
+
+<script>
+//주소 검색 버튼 클릭 시 새 창 열기
+$("#address-search-button").click(function() {
+    var searchWindow = window.open("/address-search", "_blank", "width=600,height=400");
+    
+    // 주소 검색창에서 선택한 주소를 부모 창에 전달할 수 있도록 설정
+    searchWindow.onunload = function() {
+        var selectedAddress = searchWindow.document.getElementById('selected-address').value;
+        if (selectedAddress) {
+            $("#address").val(selectedAddress);  // 부모 창의 주소 입력란에 값 입력
+        }
+    };
+});
+//구매 개수 변경 시 자동으로 가격 계산
+$("#ea").on("input", function() {
+    const pricePerItem = parseInt($("#price").val());  // 개당 가격 (기존 주문 가격)
+    const quantity = parseInt($(this).val());  // 변경된 개수
+    if (!isNaN(quantity) && quantity > 0) {
+        const totalPrice = pricePerItem * quantity;
+        $("#price").val(totalPrice);  // 총 가격 업데이트
+    }
+});
+// 폼 제출 시 AJAX로 처리
+$('#orderEditForm').submit(function (e) {
+    e.preventDefault();
+
+    const formData = $(this).serialize();
+
+    $.ajax({
+        url: '/update_order',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            // 성공 메시지 표시
+            Swal.fire('성공', response, 'success').then(function () {
+                window.close();  // 팝업 창 닫기
+
+                // 수정된 내용을 동적으로 반영 (예: 주문 가격, 개수, 주소 등)
+                $('#price').text($('#price').val());
+                $('#ea').text($('#ea').val());
+                $('#address').text($('#address').val());
+                
+                window.opener.location.reload();
+            });
+        },
+        error: function (error) {
+            Swal.fire('실패', '주문 수정 중 오류가 발생했습니다.', 'error');
+        }
+    });
+});
+
+</script>
+</body>
+</html>

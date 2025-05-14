@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>주소 검색</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" th:href="@{/css/login.css}">
+<script th:src="@{js/login.js}"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+    // 주소 검색 함수
+    function searchAddress() {
+        var keyword = document.getElementById("address-input").value;
+        if (!keyword) {
+            swal.fire({
+                icon: 'warning',
+                title: '주소를 입력해주세요.'
+            });
+            return;
+        }
+        
+        // 서버에서 Kakao API를 호출하도록 변경
+        $.ajax({
+            url: '/api/kakao/address',  // 서버 API 호출
+            type: 'GET',
+            data: { keyword: keyword },
+            success: function(response) {
+                console.log("서버 응답:", response);
+                var addresses = response.documents;
+                var addressListHtml = '';
+                
+                if (!addresses || addresses.length === 0) {
+                    swal.fire({
+                        icon: 'info',
+                        title: '검색 결과가 없습니다.'
+                    });
+                    return;
+                }
+
+                addresses.forEach(function(address) {
+                    const placeName = address.place_name; // 장소명
+                    const addressName = address.road_address_name || address.address_name || "주소 없음";
+
+                    const displayAddr = `${placeName} (${addressName})`;
+
+                    addressListHtml += `
+                        <li class="address-item" data-address="${addressName}" onclick="selectAddress('${placeName} (${addressName})')">
+                            ${displayAddr}
+                        </li>`;
+                });
+
+                document.getElementById("address-list").innerHTML = addressListHtml;
+            },
+            error: function(error) {
+                console.error("주소 검색 실패:", error);
+            }
+        });
+    }
+
+    // 주소 선택 시 부모 창으로 주소 전달
+    function selectAddress(addressText) {
+        window.opener.document.getElementById('address').value = addressText;
+        window.close();
+    }
+</script>
+<style>
+/* 전체 컨테이너 */
+.address-container {
+    width: 100%;
+    max-width: 500px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 제목 */
+.address-container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 주소 입력 필드 */
+#address-input {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* 주소 입력 필드 포커스 시 효과 */
+#address-input:focus {
+    border-color: #4CAF50;
+}
+
+/* 검색 버튼 */
+button {
+    width: 80%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 검색 버튼 호버 시 색상 변화 */
+button:hover {
+    background-color: #45a049;
+}
+
+/* 주소 리스트 */
+#address-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+/* 각 주소 항목 */
+#address-list li {
+    padding: 12px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* 주소 항목 호버 시 색상과 크기 변화 */
+#address-list li:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.05); /* 크기 확대 효과 */
+}
+
+/* 리스트 항목 텍스트 */
+#address-list li p {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+}
+
+</style>
+</head>
+<body>
+	<div class="address-container">
+		<h2>주소 검색</h2>
+		<input type="text" id="address-input" placeholder="주소를 입력하세요">
+		<button onclick="searchAddress()">검색</button>
+		<ul id="address-list"></ul>
+	</div>
+</body>
+</html>

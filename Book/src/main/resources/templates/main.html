@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Main</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<link rel="stylesheet" th:href="@{/css/main.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+<script>
+    $(document).ready(function() {
+        var message = /*[[${message}]]*/ '';
+        var messageType = /*[[${messageType}]]*/ '';
+        var text = /*[[${text}]]*/ '';
+
+        if (message) {
+            Swal.fire({
+                title: '알림',
+                text: message,
+                icon: messageType || 'info', // 메시지 타입이 없는 경우 기본값으로 'info' 사용
+                confirmButtonText: '확인'
+            });
+        }
+
+        $('.month-btn').click(function() {
+            var start_date = $(this).data('start-date');
+            var end_date = $(this).data('end-date');
+
+            console.log('추천을 가져옵니다:', start_date, end_date); // 디버깅 로그
+
+            $.ajax({
+                url: '/fetch-recommendations',
+                method: 'GET',
+                data: { start_date: start_date, end_date: end_date },
+                success: function(data) {
+                    $('#recommendations-list').empty(); // 이전 데이터 삭제
+                    console.log('Response:', data); // 디버깅 로그
+
+                    if (data.error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: '데이터 오류',
+                            icon: 'error',
+                            confirmButtonText: '확인'
+                        });
+                        $('#recommendations-list').html('<li>추천이 없습니다.</li>'); // 추천이 없을 때 표시
+                    } else if (data.message) {
+                        Swal.fire({
+                            title: '알림',
+                            text: data.message,
+                            icon: 'info',
+                            confirmButtonText: '확인'
+                        });
+                    } else {
+                        var recommendations = data.recommendations || []; // 기본값으로 빈 배열 설정
+                        var totalCount = data.totalCount || 0; // totalCount 값 설정
+                     
+                        // totalCount를 사용하여 목록 상단에 추가
+                        var listHtml = '<h1>추천 책 : ' + totalCount + '권</h1>'; // 총 추천 책 수
+
+                        if (Array.isArray(recommendations) && recommendations.length > 0) {
+                            // 중복된 책을 제거하기 위해 Set을 사용
+                            var uniqueRecommendations = [];
+                            var recommendationSet = new Set();
+
+                            recommendations.forEach(function(recommendation) {
+                                if (!recommendationSet.has(recommendation.recomtitle)) {
+                                    recommendationSet.add(recommendation.recomtitle);
+                                    uniqueRecommendations.push(recommendation);
+                                }
+                            });
+
+                            // 스타일 CSS는 한 번만 적용하도록 최상단에 배치
+                            listHtml += `
+                                <style>
+                                    .recommendation-wrapper {
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        justify-content: space-between;
+                                        gap: 20px;
+                                    }
+
+                                    .recommendation-card {
+                                        flex: 0 1 calc(50% - 10px); /* 2개씩 보여주기 위해 */
+                                        border: 1px solid #ddd;
+                                        border-radius: 12px;
+                                        padding: 16px;
+                                        background-color: #f9f9f9;
+                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+                                        box-sizing: border-box;
+                                        cursor: pointer; /* 클릭 가능하도록 커서 변경 */
+                                        transition: transform 0.3s ease, box-shadow 0.3s ease; /* 애니메이션 효과 */
+                                    }
+                                    
+                                    .recommendation-card:hover {
+                                        transform: scale(1.05); /* 마우스를 올리면 확대 효과 */
+                                        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* 확대될 때 그림자 효과 */
+                                    }
+
+                                    .recommendation-title {
+                                        font-size: 18px;
+                                        font-weight: bold;
+                                        margin-bottom: 8px;
+                                        color: #333;
+                                    }
+
+                                    .recommendation-image {
+                                        width: 100%;
+                                        max-width: 150px;
+                                        height: auto;
+                                        border-radius: 6px;
+                                        margin-bottom: 10px;
+                                    }
+
+                                    .recommendation-author,
+                                    .recommendation-content,
+                                    .recommendation-date {
+                                        font-size: 14px;
+                                        color: #555;
+                                        margin: 4px 0;
+                                    }
+
+                                    /* 홀수일 때 마지막 카드 가운데 정렬 */
+                                    .recommendation-wrapper .recommendation-card:last-child:nth-child(2n + 1) {
+                                        margin: 0 auto;
+                                    }
+                                </style>
+                            `;
+
+                            // 유니크한 추천 목록을 렌더링
+                            listHtml += '<div class="recommendation-wrapper">';
+
+                            uniqueRecommendations.forEach(function(recommendation) {
+                                listHtml += `
+                                    <div class="recommendation-card" onclick="goToReviewPage('${recommendation.recomtitle}', '${recommendation.recomauthor.replace(';', '/')}', '${recommendation.recomfilepath}')">
+                                        <h2 class="recommendation-title">${recommendation.recomtitle}</h2>
+                                        <img class="recommendation-image" src="${recommendation.recomfilepath}" alt="책 이미지">
+                                        <p class="recommendation-author">${recommendation.recomauthor.replace(';', '/')}</p>
+                                        <p class="recommendation-content">${recommendation.recomcontens}</p>
+                                        <p class="recommendation-date">날짜: ${recommendation.regdate}</p>
+                                    </div>
+                                `;
+                            });
+
+                            listHtml += '</div>';
+
+                            $('#recommendations-list').html(listHtml);
+                        } else {
+                            $('#recommendations-list').html('<li>추천이 없습니다.</li>'); // 추천이 없을 때 표시
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request failed:', error); // 디버깅 로그
+                }
+            });
+        });
+    });
+</script>
+
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:insert="~{include/header}"></th:block>
+<div class="main-search">
+<form class="search-form" id="search-form" method="get">
+    <!-- 검색 대상 선택 -->
+	<select name="srchTarget" id="srchTarget" class="searchTarget">
+	    <option value="total">전체</option>
+	    <option value="title">제목</option>
+	    <option value="author">저자</option>
+	</select>
+	   <input type="search" name="query" id="query" placeholder="도서 검색..." aria-label="도서 검색" />
+	   <button class="search-btn" type="button" onclick="search_book()">검색</button>
+</form>
+</div>
+<div class="main-container">
+	<h1>사서 도서 추천</h1>
+	<div th:if="${error}">
+	    <p th:text="${error}"></p>
+	</div>
+	<div class="recommendations-btns" id="month-buttons-container">
+	</div>
+<script>
+	// 현재 날짜 가져오기
+	const currentDate = new Date();
+	const currentYear = currentDate.getFullYear();
+	const currentMonth = currentDate.getMonth(); // 0부터 시작 (0 = 1월, 11 = 12월)
+	
+	// 버튼을 담을 컨테이너
+	const container = document.getElementById('month-buttons-container');
+	
+	// 월별 버튼 동적으로 생성
+	for (let month = 0; month < 12; month++) {
+	    // 해당 버튼의 년도와 월 계산
+	    let buttonYear = currentYear;
+	    if (month > currentMonth) {
+	        // 아직 지나지 않은 달은 작년 월로 설정
+	        buttonYear = currentYear - 1;
+	    }
+	    
+	    // 월별 시작일과 종료일 계산
+	    const startDate = `${buttonYear}${String(month + 1).padStart(2, '0')}01`;
+	    const endDate = `${buttonYear}${String(month + 1).padStart(2, '0')}${new Date(buttonYear, month + 1, 0).getDate()}`;
+	    
+	    // 버튼 생성
+	    const button = document.createElement('button');
+	    button.classList.add('month-btn');
+	    button.setAttribute('data-start-date', startDate);
+	    button.setAttribute('data-end-date', endDate);
+	    button.textContent = getMonthName(month);
+	
+	    // 버튼 클릭 시 처리
+	    button.addEventListener('click', function() {
+	        handleMonthClick(button);
+	    });
+	
+	    // 버튼을 컨테이너에 추가
+	    container.appendChild(button);
+	}
+	
+	// 월 이름을 반환하는 함수
+	function getMonthName(monthIndex) {
+	    const monthNames = [
+	        "January", "February", "March", "April", "May", "June", 
+	        "July", "August", "September", "October", "November", "December"
+	    ];
+	    return monthNames[monthIndex];
+	}
+	
+	// 월 클릭 시 처리
+	function handleMonthClick(button) {
+	    const startDate = button.getAttribute('data-start-date');
+	    const endDate = button.getAttribute('data-end-date');
+	    console.log(`Selected Start Date: ${startDate}`);
+	    console.log(`Selected End Date: ${endDate}`);
+	    // 여기서 날짜를 처리하는 추가 로직을 작성할 수 있습니다.
+	}
+</script>
+	<div id="recommendations-container" class="recommendations-container">
+	    <ul id="recommendations-list" class="recommendateions-list">
+	        <!-- 추천 목록이 여기에 동적으로 추가됩니다. -->
+	    </ul>
+	</div>
+</div>
+
+</body>
+</html>
