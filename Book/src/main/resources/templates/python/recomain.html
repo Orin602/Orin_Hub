@@ -62,7 +62,7 @@ function displayResults(results) {
 	            </div>
 	            <p class="book_genre">
 	            <span class="hashtag" 
-	                onclick="${book.genre ? `hashtagRecommend('${book.genre}')` : 'event.preventDefault();'}"
+	                onclick="${book.genre ? `event.stopPropagation(); hashtagRecommend('${book.genre}')` : 'event.preventDefault();'}"
 	                style="${book.genre ? '' : 'cursor: not-allowed; color: gray;'}">
 	              #${book.genre || '해시 태그 없음'}
 	          </span>
