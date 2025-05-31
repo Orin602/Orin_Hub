@@ -52,7 +52,7 @@ public class StoreController {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		if(loginUser == null) {
 			model.addAttribute("message", "로그인 필요");
-			model.addAttribute("text", "리뷰 작성은 로그인 후 이용 가능합니다.");
+			model.addAttribute("text", "도서 구매는 로그인 후 이용 가능합니다.");
 			return "login/login";
 		}
 		vo.setMember(loginUser);
@@ -125,7 +125,7 @@ public class StoreController {
 		Member loginUser = (Member)session.getAttribute("loginUser");
 		if(loginUser == null) {
 			model.addAttribute("message", "로그인 페이지로 이동");
-			model.addAttribute("text", "리뷰 작성은 로그인 후 이용 가능합니다.");
+			model.addAttribute("text", "도서 구매는 로그인 후 이용 가능합니다.");
 			model.addAttribute("messageType", "info");
 			
 			return "login/login";
@@ -148,7 +148,7 @@ public class StoreController {
 		
 		if(loginUser == null) {
 			model.addAttribute("message", "로그인 페이지로 이동");
-			model.addAttribute("text", "리뷰 작성은 로그인 후 이용 가능합니다.");
+			model.addAttribute("text", "도서 구매는 로그인 후 이용 가능합니다.");
 			model.addAttribute("messageType", "info");
 			
 			return "login/login";

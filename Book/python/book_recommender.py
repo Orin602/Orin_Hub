@@ -54,5 +54,6 @@ def hashtag_recommend(df, tag, n=10):
     df = df.copy()
     df['genre'] = df['genre'].fillna('')
 
-    filtered = df[df['genre'].str.contains(tag, case=False, na=False)]
+    tag_clean = tag.replace(' ', '').lower()
+    filtered = df[df['genre'].apply(lambda tags: tag_clean in tags)]
     return filtered.sample(n) if len(filtered) >= n else filtered

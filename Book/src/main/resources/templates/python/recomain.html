@@ -64,7 +64,7 @@ function displayResults(results) {
 	            <span class="hashtag" 
 	                onclick="${book.genre ? `event.stopPropagation(); hashtagRecommend('${book.genre}')` : 'event.preventDefault();'}"
 	                style="${book.genre ? '' : 'cursor: not-allowed; color: gray;'}">
-	              #${book.genre || '해시 태그 없음'}
+	              ${book.genre || '해시 태그 없음'}
 	          </span>
 	            </p>
             `;
@@ -82,7 +82,8 @@ function displayResults(results) {
 }
 //해시태그 클릭 시 해당 장르로 추천 받기
 function hashtagRecommend(genre) {
-    fetch(`http://localhost:5000/hashtag_recommend?tag=${genre}`)
+	const encoded = encodeURIComponent(genre);
+    fetch(`http://localhost:5000/hashtag_recommend?tag=${encoded}`)
         .then(response => response.json())
         .then(data => {
             displayResults(data); // 해당 장르로 추천 받은 책들 표시
